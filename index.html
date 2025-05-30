@@ -198,13 +198,13 @@
   }
 
   .toast.success {
-   border: 2px solid #28a745;
+   border: 2px solid #22c55e;
   }
   .toast.error {
-   border: 2px solid #dc3545;
+   border: 2px solid #ef4444;
   }
   .toast.info {
-   border: 2px solid #007bff;
+   border: 2px solid #facc15;
   }
 
 @keyframes slideIn {
@@ -247,7 +247,7 @@
      Room ID : <span id="roomId">----</span>
     </div>
     <div class="connected-device">
-     Connected : <span id="connectedDevice">0</span>
+     Connected Users : <span id="connectedDevice">0</span>
     </div>
    </div>
    <div class="btn-container">
@@ -337,7 +337,7 @@ function updateStatusButton(state) {
     statusBtn.textContent = 'Disconnected from Server';
     statusBtn.classList.add('disconnected');
   } else {
-    statusBtn.textContent = 'Connecting...';
+    statusBtn.textContent = 'Connecting...please wait...';
     statusBtn.classList.add('connecting');
   }
 }
