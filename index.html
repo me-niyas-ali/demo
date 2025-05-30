@@ -58,6 +58,10 @@
    letter-spacing: 3px;
    font-weight: 900;
   }
+  
+  #connectedDevice {
+   font-weight: 900;
+  }
 
   .connected-device {
    width: 50%;
@@ -159,7 +163,7 @@
    display: none;
    cursor: pointer;
   }
- 
+
   #toast-container {
    position: fixed;
    bottom: 20px;
@@ -221,24 +225,27 @@
     transform: translateX(30px);
    }
   }
-  
-  .status-btn{
+
+  .status-btn {
    border-radius: 8px;
    padding: 0.25em 0.5em;
   }
-  
- .status-btn.connected {
-  background-color: #22c55e; /* green */
-  color: white;
-}
-.status-btn.disconnected {
-  background-color: #ef4444; /* red */
-  color: white;
-}
-.status-btn.connecting {
-  background-color: #facc15; /* yellow */
-  color: black;
-}
+
+  .status-btn.connected {
+   background-color: #22c55e;
+   /* green */
+   color: white;
+  }
+  .status-btn.disconnected {
+   background-color: #ef4444;
+   /* red */
+   color: white;
+  }
+  .status-btn.connecting {
+   background-color: #facc15;
+   /* yellow */
+   color: black;
+  }
 
  </style>
 
@@ -273,14 +280,14 @@
 
  <script src="/socket.io/socket.io.js"></script>
  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-<script>
+ <script>
   const input = document.getElementById('roomIdinput');
   input.addEventListener('input', () => {
-    if (input.value.length > 4) {
-      input.value = input.value.slice(0, 4);
-    }
+   if (input.value.length > 4) {
+    input.value = input.value.slice(0, 4);
+   }
   });
-  
+
   const socket = io('https://p2p-share-7wvh.onrender.com');
   const roomIdInput = document.getElementById("roomIdinput");
   const roomDisplay = document.getElementById("roomId");
@@ -329,42 +336,44 @@
     });
    }
   });
-  
+
   const statusBtn = document.getElementById('serverstatus');
 
-// Helper to update button status
-function updateStatusButton(state) {
-  statusBtn.classList.remove('connected', 'disconnected', 'connecting');
+  // Helper to update button status
+  function updateStatusButton(state) {
+   statusBtn.classList.remove('connected',
+    'disconnected',
+    'connecting');
 
-  if (state === 'connected') {
+   if (state === 'connected') {
     statusBtn.textContent = 'Connected to Server';
     statusBtn.classList.add('connected');
-  } else if (state === 'disconnected') {
+   } else if (state === 'disconnected') {
     statusBtn.textContent = 'Disconnected from Server';
     statusBtn.classList.add('disconnected');
-  } else {
+   } else {
     statusBtn.textContent = 'Connecting...please wait...';
     statusBtn.classList.add('connecting');
+   }
   }
-}
 
-// Initially set to connecting
-updateStatusButton('connecting');
-
-// When socket connects
-socket.on('connect', () => {
-  updateStatusButton('connected');
-});
-
-// When socket disconnects
-socket.on('disconnect', () => {
-  updateStatusButton('disconnected');
-});
-
-// Optional: show reconnecting state
-socket.io.on('reconnect_attempt', () => {
+  // Initially set to connecting
   updateStatusButton('connecting');
-});
+
+  // When socket connects
+  socket.on('connect', () => {
+   updateStatusButton('connected');
+  });
+
+  // When socket disconnects
+  socket.on('disconnect', () => {
+   updateStatusButton('disconnected');
+  });
+
+  // Optional: show reconnecting state
+  socket.io.on('reconnect_attempt', () => {
+   updateStatusButton('connecting');
+  });
 
 
   function formatBytes(bytes) {
@@ -648,12 +657,12 @@ socket.io.on('reconnect_attempt', () => {
   }
  </script>
 
-<!-- <script " to check toast " >
-  document.getElementById("testbtn").addEventListener("click", function () {
-   showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
-    duration: 99999999, dismissible: true
+ <!-- <script " to check toast " >
+   document.getElementById("testbtn").addEventListener("click", function () {
+    showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
+     duration: 99999999, dismissible: true
+    });
    });
-  });
- </script>-->
+  </script>-->
 </body>
 </html>
