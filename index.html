@@ -220,6 +220,20 @@
     transform: translateX(30px);
    }
   }
+  
+ .status-btn.connected {
+  background-color: #22c55e; /* green */
+  color: white;
+}
+.status-btn.disconnected {
+  background-color: #ef4444; /* red */
+  color: white;
+}
+.status-btn.connecting {
+  background-color: #facc15; /* yellow */
+  color: black;
+}
+
  </style>
 
 </head>
@@ -227,7 +241,7 @@
  <center>
   <div class="container">
    <h2>P2P File Sharing</h2>
-   <button id="serverstatus" class="status-btn">Connecting...please wait...</button>
+   <span id="serverstatus" class="status-btn">Connecting...please wait...</span>
    <div class="status-container">
     <div class="room-id">
      Room ID : <span id="roomId">----</span>
@@ -309,6 +323,42 @@
     });
    }
   });
+  
+  const statusBtn = document.getElementById('serverstatus');
+
+// Helper to update button status
+function updateStatusButton(state) {
+  statusBtn.classList.remove('connected', 'disconnected', 'connecting');
+
+  if (state === 'connected') {
+    statusBtn.textContent = 'Connected to Server';
+    statusBtn.classList.add('connected');
+  } else if (state === 'disconnected') {
+    statusBtn.textContent = 'Disconnected from Server';
+    statusBtn.classList.add('disconnected');
+  } else {
+    statusBtn.textContent = 'Connecting...';
+    statusBtn.classList.add('connecting');
+  }
+}
+
+// Initially set to connecting
+updateStatusButton('connecting');
+
+// When socket connects
+socket.on('connect', () => {
+  updateStatusButton('connected');
+});
+
+// When socket disconnects
+socket.on('disconnect', () => {
+  updateStatusButton('disconnected');
+});
+
+// Optional: show reconnecting state
+socket.io.on('reconnect_attempt', () => {
+  updateStatusButton('connecting');
+});
 
 
   function formatBytes(bytes) {
