@@ -246,6 +246,10 @@
    /* yellow */
    color: black;
   }
+  .status-btn.offline {
+  background-color: #ef4444;
+  color: white;
+}
 
  </style>
 
@@ -336,44 +340,66 @@
     });
    }
   });
-
+  
   const statusBtn = document.getElementById('serverstatus');
-
-  // Helper to update button status
+  
   function updateStatusButton(state) {
-   statusBtn.classList.remove('connected',
-    'disconnected',
-    'connecting');
+  statusBtn.classList.remove('connected', 'disconnected', 'connecting', 'offline');
 
-   if (state === 'connected') {
+  if (state === 'connected') {
     statusBtn.textContent = 'Connected to Server';
     statusBtn.classList.add('connected');
-   } else if (state === 'disconnected') {
+  } else if (state === 'disconnected') {
     statusBtn.textContent = 'Disconnected from Server';
     statusBtn.classList.add('disconnected');
-   } else {
-    statusBtn.textContent = 'Connecting... Please wait...';
+  } else if (state === 'offline') {
+    statusBtn.textContent = 'You are Offline';
+    statusBtn.classList.add('offline');
+  } else {
+    statusBtn.textContent = 'Connecting...';
     statusBtn.classList.add('connecting');
-   }
   }
+}
 
-  // Initially set to connecting
+// Listen for internet connectivity changes
+window.addEventListener('online', () => {
+  if (socket.connected) {
+    updateStatusButton('connected');
+  } else {
+    updateStatusButton('connecting');
+  }
+});
+
+window.addEventListener('offline', () => {
+  updateStatusButton('offline');
+});
+
+// Initial check on load
+if (!navigator.onLine) {
+  updateStatusButton('offline');
+} else if (socket.connected) {
+  updateStatusButton('connected');
+} else {
   updateStatusButton('connecting');
+}
 
-  // When socket connects
-  socket.on('connect', () => {
-   updateStatusButton('connected');
-  });
+// Existing socket events
+socket.on('connect', () => {
+  if (navigator.onLine) updateStatusButton('connected');
+});
 
-  // When socket disconnects
-  socket.on('disconnect', () => {
-   updateStatusButton('disconnected');
-  });
+socket.on('disconnect', () => {
+  updateStatusButton('disconnected');
+});
 
-  // Optional: show reconnecting state
-  socket.io.on('reconnect_attempt', () => {
-   updateStatusButton('connecting');
-  });
+socket.io.on('reconnect_attempt', () => {
+  if (!navigator.onLine) {
+    updateStatusButton('offline');
+  } else {
+    updateStatusButton('connecting');
+  }
+});
+
 
   function formatBytes(bytes) {
    const sizes = ['Bytes',
