@@ -653,7 +653,6 @@
     chunk, transferId
    }) => {
     if (receivingCancelled || transferId !== metadata.id) return;
-
     buffer.push(chunk);
     receivedSize += chunk.byteLength;
 
@@ -664,18 +663,13 @@
      ui.status.textContent = `${formatBytes(receivedSize)}`;
      ui.status.style.color = 'black';
      ui.progressBar.parentElement.style.display = 'none';
-
-     // Change "Cancel" to "Clear"
-     ui.cancelBtn.textContent = 'Clear';
-     ui.cancelBtn.onclick = () => {
-      recvFilesDisplay.removeChild(ui.card); // Or whatever parent you're using
-     };
-
      showToast("File received", "success");
      ui.downloadBtn.style.display = 'block';
+     ui.cancelBtn.textContent = 'Clear';
+     ui.cancelBtn.onclick = () => {
+      receivedFilesDisplay.removeChild(ui.card);
     }
    });
-
 
    socket.on("send-cancel-transfer",
     ({
@@ -736,11 +730,11 @@
  </script>
 
  <!-- <script " to check toast " >
-       document.getElementById("testbtn").addEventListener("click", function () {
-        showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
-         duration: 99999999, dismissible: true
-        });
+      document.getElementById("testbtn").addEventListener("click", function () {
+       showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
+        duration: 99999999, dismissible: true
        });
-      </script>-->
+      });
+     </script>-->
 </body>
 </html>
