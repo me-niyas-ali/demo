@@ -17,7 +17,7 @@
    padding: 0;
    transition: ease 0.3s;
    box-sizing: border-box;
-   font-weight: 350;
+   font-weight: 400;
   }
 
   body, html {
@@ -254,7 +254,7 @@
  <center>
   <div class="container">
    <h2>P2P File Sharing</h2>
-   <span id="serverstatus" class="status-btn">Connecting...please wait...</span>
+   <span id="serverstatus" class="status-btn">Connecting... please wait...</span>
    <div class="status-container">
     <div class="room-id">
      Room ID : <span id="roomId">----</span>
@@ -352,7 +352,7 @@
     statusBtn.textContent = 'Disconnected from Server';
     statusBtn.classList.add('disconnected');
    } else {
-    statusBtn.textContent = 'Connecting...please wait...';
+    statusBtn.textContent = 'Connecting... Please wait...';
     statusBtn.classList.add('connecting');
    }
   }
