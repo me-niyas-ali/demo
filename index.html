@@ -663,11 +663,9 @@
      ui.status.textContent = `${formatBytes(receivedSize)}`;
      ui.status.style.color = 'black';
      ui.progressBar.parentElement.style.display = 'none';
+     ui.cancelBtn.remove();
      showToast("File received", "success");
      ui.downloadBtn.style.display = 'block';
-     ui.cancelBtn.textContent = 'Clear';
-     ui.cancelBtn.onclick = () => {
-      receivedFilesDisplay.removeChild(ui.card);
     }
    });
 
