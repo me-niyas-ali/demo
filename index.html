@@ -54,13 +54,13 @@
    width: 50%;
   }
 
-  #roomid {
-   letter-spacing: 3px;
-   font-weight: 900;
+  #roomId {
+    letter-spacing: 0.5em;
+    font-weight: bold;
   }
-  
+
   #connectedDevice {
-   font-weight: 900;
+   font-weight: bold;
   }
 
   .connected-device {
@@ -247,9 +247,9 @@
    color: black;
   }
   .status-btn.offline {
-  background-color: #ef4444;
-  color: white;
-}
+   background-color: #ef4444;
+   color: white;
+  }
 
  </style>
 
@@ -323,82 +323,69 @@
    }
   };
 
-  socket.on("disconnect", (reason) => {
+  socket.on("disconnect", () => {
    resetState();
-
-   if (reason === "io server disconnect") {
-    showToast("Disconnected by server", "error", {
-     duration: 99999999, dismissible: true
-    });
-   } else if (reason === "io client disconnect") {
-    showToast("Disconnected from client (tab/browser closed)", "error", {
-     duration: 99999999, dismissible: true
-    });
-   } else {
-    showToast(`Disconnected: ${reason}`, "error", {
-     duration: 99999999, dismissible: true
-    });
-   }
   });
-  
-  const statusBtn = document.getElementById('serverstatus');
-  
-  function updateStatusButton(state) {
-  statusBtn.classList.remove('connected', 'disconnected', 'connecting', 'offline');
 
-  if (state === 'connected') {
+
+  const statusBtn = document.getElementById('serverstatus');
+
+  function updateStatusButton(state) {
+   statusBtn.classList.remove('connected', 'disconnected', 'connecting', 'offline');
+
+   if (state === 'connected') {
     statusBtn.textContent = 'Connected to Server';
     statusBtn.classList.add('connected');
-  } else if (state === 'disconnected') {
+   } else if (state === 'disconnected') {
     statusBtn.textContent = 'Disconnected from Server';
     statusBtn.classList.add('disconnected');
-  } else if (state === 'offline') {
+   } else if (state === 'offline') {
     statusBtn.textContent = 'You are Offline';
     statusBtn.classList.add('offline');
-  } else {
+   } else {
     statusBtn.textContent = 'Connecting...';
     statusBtn.classList.add('connecting');
+   }
   }
-}
 
-// Listen for internet connectivity changes
-window.addEventListener('online', () => {
-  if (socket.connected) {
+  // Listen for internet connectivity changes
+  window.addEventListener('online', () => {
+   if (socket.connected) {
     updateStatusButton('connected');
-  } else {
+   } else {
     updateStatusButton('connecting');
-  }
-});
+   }
+  });
 
-window.addEventListener('offline', () => {
-  updateStatusButton('offline');
-});
+  window.addEventListener('offline', () => {
+   updateStatusButton('offline');
+  });
 
-// Initial check on load
-if (!navigator.onLine) {
-  updateStatusButton('offline');
-} else if (socket.connected) {
-  updateStatusButton('connected');
-} else {
-  updateStatusButton('connecting');
-}
-
-// Existing socket events
-socket.on('connect', () => {
-  if (navigator.onLine) updateStatusButton('connected');
-});
-
-socket.on('disconnect', () => {
-  updateStatusButton('disconnected');
-});
-
-socket.io.on('reconnect_attempt', () => {
+  // Initial check on load
   if (!navigator.onLine) {
-    updateStatusButton('offline');
+   updateStatusButton('offline');
+  } else if (socket.connected) {
+   updateStatusButton('connected');
   } else {
-    updateStatusButton('connecting');
+   updateStatusButton('connecting');
   }
-});
+
+  // Existing socket events
+  socket.on('connect', () => {
+   if (navigator.onLine) updateStatusButton('connected');
+  });
+
+  socket.on('disconnect', () => {
+   updateStatusButton('disconnected');
+  });
+
+  socket.io.on('reconnect_attempt', () => {
+   if (!navigator.onLine) {
+    updateStatusButton('offline');
+   } else {
+    updateStatusButton('connecting');
+   }
+  });
 
 
   function formatBytes(bytes) {
@@ -422,7 +409,7 @@ socket.io.on('reconnect_attempt', () => {
    showToast("Left room", "error");
    joinBtn.textContent = "Join Room";
    joinBtn.classList.remove("bg-error");
-   roomDisplay.textContent = "- - - -";
+   roomDisplay.textContent = "----";
    deviceDisplay.textContent = "0";
   }
 
@@ -683,11 +670,11 @@ socket.io.on('reconnect_attempt', () => {
  </script>
 
  <!-- <script " to check toast " >
-   document.getElementById("testbtn").addEventListener("click", function () {
-    showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
-     duration: 99999999, dismissible: true
+    document.getElementById("testbtn").addEventListener("click", function () {
+     showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
+      duration: 99999999, dismissible: true
+     });
     });
-   });
-  </script>-->
+   </script>-->
 </body>
 </html>
