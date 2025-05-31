@@ -359,256 +359,284 @@
  <script src="/socket.io/socket.io.js"></script>
  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
  <script>
- // Updated full script with fix to re-enable file sending after a cancelled transfer
+ 
+  const socket = io('https://p2p-share-7wvh.onrender.com');
 
-const socket = io('https://p2p-share-7wvh.onrender.com');
+  const roomIdInput = document.getElementById("roomIdinput");
+  const roomDisplay = document.getElementById("roomId");
+  const deviceDisplay = document.getElementById("connectedDevice");
+  const joinBtn = document.getElementById("joinBtn");
+  const sendBtn = document.getElementById("sendBtn");
+  const fileInput = document.getElementById("fileInput");
+  const sendFilesDisplay = document.getElementById("sendFilesDisplay");
+  const receivedFilesDisplay = document.getElementById("receivedFilesDisplay");
+  const statusBtn = document.getElementById("serverstatus");
 
-const roomIdInput = document.getElementById("roomIdinput");
-const roomDisplay = document.getElementById("roomId");
-const deviceDisplay = document.getElementById("connectedDevice");
-const joinBtn = document.getElementById("joinBtn");
-const sendBtn = document.getElementById("sendBtn");
-const fileInput = document.getElementById("fileInput");
-const sendFilesDisplay = document.getElementById("sendFilesDisplay");
-const receivedFilesDisplay = document.getElementById("receivedFilesDisplay");
-const statusBtn = document.getElementById("serverstatus");
+  let roomId = '';
+  let joined = false;
+  let sendOffset = 0;
+  let sendFile = null;
+  let sendFileReader = null;
+  let sendingCancelled = false;
+  let currentTransferId = null;
 
-let roomId = '';
-let joined = false;
-let sendOffset = 0;
-let sendFile = null;
-let sendFileReader = null;
-let sendingCancelled = false;
-let currentTransferId = null;
+  const CHUNK_SIZE = 64 * 1024;
+  const countdownSeconds = 35;
+  let countdownTimer = null;
+  let countdownActive = false;
+  let reconnectAttempts = 0;
+  let currentLabel = "Connecting";
 
-const CHUNK_SIZE = 64 * 1024;
-const countdownSeconds = 35;
-let countdownTimer = null;
-let countdownActive = false;
-let reconnectAttempts = 0;
-let currentLabel = "Connecting";
+  // Limit input to 4 digits
+  roomIdInput.addEventListener('input', () => {
+   if (roomIdInput.value.length > 4) {
+    roomIdInput.value = roomIdInput.value.slice(0, 4);
+   }
+  });
 
-roomIdInput.addEventListener('input', () => {
- if (roomIdInput.value.length > 4) {
-  roomIdInput.value = roomIdInput.value.slice(0, 4);
- }
-});
+  // Join or leave room
+  joinBtn.onclick = () => {
+   if (!joined) {
+    roomId = roomIdInput.value.trim();
+    if (roomId.length !== 4) return showToast("Enter 4-digit room code", "info");
+    socket.emit("join-room", roomId);
+   } else {
+    socket.emit("leave-room", roomId);
+    resetState();
+   }
+  };
 
-joinBtn.onclick = () => {
- if (!joined) {
-  roomId = roomIdInput.value.trim();
-  if (roomId.length !== 4) return showToast("Enter 4-digit room code", "info");
-  socket.emit("join-room", roomId);
- } else {
-  socket.emit("leave-room", roomId);
-  resetState();
- }
-};
+  // Reset state
+  function resetState() {
+   joined = false;
+   roomId = '';
+   sendingCancelled = true;
+   sendFileReader = null;
+   sendOffset = 0;
+   sendFile = null;
+   currentTransferId = null;
+   showToast("Left room", "error");
+   joinBtn.textContent = "Join Room";
+   joinBtn.classList.remove("bg-error");
+   roomDisplay.textContent = "----";
+   deviceDisplay.textContent = "0";
+  }
 
-function resetState() {
- joined = false;
- roomId = '';
- sendingCancelled = true;
- sendFileReader = null;
- sendOffset = 0;
- sendFile = null;
- currentTransferId = null;
- showToast("Left room", "error");
- joinBtn.textContent = "Join Room";
- joinBtn.classList.remove("bg-error");
- roomDisplay.textContent = "----";
- deviceDisplay.textContent = "0";
- sendBtn.disabled = false;
-}
+  // Format byte sizes
+  function formatBytes(bytes) {
+   const sizes = ['Bytes',
+    'KB',
+    'MB',
+    'GB'];
+   if (bytes === 0) return '0 Bytes';
+   const i = Math.floor(Math.log(bytes) / Math.log(1024));
+   return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
+  }
 
-function formatBytes(bytes) {
- const sizes = ['Bytes', 'KB', 'MB', 'GB'];
- if (bytes === 0) return '0 Bytes';
- const i = Math.floor(Math.log(bytes) / Math.log(1024));
- return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];
-}
+  // Update server status UI
+  function updateStatusButton(state) {
+   statusBtn.classList.remove('connected', 'disconnected', 'connecting', 'offline');
+   if (state === 'connected') {
+    reconnectAttempts = 0;
+    stopCountdown();
+    statusBtn.textContent = 'Connected to Server.';
+    statusBtn.classList.add('connected');
+   } else if (state === 'disconnected') {
+    reconnectAttempts = 0;
+    stopCountdown();
+    statusBtn.textContent = 'Disconnected from Server.';
+    statusBtn.classList.add('disconnected');
+   } else if (state === 'offline') {
+    reconnectAttempts = 0;
+    stopCountdown();
+    statusBtn.textContent = 'You are Offline.';
+    statusBtn.classList.add('offline');
+   } else {
+    statusBtn.classList.add('connecting');
+    startCountdown();
+   }
+  }
 
-function updateStatusButton(state) {
- statusBtn.classList.remove('connected', 'disconnected', 'connecting', 'offline');
- if (state === 'connected') {
-  reconnectAttempts = 0;
-  stopCountdown();
-  statusBtn.textContent = 'Connected to Server.';
-  statusBtn.classList.add('connected');
- } else if (state === 'disconnected') {
-  reconnectAttempts = 0;
-  stopCountdown();
-  statusBtn.textContent = 'Disconnected from Server.';
-  statusBtn.classList.add('disconnected');
- } else if (state === 'offline') {
-  reconnectAttempts = 0;
-  stopCountdown();
-  statusBtn.textContent = 'You are Offline.';
-  statusBtn.classList.add('offline');
- } else {
-  statusBtn.classList.add('connecting');
-  startCountdown();
- }
-}
+  function startCountdown() {
+   if (countdownActive) return;
+   countdownActive = true;
 
-function startCountdown() {
- if (countdownActive) return;
- countdownActive = true;
- let secondsLeft = countdownSeconds;
- statusBtn.textContent = `${currentLabel}... (${secondsLeft}s)` + (reconnectAttempts > 1 ? ` | Attempt #${reconnectAttempts}` : '');
- countdownTimer = setInterval(() => {
-  secondsLeft--;
-  if (secondsLeft > 0) {
-   statusBtn.textContent = `${currentLabel}... (${secondsLeft}s)` + (reconnectAttempts > 1 ? ` | Attempt #${reconnectAttempts}` : '');
-  } else {
+   let secondsLeft = countdownSeconds;
+   statusBtn.textContent = `${currentLabel}... (${secondsLeft}s)` +
+   (reconnectAttempts > 1 ? ` | Attempt #${reconnectAttempts}`: '');
+
+   countdownTimer = setInterval(() => {
+    secondsLeft--;
+    if (secondsLeft > 0) {
+     statusBtn.textContent = `${currentLabel}... (${secondsLeft}s)` +
+     (reconnectAttempts > 1 ? ` | Attempt #${reconnectAttempts}`: '');
+    } else {
+     clearInterval(countdownTimer);
+     statusBtn.textContent = 'Connection Timeout. Reloading...';
+     setTimeout(() => location.reload(), 1000);
+    }
+   },
+    1000);
+  }
+
+  function stopCountdown() {
    clearInterval(countdownTimer);
-   statusBtn.textContent = 'Connection Timeout. Reloading...';
-   setTimeout(() => location.reload(), 1000);
+   countdownActive = false;
   }
- }, 1000);
-}
 
-function stopCountdown() {
- clearInterval(countdownTimer);
- countdownActive = false;
-}
-
-window.addEventListener('online', () => {
- if (socket.connected) {
-  updateStatusButton('connected');
- } else {
-  currentLabel = reconnectAttempts > 1 ? 'Reconnecting' : 'Connecting';
-  updateStatusButton('connecting');
- }
-});
-
-window.addEventListener('offline', () => {
- updateStatusButton('offline');
-});
-
-if (!navigator.onLine) {
- updateStatusButton('offline');
-} else if (socket.connected) {
- updateStatusButton('connected');
-} else {
- reconnectAttempts = 1;
- updateStatusButton('connecting');
-}
-
-socket.on('connect', () => updateStatusButton('connected'));
-socket.on('disconnect', () => updateStatusButton('disconnected'));
-
-socket.io.on('reconnect_attempt', () => {
- if (!navigator.onLine) {
-  updateStatusButton('offline');
- } else {
-  reconnectAttempts++;
-  currentLabel = 'Reconnecting';
-  updateStatusButton('connecting');
- }
-});
-
-socket.on("room-joined", (data) => {
- joined = true;
- roomId = data.roomId;
- roomDisplay.textContent = data.roomId;
- deviceDisplay.textContent = data.devices;
- joinBtn.textContent = "Exit Room";
- showToast("Joined a room", "success");
- joinBtn.classList.add("bg-error");
-});
-
-socket.on("room-updated", (data) => {
- deviceDisplay.textContent = data.devices;
-});
-
-socket.on('user-joined-toast', ({ devices }) => {
- showToast(`A user joined, ${devices} Connected`);
-});
-
-socket.on('user-left-toast', ({ devices }) => {
- showToast(`A user left, ${devices} Connected`);
-});
-
-sendBtn.onclick = () => {
- if (!fileInput.files.length || !joined) {
-  showToast("Join a room or select a file first", "info");
-  return;
- }
-
- sendBtn.disabled = true;
- sendFile = fileInput.files[0];
- sendOffset = 0;
- sendingCancelled = false;
- currentTransferId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-
- const metadata = {
-  name: sendFile.name,
-  size: sendFile.size,
-  type: sendFile.type,
-  id: currentTransferId
- };
-
- const ui = createFileCard(sendFilesDisplay, metadata, true);
-
- ui.cancelBtn.onclick = () => {
-  sendingCancelled = true;
-  if (sendFileReader && sendFileReader.readyState === FileReader.LOADING) {
-   sendFileReader.abort();
-  }
-  socket.emit("send-cancel-transfer", {
-   roomId,
-   fileName: sendFile.name,
-   transferId: currentTransferId
-  });
-  sendFileReader = null;
-  sendOffset = sendFile.size;
-  sendFilesDisplay.removeChild(ui.card);
-  showToast("Transfer cancelled", "error");
-  sendBtn.disabled = false; // <-- critical line added here
- };
-
- socket.emit("send-file-meta", {
-  roomId, metadata
- });
-
- sendFileReader = new FileReader();
- sendFileReader.onload = (e) => {
-  if (sendingCancelled || !sendFileReader) return;
-
-  socket.emit("send-file-chunk", {
-   roomId,
-   chunk: e.target.result,
-   transferId: currentTransferId
+  // Network listeners
+  window.addEventListener('online', () => {
+   if (socket.connected) {
+    updateStatusButton('connected');
+   } else {
+    currentLabel = reconnectAttempts > 1 ? 'Reconnecting': 'Connecting';
+    updateStatusButton('connecting');
+   }
   });
 
-  sendOffset += CHUNK_SIZE;
-  ui.status.textContent = `${formatBytes(Math.min(sendOffset, sendFile.size))} / ${formatBytes(sendFile.size)}`;
-  ui.progressBar.style.width = `${(sendOffset / sendFile.size) * 100}%`;
+  window.addEventListener('offline', () => {
+   updateStatusButton('offline');
+  });
 
-  if (sendOffset < sendFile.size) {
-   sendChunk();
+  // Initial connection state
+  if (!navigator.onLine) {
+   updateStatusButton('offline');
+  } else if (socket.connected) {
+   updateStatusButton('connected');
   } else {
-   ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
-   ui.status.style.color = '#22c55e';
-   sendBtn.disabled = false;
-   ui.cancelBtn.textContent = 'Clear';
-   ui.cancelBtn.style.color = 'white';
-   ui.cancelBtn.style.backgroundColor = '#ffaa00';
-   ui.cancelBtn.onclick = () => {
-    sendFilesDisplay.removeChild(ui.card);
-   };
+   reconnectAttempts = 1;
+   updateStatusButton('connecting');
   }
- };
 
- function sendChunk() {
-  if (sendingCancelled || !sendFile || !sendFileReader || sendOffset >= sendFile.size) return;
-  const slice = sendFile.slice(sendOffset, sendOffset + CHUNK_SIZE);
-  sendFileReader.readAsArrayBuffer(slice);
- }
+  // Socket events
+  socket.on('connect', () => updateStatusButton('connected'));
+  socket.on('disconnect', () => updateStatusButton('disconnected'));
 
- sendChunk();
+  socket.io.on('reconnect_attempt', () => {
+   if (!navigator.onLine) {
+    updateStatusButton('offline');
+   } else {
+    reconnectAttempts++;
+    currentLabel = 'Reconnecting';
+    updateStatusButton('connecting');
+   }
+  });
+
+  socket.on("room-joined", (data) => {
+   joined = true;
+   roomId = data.roomId;
+   roomDisplay.textContent = data.roomId;
+   deviceDisplay.textContent = data.devices;
+   joinBtn.textContent = "Exit Room";
+   showToast("Joined a room", "success");
+   joinBtn.classList.add("bg-error");
+  });
+
+  socket.on("room-updated", (data) => {
+   deviceDisplay.textContent = data.devices;
+  });
+
+  socket.on('user-joined-toast', ({
+   devices
+  }) => {
+   showToast(`A user joined, ${devices} Connected`);
+  });
+
+  socket.on('user-left-toast', ({
+   devices
+  }) => {
+   showToast(`A user left, ${devices} Connected`);
+  });
+
+  // File sending
+  sendBtn.onclick = () => {
+  if (!fileInput.files.length || !joined) {
+    showToast("Join a room or select a file first", "info");
+    return;
+  }
+
+  sendBtn.disabled = true;
+  sendFile = fileInput.files[0];
+  sendOffset = 0;
+  sendingCancelled = false;
+  currentTransferId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+  const metadata = {
+    name: sendFile.name,
+    size: sendFile.size,
+    type: sendFile.type,
+    id: currentTransferId
+  };
+
+  const ui = createFileCard(sendFilesDisplay, metadata, true);
+
+  ui.cancelBtn.onclick = () => {
+    sendingCancelled = true;
+    sendOffset = sendFile.size; // Stop future reads
+    socket.emit("send-cancel-transfer", {
+      roomId,
+      fileName: sendFile.name,
+      transferId: currentTransferId
+    });
+    sendFilesDisplay.removeChild(ui.card);
+    showToast("Transfer cancelled", "error");
+    sendBtn.disabled = false;
+  };
+
+  socket.emit("send-file-meta", {
+    roomId, metadata
+  });
+
+  const PIPELINE_DEPTH = 3;
+  let activeReads = 0;
+
+  function sendChunkPipeline() {
+    if (sendingCancelled || !sendFile || sendOffset >= sendFile.size) return;
+
+    while (activeReads < PIPELINE_DEPTH && sendOffset < sendFile.size) {
+      const start = sendOffset;
+      const end = Math.min(sendOffset + CHUNK_SIZE, sendFile.size);
+      const slice = sendFile.slice(start, end);
+
+      const reader = new FileReader();
+      activeReads++;
+      sendOffset = end;
+
+      reader.onload = (e) => {
+        if (sendingCancelled) return;
+
+        socket.emit("send-file-chunk", {
+          roomId,
+          chunk: e.target.result,
+          transferId: currentTransferId
+        });
+
+        ui.status.textContent = `${formatBytes(Math.min(sendOffset, sendFile.size))} / ${formatBytes(sendFile.size)}`;
+        ui.progressBar.style.width = `${(sendOffset / sendFile.size) * 100}%`;
+
+        activeReads--;
+        if (sendOffset < sendFile.size) {
+          sendChunkPipeline(); // Queue next
+        } else if (activeReads === 0) {
+          ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
+          ui.status.style.color = '#22c55e';
+          sendBtn.disabled = false;
+          ui.cancelBtn.textContent = 'Clear';
+          ui.cancelBtn.style.color = 'white';
+          ui.cancelBtn.style.backgroundColor = '#ffaa00';
+          ui.cancelBtn.onclick = () => {
+            sendFilesDisplay.removeChild(ui.card);
+          };
+        }
+      };
+
+      reader.readAsArrayBuffer(slice);
+    }
+  }
+
+  sendChunkPipeline(); // Start sending
 };
+
 
   // File receiving
   socket.on("file-meta", (metadata) => {
