@@ -549,85 +549,93 @@
 
   // File sending
   sendBtn.onclick = () => {
-   if (!fileInput.files.length || !joined) {
+  if (!fileInput.files.length || !joined) {
     showToast("Join a room or select a file first", "info");
     return;
-   }
+  }
 
-   sendBtn.disabled = true;
-   sendFile = fileInput.files[0];
-   sendOffset = 0;
-   sendingCancelled = false;
-   currentTransferId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  sendBtn.disabled = true;
+  sendFile = fileInput.files[0];
+  sendOffset = 0;
+  sendingCancelled = false;
+  currentTransferId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
-   const metadata = {
+  const metadata = {
     name: sendFile.name,
     size: sendFile.size,
     type: sendFile.type,
     id: currentTransferId
-   };
+  };
 
-   const ui = createFileCard(sendFilesDisplay, metadata, true);
+  const ui = createFileCard(sendFilesDisplay, metadata, true);
 
-   ui.cancelBtn.onclick = () => {
+  ui.cancelBtn.onclick = () => {
     sendingCancelled = true;
-    if (sendFileReader && sendFileReader.readyState === FileReader.LOADING) {
-     sendFileReader.abort();
-    }
+    sendOffset = sendFile.size; // Stop future reads
     socket.emit("send-cancel-transfer", {
-     roomId,
-     fileName: sendFile.name,
-     transferId: currentTransferId
+      roomId,
+      fileName: sendFile.name,
+      transferId: currentTransferId
     });
-    sendFileReader = null;
-    sendOffset = sendFile.size;
     sendFilesDisplay.removeChild(ui.card);
     showToast("Transfer cancelled", "error");
     sendBtn.disabled = false;
-   };
-
-   socket.emit("send-file-meta", {
-    roomId, metadata
-   });
-
-   sendFileReader = new FileReader();
-   sendFileReader.onload = (e) => {
-    if (sendingCancelled || !sendFileReader) return;
-
-    socket.emit("send-file-chunk", {
-     roomId,
-     chunk: e.target.result,
-     transferId: currentTransferId
-    });
-
-    sendOffset += CHUNK_SIZE;
-    ui.status.textContent = `${formatBytes(Math.min(sendOffset, sendFile.size))} / ${formatBytes(sendFile.size)}`;
-    ui.progressBar.style.width = `${(sendOffset / sendFile.size) * 100}%`;
-
-    if (sendOffset < sendFile.size) {
-     sendChunk();
-    } else {
-     ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
-     ui.status.style.color = '#22c55e';
-     sendBtn.disabled = false;
-     // Change cancel to clear
-     ui.cancelBtn.textContent = 'Clear';
-     ui.cancelBtn.style.color = 'white';
-     ui.cancelBtn.style.backgroundColor = '#ffaa00';
-     ui.cancelBtn.onclick = () => {
-      sendFilesDisplay.removeChild(ui.card);
-     };
-    }
-   };
-
-   function sendChunk() {
-    if (sendingCancelled || !sendFile || !sendFileReader || sendOffset >= sendFile.size) return;
-    const slice = sendFile.slice(sendOffset, sendOffset + CHUNK_SIZE);
-    sendFileReader.readAsArrayBuffer(slice);
-   }
-
-   sendChunk();
   };
+
+  socket.emit("send-file-meta", {
+    roomId, metadata
+  });
+
+  const PIPELINE_DEPTH = 3;
+  let activeReads = 0;
+
+  function sendChunkPipeline() {
+    if (sendingCancelled || !sendFile || sendOffset >= sendFile.size) return;
+
+    while (activeReads < PIPELINE_DEPTH && sendOffset < sendFile.size) {
+      const start = sendOffset;
+      const end = Math.min(sendOffset + CHUNK_SIZE, sendFile.size);
+      const slice = sendFile.slice(start, end);
+
+      const reader = new FileReader();
+      activeReads++;
+      sendOffset = end;
+
+      reader.onload = (e) => {
+        if (sendingCancelled) return;
+
+        socket.emit("send-file-chunk", {
+          roomId,
+          chunk: e.target.result,
+          transferId: currentTransferId
+        });
+
+        ui.status.textContent = `${formatBytes(Math.min(sendOffset, sendFile.size))} / ${formatBytes(sendFile.size)}`;
+        ui.progressBar.style.width = `${(sendOffset / sendFile.size) * 100}%`;
+
+        activeReads--;
+        if (sendOffset < sendFile.size) {
+          sendChunkPipeline(); // Queue next
+        } else if (activeReads === 0) {
+          ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
+          ui.status.style.color = '#22c55e';
+          sendBtn.disabled = false;
+          ui.cancelBtn.textContent = 'Clear';
+          ui.cancelBtn.style.color = 'white';
+          ui.cancelBtn.style.backgroundColor = '#ffaa00';
+          ui.cancelBtn.onclick = () => {
+            sendFilesDisplay.removeChild(ui.card);
+          };
+        }
+      };
+
+      reader.readAsArrayBuffer(slice);
+    }
+  }
+
+  sendChunkPipeline(); // Start sending
+};
+
 
   // File receiving
   socket.on("file-meta", (metadata) => {
