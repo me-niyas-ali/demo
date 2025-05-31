@@ -385,7 +385,7 @@
   let currentTransferId = null;
 
   const CHUNK_SIZE = 64 * 1024;
-  const countdownSeconds = 30;
+  const countdownSeconds = 35;
   let countdownTimer = null;
   let countdownActive = false;
   let reconnectAttempts = 0;
@@ -612,8 +612,7 @@
     if (sendOffset < sendFile.size) {
      sendChunk();
     } else {
-     ui.status.textContent = `Upload complete (${formatBytes(sendFile.size)})`;
-     showToast("Upload completed", "success");
+     ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
      ui.status.style.color = '#22c55e';
      sendBtn.disabled = false;
      // Change cancel to clear
@@ -675,7 +674,6 @@
      ui.status.textContent = `File received (${formatBytes(metadata.size)})`;
      ui.status.style.color = '#22c55e';
      ui.progressBar.parentElement.style.display = 'none';
-     showToast("File received", "success");
      ui.downloadBtn.style.display = 'block';
      // Change cancel to clear
      ui.cancelBtn.textContent = 'Clear';
