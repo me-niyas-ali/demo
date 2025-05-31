@@ -202,19 +202,19 @@
   .status-line {
    margin-bottom: 8px;
   }
-  
-  .button-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 8px;
-}
 
-.button-container .cancel-btn,
-.button-container .download-btn {
-  flex: 1;
-  text-align: center;
-}
+  .button-container {
+   display: flex;
+   justify-content: space-between;
+   gap: 10px;
+   margin-top: 8px;
+  }
+
+  .button-container .cancel-btn,
+  .button-container .download-btn {
+   flex: 1;
+   text-align: center;
+  }
 
   .cancel-btn {
    background: #f44336;
@@ -346,11 +346,11 @@
   </center>
   <!--button class="button" id="testbtn">Test Toast</button-->
   <div id="sendFilesDisplay" class="file-display-area"></div>
-  
+
   <!--div class="button-container">
-  <button class="cancel-btn">Cancel</button>
-  <button class="download-btn">download</button>
-  </div-->
+    <button class="cancel-btn">Cancel</button>
+    <button class="download-btn">download</button>
+    </div-->
 
   <div id="receivedFilesDisplay" class="file-display-area"></div>
  </div>
@@ -359,7 +359,7 @@
  <script src="/socket.io/socket.io.js"></script>
  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
  <script>
- 
+
   const socket = io('https://p2p-share-7wvh.onrender.com');
 
   const roomIdInput = document.getElementById("roomIdinput");
@@ -550,99 +550,99 @@
 
   // File sending
   sendBtn.onclick = () => {
-  if (!fileInput.files.length || !joined) {
+   if (!fileInput.files.length || !joined) {
     showToast("Join a room or select a file first", "info");
     return;
-  }
+   }
 
-  sendBtn.disabled = true;
-  sendFile = fileInput.files[0];
-  sendOffset = 0;
-  sendingCancelled = false;
-  currentTransferId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+   sendBtn.disabled = true;
+   sendFile = fileInput.files[0];
+   sendOffset = 0;
+   sendingCancelled = false;
+   currentTransferId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
-  const metadata = {
+   const metadata = {
     name: sendFile.name,
     size: sendFile.size,
     type: sendFile.type,
     id: currentTransferId
-  };
+   };
 
-  const ui = createFileCard(sendFilesDisplay, metadata, true);
+   const ui = createFileCard(sendFilesDisplay, metadata, true);
 
-  ui.cancelBtn.onclick = () => {
+   ui.cancelBtn.onclick = () => {
     sendingCancelled = true;
     sendOffset = sendFile.size; // Stop future reads
     socket.emit("send-cancel-transfer", {
-      roomId,
-      fileName: sendFile.name,
-      transferId: currentTransferId
+     roomId,
+     fileName: sendFile.name,
+     transferId: currentTransferId
     });
     sendFilesDisplay.removeChild(ui.card);
     showToast("Transfer cancelled", "error");
     sendBtn.disabled = false;
-  };
+   };
 
-  socket.emit("send-file-meta", {
+   socket.emit("send-file-meta", {
     roomId, metadata
-  });
+   });
 
-  const PIPELINE_DEPTH = 3;
-  let activeReads = 0;
+   const PIPELINE_DEPTH = 3;
+   let activeReads = 0;
 
-  function sendChunkPipeline() {
+   function sendChunkPipeline() {
     if (sendingCancelled || !sendFile || sendOffset >= sendFile.size) return;
 
     while (activeReads < PIPELINE_DEPTH && sendOffset < sendFile.size) {
-      const start = sendOffset;
-      const end = Math.min(sendOffset + CHUNK_SIZE, sendFile.size);
-      const slice = sendFile.slice(start, end);
+     const start = sendOffset;
+     const end = Math.min(sendOffset + CHUNK_SIZE, sendFile.size);
+     const slice = sendFile.slice(start, end);
 
-      const reader = new FileReader();
-      activeReads++;
-      sendOffset = end;
+     const reader = new FileReader();
+     activeReads++;
+     sendOffset = end;
 
-      reader.onload = (e) => {
-        if (sendingCancelled) return;
+     reader.onload = (e) => {
+      if (sendingCancelled) return;
 
-        socket.emit("send-file-chunk", {
-          roomId,
-          chunk: e.target.result,
-          transferId: currentTransferId
-        });
+      socket.emit("send-file-chunk", {
+       roomId,
+       chunk: e.target.result,
+       transferId: currentTransferId
+      });
 
-        ui.status.textContent = `${formatBytes(Math.min(sendOffset, sendFile.size))} / ${formatBytes(sendFile.size)}`;
-        ui.progressBar.style.width = `${(sendOffset / sendFile.size) * 100}%`;
+      ui.status.textContent = `${formatBytes(Math.min(sendOffset, sendFile.size))} / ${formatBytes(sendFile.size)}`;
+      ui.progressBar.style.width = `${(sendOffset / sendFile.size) * 100}%`;
 
-        activeReads--;
-        if (sendOffset < sendFile.size) {
-          sendChunkPipeline(); // Queue next
-        } else if (activeReads === 0) {
-          ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
-          ui.status.style.color = '#22c55e';
-          sendBtn.disabled = false;
-          ui.cancelBtn.textContent = 'Clear';
-          ui.cancelBtn.style.color = 'white';
-          ui.cancelBtn.style.backgroundColor = '#ffaa00';
-          ui.cancelBtn.onclick = () => {
-            sendFilesDisplay.removeChild(ui.card);
-          };
-        }
-      };
+      activeReads--;
+      if (sendOffset < sendFile.size) {
+       sendChunkPipeline(); // Queue next
+      } else if (activeReads === 0) {
+       ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
+       ui.status.style.color = '#22c55e';
+       sendBtn.disabled = false;
+       ui.cancelBtn.textContent = 'Clear';
+       ui.cancelBtn.style.color = 'white';
+       ui.cancelBtn.style.backgroundColor = '#ffaa00';
+       ui.cancelBtn.onclick = () => {
+        sendFilesDisplay.removeChild(ui.card);
+       };
+      }
+     };
 
-      reader.readAsArrayBuffer(slice);
+     reader.readAsArrayBuffer(slice);
     }
-  }
+   }
 
-  sendChunkPipeline(); // Start sending
-};
+   sendChunkPipeline(); // Start sending
+  };
 
   // File receiving
   socket.on("file-meta", (metadata) => {
-   
+
    socket.off("file-chunk");
    socket.off("send-cancel-transfer");
-  
+
    const ui = createFileCard(receivedFilesDisplay, metadata, false);
    let buffer = [];
    let receivedSize = 0;
@@ -763,25 +763,25 @@
    progressBar.className = 'progress-bar';
    progressContainer.appendChild(progressBar);
    card.appendChild(progressContainer);
-   
-const buttonContainer = document.createElement('div');
-buttonContainer.className = 'button-container';
 
-const cancelBtn = document.createElement('button');
-cancelBtn.className = 'cancel-btn';
-cancelBtn.textContent = 'Cancel';
-buttonContainer.appendChild(cancelBtn);
+   const buttonContainer = document.createElement('div');
+   buttonContainer.className = 'button-container';
 
-let downloadBtn = null;
-if (!isSender) {
-  downloadBtn = document.createElement('button');
-  downloadBtn.className = 'download-btn';
-  downloadBtn.textContent = 'Download';
-  downloadBtn.style.display = 'none';
-  buttonContainer.appendChild(downloadBtn);
-}
+   const cancelBtn = document.createElement('button');
+   cancelBtn.className = 'cancel-btn';
+   cancelBtn.textContent = 'Cancel';
+   buttonContainer.appendChild(cancelBtn);
 
-card.appendChild(buttonContainer);
+   let downloadBtn = null;
+   if (!isSender) {
+    downloadBtn = document.createElement('button');
+    downloadBtn.className = 'download-btn';
+    downloadBtn.textContent = 'Download';
+    downloadBtn.style.display = 'none';
+    buttonContainer.appendChild(downloadBtn);
+   }
+
+   card.appendChild(buttonContainer);
    displayArea.appendChild(card);
    return {
     card,
