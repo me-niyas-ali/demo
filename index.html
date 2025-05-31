@@ -176,13 +176,6 @@
    position: relative;
   }
 
-  .file-card span {
-   margin: 0px;
-   padding: 0px;
-   word-wrap: break-word;
-   line-height: 1.2;
-  }
-
   .file-card-title-wrapper {
    position: relative;
    overflow: hidden;
@@ -202,7 +195,7 @@
    0% {
     transform: translateX(0%);
    }
-   10% {
+   20% {
     transform: translateX(0%);
    }
    100% {
@@ -650,7 +643,7 @@
       if (sendOffset < sendFile.size) {
        sendChunkPipeline(); // Queue next
       } else if (activeReads === 0) {
-       ui.status.textContent = `File Send (${formatBytes(sendFile.size)})`;
+       ui.status.textContent = `File Sent (${formatBytes(sendFile.size)})`;
        ui.status.style.color = '#22c55e';
        sendBtn.disabled = false;
        ui.cancelBtn.textContent = 'Clear';
