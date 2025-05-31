@@ -183,6 +183,34 @@
    line-height: 1.2;
   }
 
+  .file-card-title-wrapper {
+   position: relative;
+   overflow: hidden;
+   white-space: nowrap;
+   width: 100%;
+  }
+
+  .file-card-title {
+   display: inline-block;
+   white-space: nowrap;
+   will-change: transform;
+   animation: scroll-title 15s linear infinite;
+   animation-play-state: paused;
+  }
+
+@keyframes scroll-title {
+   0% {
+    transform: translateX(0%);
+   }
+   10% {
+    transform: translateX(0%);
+   }
+   100% {
+    transform: translateX(-100%);
+   }
+  }
+
+
   .progress-container {
    width: 100%;
    background: #eee;
@@ -299,27 +327,22 @@
   .status-btn {
    border-radius: 8px;
    padding: 0.25em 0.5em;
+   border: 2px solid #ef4444;
+   color: black;
+   background-color: none;
   }
 
   .status-btn.connected {
-   background-color: none;
-   border:2px solid #22c55e;
-   color: black;
+   border: 2px solid #22c55e;
   }
   .status-btn.disconnected {
-   background-color: none;
-   border:2px solid #ef4444;
-   color: black;
+   border: 2px solid #ef4444;
   }
   .status-btn.connecting {
-   background-color: none;
-   border:2px solid #ffcc66;
-   color: black;
+   border: 2px solid #ffcc66;
   }
   .status-btn.offline {
-   background-color: none;
-   border:2px solid #ef4444;
-   color: black;
+   border: 2px solid #ef4444;
   }
  </style>
 </head>
@@ -348,19 +371,18 @@
   <!--button class="button" id="testbtn">Test Toast</button-->
   <div id="sendFilesDisplay" class="file-display-area"></div>
 
-   <!--div class="file-card">
-    <span>File Njdidndjudbskisbhsujeneksisnsjidhehsjsisjnehdudjdbdkdisjbesijdbdgeusjdbdjdksjdidjdbhdjdkdidbdjame</span>
-    <div class="status-line">Transfer Status</div>
-    <div class="progress-container">
-     <div class="progress-bar">
-      
-     </div>
+  <!--div class="file-card">
+      <span>File Njdidndjudbskisbhsujeneksisnsjidhehsjsisjnehdudjdbdkdisjbesijdbdgeusjdbdjdksjdidjdbhdjdkdidbdjame</span>
+      <div class="status-line">Transfer Status</div>
+      <div class="progress-container">
+       <div class="progress-bar">
+       </div>
+      </div>
+      <div class="button-container">
+     <button class="cancel-btn">Cancel</button>
+     <button class="download-btn">download</button>
     </div>
-    <div class="button-container">
-   <button class="cancel-btn">Cancel</button>
-   <button class="download-btn">download</button>
-  </div>
-   </div-->
+     </div-->
 
   <div id="receivedFilesDisplay" class="file-display-area"></div>
  </div>
@@ -759,9 +781,24 @@
    card.className = 'file-card';
    if (metadata.id) card.dataset.transferId = metadata.id;
 
+   // Title wrapper and title
+   const titleWrapper = document.createElement('div');
+   titleWrapper.className = 'file-card-title-wrapper';
+
    const title = document.createElement('span');
+   title.className = 'file-card-title';
    title.textContent = metadata.name;
-   card.appendChild(title);
+
+   titleWrapper.appendChild(title);
+   card.appendChild(titleWrapper);
+
+   // Animate scroll if overflow
+   setTimeout(() => {
+    if (title.scrollWidth > titleWrapper.clientWidth) {
+     title.style.animationPlayState = 'running';
+    }
+   },
+    100); // Slight delay for rendering
 
    const status = document.createElement('div');
    status.className = 'status-line';
@@ -795,6 +832,7 @@
 
    card.appendChild(buttonContainer);
    displayArea.prepend(card);
+
    return {
     card,
     status,
@@ -803,6 +841,7 @@
     downloadBtn
    };
   }
+
  </script>
 
 
