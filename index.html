@@ -313,7 +313,7 @@
  <center>
   <div class="container">
    <h2>P2P File Sharing</h2>
-   <span id="serverstatus" class="status-btn">Connecting... please wait...</span>
+   <span id="serverstatus" class="status-btn">Connecting...</span>
    <div class="status-container">
     <div class="room-id">
      Room ID : <span id="roomId">----</span>
@@ -330,23 +330,16 @@
     <input class="input" type="file" id="fileInput" />
     <button class="button"id="sendBtn">Send</button>
    </div>
-   </center>
-   <!--button class="button" id="testbtn">Test Toast</button-->
-   <div id="sendFilesDisplay" class="file-display-area"></div>
-   <div id="receivedFilesDisplay" class="file-display-area"></div>
-  </div>
-  <div id="toast-container"></div>
+  </center>
+  <!--button class="button" id="testbtn">Test Toast</button-->
+  <div id="sendFilesDisplay" class="file-display-area"></div>
+  <div id="receivedFilesDisplay" class="file-display-area"></div>
+ </div>
+ <div id="toast-container"></div>
 
  <script src="/socket.io/socket.io.js"></script>
  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
  <script>
-  const input = document.getElementById('roomIdinput');
-  input.addEventListener('input', () => {
-   if (input.value.length > 4) {
-    input.value = input.value.slice(0, 4);
-   }
-  });
-
   const socket = io('https://p2p-share-7wvh.onrender.com');
   const roomIdInput = document.getElementById("roomIdinput");
   const roomDisplay = document.getElementById("roomId");
@@ -382,32 +375,79 @@
    resetState();
   });
 
+  const input = document.getElementById('roomIdinput');
+  input.addEventListener('input', () => {
+   if (input.value.length > 4) {
+    input.value = input.value.slice(0, 4);
+   }
+  });
 
   const statusBtn = document.getElementById('serverstatus');
 
+  let countdownTimer = null;
+  let countdownActive = false;
+  let reconnectAttempts = 0;
+  let currentLabel = "Connecting";
+  const countdownSeconds = 50;
+
+  function startCountdown() {
+   if (countdownActive) return;
+   countdownActive = true;
+
+   let secondsLeft = countdownSeconds;
+   statusBtn.textContent = `${currentLabel}... (${secondsLeft}s).` + (reconnectAttempts > 1 ? ` | Attempt #${reconnectAttempts}.`: '');
+
+   countdownTimer = setInterval(() => {
+    secondsLeft--;
+    if (secondsLeft > 0) {
+     statusBtn.textContent = `${currentLabel}... (${secondsLeft}s)` + (reconnectAttempts > 1 ? ` | Attempt #${reconnectAttempts}.`: '');
+    } else {
+     clearInterval(countdownTimer);
+     statusBtn.textContent = 'Connection Timeout. Reloading...';
+     setTimeout(() => location.reload(), 1000);
+    }
+   },
+    1000);
+  }
+
+  function stopCountdown() {
+   clearInterval(countdownTimer);
+   countdownActive = false;
+  }
+
   function updateStatusButton(state) {
-   statusBtn.classList.remove('connected', 'disconnected', 'connecting', 'offline');
+   statusBtn.classList.remove('connected',
+    'disconnected',
+    'connecting',
+    'offline');
 
    if (state === 'connected') {
-    statusBtn.textContent = 'Connected to Server';
+    reconnectAttempts = 0;
+    stopCountdown();
+    statusBtn.textContent = 'Connected to Server.';
     statusBtn.classList.add('connected');
    } else if (state === 'disconnected') {
-    statusBtn.textContent = 'Disconnected from Server';
+    reconnectAttempts = 0;
+    stopCountdown();
+    statusBtn.textContent = 'Disconnected from Server.';
     statusBtn.classList.add('disconnected');
    } else if (state === 'offline') {
-    statusBtn.textContent = 'You are Offline';
+    reconnectAttempts = 0;
+    stopCountdown();
+    statusBtn.textContent = 'You are Offline.';
     statusBtn.classList.add('offline');
    } else {
-    statusBtn.textContent = 'Connecting...';
     statusBtn.classList.add('connecting');
+    startCountdown();
    }
   }
 
-  // Listen for internet connectivity changes
+  // Handle online/offline
   window.addEventListener('online', () => {
    if (socket.connected) {
     updateStatusButton('connected');
    } else {
+    currentLabel = reconnectAttempts > 1 ? 'Reconnecting': 'Connecting';
     updateStatusButton('connecting');
    }
   });
@@ -416,18 +456,20 @@
    updateStatusButton('offline');
   });
 
-  // Initial check on load
+  // Initial check
   if (!navigator.onLine) {
    updateStatusButton('offline');
   } else if (socket.connected) {
    updateStatusButton('connected');
   } else {
+   reconnectAttempts = 1;
+   currentLabel = 'Connecting';
    updateStatusButton('connecting');
   }
 
-  // Existing socket events
+  // Socket events
   socket.on('connect', () => {
-   if (navigator.onLine) updateStatusButton('connected');
+   updateStatusButton('connected');
   });
 
   socket.on('disconnect', () => {
@@ -438,6 +480,8 @@
    if (!navigator.onLine) {
     updateStatusButton('offline');
    } else {
+    reconnectAttempts++;
+    currentLabel = 'Reconnecting';
     updateStatusButton('connecting');
    }
   });
@@ -728,11 +772,11 @@
  </script>
 
  <!-- <script " to check toast " >
-      document.getElementById("testbtn").addEventListener("click", function () {
-       showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
-        duration: 99999999, dismissible: true
+       document.getElementById("testbtn").addEventListener("click", function () {
+        showToast("toast hyyhuujjhyy 5ghuyhh tfvhyh test", "info", {
+         duration: 99999999, dismissible: true
+        });
        });
-      });
-     </script>-->
+      </script>-->
 </body>
 </html>
