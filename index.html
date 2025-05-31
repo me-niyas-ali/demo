@@ -176,8 +176,9 @@
    position: relative;
   }
 
-  .file-card h4 {
+  .file-card span {
    margin: 0 0 6px;
+   font-size: 0.875rem;
   }
 
   .progress-container {
@@ -545,7 +546,7 @@
    card.className = 'file-card';
    if (metadata.id) card.dataset.transferId = metadata.id;
 
-   const title = document.createElement('h4');
+   const title = document.createElement('span');
    title.textContent = metadata.name;
    card.appendChild(title);
 
@@ -652,10 +653,7 @@
      showToast("Upload completed", "success");
      ui.status.style.color = '#22c55e';
      sendBtn.disabled = false;
-     ui.cancelBtn.textContent = 'Clear';
-     ui.cancelBtn.onclick = () => {
-      sendFilesDisplay.removeChild(ui.card);
-     };
+     ui.cancelBtn.remove();
     }
    };
 
