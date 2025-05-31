@@ -202,25 +202,37 @@
   .status-line {
    margin-bottom: 8px;
   }
+  
+  .button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.button-container .cancel-btn,
+.button-container .download-btn {
+  flex: 1;
+  text-align: center;
+}
 
   .cancel-btn {
    background: #f44336;
    color: white;
    border: none;
-   padding: 5px 8px;
-   border-radius: 3px;
+   padding: 8px;
+   border-radius: 5px;
    cursor: pointer;
   }
 
   .download-btn {
    background-color: #4caf50;
    color: white;
-   padding: 6px;
    border: none;
-   border-radius: 4px;
-   margin-top: 10px;
-   display: none;
+   padding: 8px;
+   border-radius: 5px;
    cursor: pointer;
+   display: none;
   }
 
   #toast-container {
@@ -243,7 +255,7 @@
    color: black;
    padding: 6px 8px;
    border-radius: 8px;
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
    opacity: 0;
    transform: translateX(30px);
    animation: slideIn 0.4s ease forwards, fadeOut 0.2s ease forwards 2s;
@@ -261,13 +273,13 @@
   }
 
   .toast.success {
-   border: 2px solid #22c55e;
+   border: 3px solid #22c55e;
   }
   .toast.error {
-   border: 2px solid #ef4444;
+   border: 3px solid #ef4444;
   }
   .toast.info {
-   border: 2px solid #facc15;
+   border: 3px solid #ffaa00;
   }
 
 @keyframes slideIn {
@@ -300,7 +312,7 @@
    color: white;
   }
   .status-btn.connecting {
-   background-color: #facc15;
+   background-color: #ffcc66;
    /* yellow */
    color: black;
   }
@@ -308,6 +320,7 @@
    background-color: #ef4444;
    color: white;
   }
+  
 
  </style>
 
@@ -336,6 +349,14 @@
   </center>
   <!--button class="button" id="testbtn">Test Toast</button-->
   <div id="sendFilesDisplay" class="file-display-area"></div>
+  
+  
+  <!--div class="button-container">
+  <button class="cancel-btn">Cancel</button>
+  <button class="download-btn">download</button>
+  </div-->
+
+  
   <div id="receivedFilesDisplay" class="file-display-area"></div>
  </div>
  <div id="toast-container"></div>
@@ -597,6 +618,8 @@
      sendBtn.disabled = false;
      // Change cancel to clear
      ui.cancelBtn.textContent = 'Clear';
+     ui.cancelBtn.style.color = 'white';
+     ui.cancelBtn.style.backgroundColor = '#ffaa00';
      ui.cancelBtn.onclick = () => {
       sendFilesDisplay.removeChild(ui.card);
      };
@@ -649,13 +672,15 @@
     ui.progressBar.style.width = `${(receivedSize / metadata.size) * 100}%`;
 
     if (receivedSize >= metadata.size) {
-     ui.status.textContent = 'File received';
+     ui.status.textContent = `File received (${formatBytes(metadata.size)})`;
      ui.status.style.color = '#22c55e';
      ui.progressBar.parentElement.style.display = 'none';
      showToast("File received", "success");
      ui.downloadBtn.style.display = 'block';
      // Change cancel to clear
      ui.cancelBtn.textContent = 'Clear';
+     ui.cancelBtn.style.color = 'white';
+     ui.cancelBtn.style.backgroundColor = '#ffaa00';
      ui.cancelBtn.onclick = () => {
       receivedFilesDisplay.removeChild(ui.card);
      };
@@ -733,21 +758,25 @@
    progressBar.className = 'progress-bar';
    progressContainer.appendChild(progressBar);
    card.appendChild(progressContainer);
+   
+const buttonContainer = document.createElement('div');
+buttonContainer.className = 'button-container';
 
-   const cancelBtn = document.createElement('button');
-   cancelBtn.className = 'cancel-btn';
-   cancelBtn.textContent = 'Cancel';
-   card.appendChild(cancelBtn);
+const cancelBtn = document.createElement('button');
+cancelBtn.className = 'cancel-btn';
+cancelBtn.textContent = 'Cancel';
+buttonContainer.appendChild(cancelBtn);
 
-   let downloadBtn = null;
-   if (!isSender) {
-    downloadBtn = document.createElement('button');
-    downloadBtn.className = 'download-btn';
-    downloadBtn.textContent = `Download  (${formatBytes(metadata.size)})`;
-    downloadBtn.style.display = 'none';
-    card.appendChild(downloadBtn);
-   }
+let downloadBtn = null;
+if (!isSender) {
+  downloadBtn = document.createElement('button');
+  downloadBtn.className = 'download-btn';
+  downloadBtn.textContent = 'Download';
+  downloadBtn.style.display = 'none';
+  buttonContainer.appendChild(downloadBtn);
+}
 
+card.appendChild(buttonContainer);
    displayArea.appendChild(card);
    return {
     card,
