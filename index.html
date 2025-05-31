@@ -162,7 +162,7 @@
   }
 
   .file-display-area {
-   margin-top: 20px;
+   margin-top: 15px;
    display: flex;
    flex-direction: column;
    gap: 15px;
@@ -179,8 +179,8 @@
   .file-card span {
    margin: 0px;
    padding: 0px;
-   font-size: 0.875rem;
    word-wrap: break-word;
+   line-height: 1.2;
   }
 
   .progress-container {
@@ -189,12 +189,12 @@
    height: 15px;
    border-radius: 5px;
    overflow: hidden;
-   margin: 8px 0;
+   margin: 0px;
   }
 
   .progress-bar {
    height: 100%;
-   width: 0%;
+   width: 30%;
    background: #4caf50;
    transition: width 0.2s;
   }
@@ -347,10 +347,20 @@
   <!--button class="button" id="testbtn">Test Toast</button-->
   <div id="sendFilesDisplay" class="file-display-area"></div>
 
-  <!--div class="button-container">
-        <button class="cancel-btn">Cancel</button>
-        <button class="download-btn">download</button>
-        </div-->
+   <div class="file-card">
+    <span>File Njdidndjudbskisbhsujeneksisnsjidhehsjsisjnehdudjdbdkdisjbesijdbdgeusjdbdjdksjdidjdbhdjdkdidbdjame</span>
+    <div class="status-line">Transfer Status</div>
+    <div class="progress-container">
+     <div class="progress-bar">
+      
+     </div>
+    </div>
+    <div class="button-container">
+   <button class="cancel-btn">Cancel</button>
+   <button class="download-btn">download</button>
+  </div>
+   </div>
+  
 
   <div id="receivedFilesDisplay" class="file-display-area"></div>
  </div>
@@ -709,8 +719,8 @@
       if (progressBar) progressBar.style.backgroundColor = '#ef4444';
       if (cancelBtn)
        cancelBtn.textContent = 'Clear';
-       cancelBtn.style.color = 'white';
-       cancelBtn.style.backgroundColor = '#ffaa00';
+      cancelBtn.style.color = 'white';
+      cancelBtn.style.backgroundColor = '#ffaa00';
      }
     });
   });
