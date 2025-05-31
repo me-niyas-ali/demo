@@ -637,9 +637,12 @@
   sendChunkPipeline(); // Start sending
 };
 
-
   // File receiving
   socket.on("file-meta", (metadata) => {
+   
+   socket.off("file-chunk");
+   socket.off("send-cancel-transfer");
+  
    const ui = createFileCard(receivedFilesDisplay, metadata, false);
    let buffer = [];
    let receivedSize = 0;
