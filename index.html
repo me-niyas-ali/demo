@@ -418,55 +418,71 @@
     showLoggedOut();
    }
   });
-  
-  
+
+
+  // --- Show User Dashboard ---
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
    adminSection.classList.add("d-none");
    userSection.classList.remove("d-none");
+
    // Load user info
    const userDoc = await getDoc(doc(db, "users", uid));
    userFullnameSpan.textContent = userDoc.exists() ? userDoc.data().fullname: "";
+
    // Load books and show status
    onSnapshot(collection(db, "books"),
-    (snapshot) => {
+    async (snapshot) => {
      booksTableBody.innerHTML = "";
-     snapshot.forEach((docSnap) => {
+
+     for (const docSnap of snapshot.docs) {
       const book = docSnap.data();
+      const bookId = docSnap.id;
       let status = book.availability;
+
+      // Check if the book is already requested by any user and still active (Pending/Approved)
+      const requestSnap = await getDocs(query(
+       collection(db, "bookRequests"),
+       where("bookId", "==", bookId),
+       where("status", "in", ["Pending", "Approved"])
+      ));
+
+      const isRequested = !requestSnap.empty;
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
-
-
       <td>${book.title}</td>
       <td>${book.author}</td>
       <td>${status}</td>
-      <td>
-      ${status === "Available" ? `
-
-      <button class="btn btn-sm btn-primary">Request</button>`: ""}
-
-
-      </td>
+      <td>${
+      status === "Available" && !isRequested
+      ? `<button class="btn btn-sm btn-primary">Request</button>`: `<span class="text-muted">${isRequested ? "Already requested": ""}</span>`
+      }</td>
       `;
-      if (status === "Available") {
+
+      // Attach button handler
+      if (status === "Available" && !isRequested) {
        const btn = tr.querySelector("button");
-       btn.onclick = () => requestBook(docSnap.id);
+       btn.onclick = () => requestBook(bookId);
       }
+
       booksTableBody.appendChild(tr);
-     });
+     }
     });
+
    // Load user book request/checkouts
-   onSnapshot(query(collection(db, "bookRequests"),
-    where("userId", "==", uid)),
+   onSnapshot(query(
+    collection(db, "bookRequests"),
+    where("userId", "==", uid)
+   ),
     (snapshot) => {
      const historyTableBody = document.querySelector("#userHistoryTable tbody");
      historyTableBody.innerHTML = "";
+
      snapshot.forEach((docSnap) => {
       const req = docSnap.data();
       const tr = document.createElement("tr");
       tr.innerHTML = `
-
       <td>${req.title}</td>
       <td>${req.status}</td>
       <td>${new Date(req.requestedAt).toLocaleString()}</td>
@@ -475,7 +491,8 @@
      });
     });
   }
-  // Request book 
+
+  // Request book
   async function requestBook(bookId) {
    try {
     const user = auth.currentUser;
@@ -509,8 +526,8 @@
     alert("Error requesting book: " + err.message);
    }
   }
-  
-  
+
+
   // --- Show Admin Dashboard ---
   function showAdminDashboard() {
    userSection.classList.add("d-none");
