@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <h1 class="mb-4">Library App 30</h1>
+  <h1 class="mb-4">Library App 49</h1>
   <!-- Buttons to open modals -->
   <div class="mb-3">
    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -627,17 +627,28 @@
        alert("Error approving request: " + err.message);
       }
      };
-     // Reject book request
+     // Reject book request// Reject book request
      tr.querySelector(".btn-danger").onclick = async () => {
+      const requestRef = doc(db, "bookRequests", docSnap.id);
+      const bookRef = doc(db, "books", request.bookId);
+
       try {
-       await updateDoc(doc(db, "bookRequests", docSnap.id), {
+       // 1. Mark the request as rejected
+       await updateDoc(requestRef, {
         status: "Rejected"
        });
-       alert("Request rejected.");
+
+       // 2. Update the book availability back to "Available"
+       await updateDoc(bookRef, {
+        availability: "Available"
+       });
+
+       alert("Request rejected and book availability reverted.");
       } catch (err) {
        alert("Error rejecting request: " + err.message);
       }
      };
+
      tbody.appendChild(tr);
     }
    });
