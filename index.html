@@ -684,18 +684,33 @@
    }
   }
   // --- Add New Book ---
+
   addBookForm.addEventListener("submit", async (e) => {
    e.preventDefault();
+
    const title = document.getElementById("bookTitle").value.trim();
    const author = document.getElementById("bookAuthor").value.trim();
    const availability = document.getElementById("bookAvailability").value;
-   await addDoc(collection(db, "books"), {
-    title,
-    author,
-    availability
-   });
-   addBookForm.reset();
+
+   // Determine initial checkout status based on availability
+   const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
+
+   try {
+    await addDoc(collection(db, "books"), {
+     title,
+     author,
+     availability, // e.g. "Available" / "Unavailable"
+     checkoutStatus, // e.g. "Checked Out" / "Available" / "Returned"
+     createdAt: Date.now()
+    });
+
+    alert("Book added successfully.");
+    addBookForm.reset();
+   } catch (err) {
+    alert("Failed to add book: " + err.message);
+   }
   });
+
   // --- Load All Books (Admin) ---
   function loadAllBooks() {
    onSnapshot(collection(db, "books"),
