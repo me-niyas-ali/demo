@@ -765,14 +765,34 @@
   }
   async function updateBookAvailability(bookId, newAvailability) {
    try {
+    // 1. Update book document
     await updateDoc(doc(db, "books", bookId), {
      availability: newAvailability
     });
+
+    // 2. If marked Available, update the corresponding bookRequests record to Returned
+    if (newAvailability === "Available") {
+     const q = query(
+      collection(db, "bookRequests"),
+      where("bookId", "==", bookId),
+      where("status", "==", "Checked Out")
+     );
+
+     const querySnapshot = await getDocs(q);
+
+     for (const docSnap of querySnapshot.docs) {
+      await updateDoc(doc(db, "bookRequests", docSnap.id), {
+       status: "Returned"
+      });
+     }
+    }
+
     alert("Book availability updated.");
    } catch (err) {
     alert("Failed to update: " + err.message);
    }
   }
+
   // --- Load All Users (Admin) ---
   function loadAllUsers() {
    onSnapshot(collection(db, "users"), (snapshot) => {
