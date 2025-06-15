@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <h1 class="mb-4">Library App 49</h1>
+  <h1 class="mb-4">Library App 30</h1>
   <!-- Buttons to open modals -->
   <div class="mb-3">
    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -467,28 +467,39 @@
     for (const [bookId, book] of booksMap.entries()) {
      const isRequested = activeRequestsMap.has(bookId);
      const tr = document.createElement("tr");
+
      tr.innerHTML = `
      <td>${book.title}</td>
      <td>${book.author}</td>
      <td>${book.availability}</td>
      <td>
-     ${
-     book.availability === "Available"
-     ? isRequested
-     ? `<button class="btn btn-sm btn-secondary" disabled>Requested</button>`: `<button class="btn btn-sm btn-primary">Request</button>`: ""
-     }
+     <button
+     class="btn btn-sm ${isRequested || book.availability !== 'Available' ? 'btn-secondary': 'btn-primary'}"
+     ${isRequested || book.availability !== 'Available' ? 'disabled': ''}
+     >
+     ${isRequested ? 'Pending': book.availability === 'Available' ? 'Request': book.availability}
+     </button>
      </td>
 
      `;
 
      if (book.availability === "Available" && !isRequested) {
       const btn = tr.querySelector("button");
-      btn.onclick = () => requestBook(bookId);
+      btn.onclick = () => {
+       // Disable the button immediately and change text to "Requested"
+       btn.disabled = true;
+       btn.className = "btn btn-sm btn-secondary";
+       btn.textContent = "Requested";
+
+       // Call the requestBook function
+       requestBook(bookId);
+      };
      }
 
      booksTableBody.appendChild(tr);
     }
    }
+
 
    // --- Load user history ---
    onSnapshot(query(
@@ -517,21 +528,34 @@
    try {
     const user = auth.currentUser;
     if (!user) return alert("You must be logged in!");
+
     // Check current active requests (Pending or Approved)
-    const activeRequestsSnap = await getDocs(query(collection(db, "bookRequests"), where("userId", "==", user.uid), where("status", "in", ["Pending", "Approved"])));
+    const activeRequestsSnap = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("status", "in", ["Pending", "Approved"])
+    ));
     if (activeRequestsSnap.size >= 3) {
      return alert("You can only have up to 3 active book requests.");
     }
+
     // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
     if (!bookSnap.exists()) return alert("Book not found!");
     const book = bookSnap.data();
+
     // Check for duplicate request
-    const existing = await getDocs(query(collection(db, "bookRequests"), where("userId", "==", user.uid), where("bookId", "==", bookId), where("status", "in", ["Pending", "Approved"])));
+    const existing = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("bookId", "==", bookId),
+     where("status", "in", ["Pending", "Approved"])
+    ));
     if (!existing.empty) {
      return alert("You've already requested or checked out this book.");
     }
+
     // Save new request
     await addDoc(collection(db, "bookRequests"), {
      userId: user.uid,
@@ -541,6 +565,12 @@
      status: "Pending",
      requestedAt: new Date().toISOString()
     });
+
+    // Update book availability to "Requested"
+    await updateDoc(bookRef, {
+     availability: "Requested"
+    });
+
     alert("Book request sent for approval.");
    } catch (err) {
     alert("Error requesting book: " + err.message);
@@ -627,28 +657,17 @@
        alert("Error approving request: " + err.message);
       }
      };
-     // Reject book request// Reject book request
+     // Reject book request
      tr.querySelector(".btn-danger").onclick = async () => {
-      const requestRef = doc(db, "bookRequests", docSnap.id);
-      const bookRef = doc(db, "books", request.bookId);
-
       try {
-       // 1. Mark the request as rejected
-       await updateDoc(requestRef, {
+       await updateDoc(doc(db, "bookRequests", docSnap.id), {
         status: "Rejected"
        });
-
-       // 2. Update the book availability back to "Available"
-       await updateDoc(bookRef, {
-        availability: "Available"
-       });
-
-       alert("Request rejected and book availability reverted.");
+       alert("Request rejected.");
       } catch (err) {
        alert("Error rejecting request: " + err.message);
       }
      };
-
      tbody.appendChild(tr);
     }
    });
