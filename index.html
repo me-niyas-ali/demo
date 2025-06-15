@@ -23,33 +23,35 @@
         <!-- Available Books display for user-->
         <h4>Available Books</h4>
         <div style="max-height: 250px; overflow-y: auto;">
-          <table class="table table-sm" id="booksTable">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Status</th>
-                <th>Request</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <table class="table table-sm" id="booksTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Request</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
         </div>
         <!-- User Your Book Requests & Checkouts -->
         <h4>Your Book Requests & Checkouts</h4>
-        <div style="max-height: 250; overflow-y: auto;">
-          <table class="table table-sm" id="userHistoryTable">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Requested At</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div style="max-height:250px; overflow-y: auto;">
+        <table class="table table-sm" id="userHistoryTable">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Requested At</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
         </div>
       </div>
+      
+      
       <!-- Admin dashboard -->
       <div id="adminSection" class="d-none">
         <h3>Admin Dashboard</h3>
@@ -404,16 +406,13 @@
             const tr = document.createElement("tr");
             tr.innerHTML = `
         
-			
 			<td>${book.title}</td>
 			<td>${book.author}</td>
 			<td>${status}</td>
 			<td>
           ${status === "Available" ? `
-				
 				<button class="btn btn-sm btn-primary">Request</button>` : ""}
         
-			
 			</td>
       `;
             if (status === "Available") {
@@ -432,10 +431,9 @@
               const req = docSnap.data();
               const tr = document.createElement("tr");
               tr.innerHTML = `
-              
-			<td>${req.title}</td>
-			<td>${req.status}</td>
-			<td>${new Date(req.requestedAt).toLocaleString()}</td>
+              <td>${req.title}</td>
+              <td>${req.status}</td>
+              <td>${new Date(req.requestedAt).toLocaleString()}</td>
         `;
               historyTableBody.appendChild(tr);
             });
@@ -499,7 +497,6 @@
             const tr = document.createElement("tr");
             tr.innerHTML = `
             
-			
 			<td>${data.fullname}</td>
 			<td>${data.email}</td>
 			<td>${data.dob}</td>
@@ -528,7 +525,6 @@
             const tr = document.createElement("tr");
             tr.innerHTML = `
           
-			
 			<td>${userName}</td>
 			<td>${request.title}</td>
 			<td>${request.author}</td>
@@ -570,28 +566,59 @@
         });
       }
 
-      function loadCheckedOutBooks() {
-        onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")), async (snapshot) => {
-          const tbody = document.querySelector("#checkedOutBooksTable tbody");
-          tbody.innerHTML = "";
-          for (const docSnap of snapshot.docs) {
-            const record = docSnap.data();
-            // Get user's name
-            const userSnap = await getDoc(doc(db, "users", record.userId));
-            const userName = userSnap.exists() ? userSnap.data().fullname : "Unknown User";
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-          
-			
-			<td>${userName}</td>
-			<td>${record.title}</td>
-			<td>${record.author}</td>
-			<td>${new Date(record.requestedAt).toLocaleString()}</td>
+
+function loadCheckedOutBooks() {
+  onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
+    async (snapshot) => {
+      const tbody = document.querySelector("#checkedOutBooksTable tbody");
+      tbody.innerHTML = "";
+
+      for (const docSnap of snapshot.docs) {
+        const record = docSnap.data();
+        const requestId = docSnap.id;
+
+        // Get user's name
+        const userSnap = await getDoc(doc(db, "users", record.userId));
+        const userName = userSnap.exists() ? userSnap.data().fullname : "Unknown User";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${userName}</td>
+          <td>${record.title}</td>
+          <td>${record.author}</td>
+          <td>${new Date(record.requestedAt).toLocaleString()}</td>
+          <td><button class="btn btn-sm btn-warning">Return</button></td>
         `;
-            tbody.appendChild(tr);
+
+        // Handle return action
+        tr.querySelector("button").onclick = async () => {
+          try {
+            // Update book availability
+            const bookRef = doc(db, "books", record.bookId);
+            await updateDoc(bookRef, { availability: "Available" });
+
+            // Update request status
+            const requestRef = doc(db, "bookRequests", requestId);
+            await updateDoc(requestRef, { status: "Returned" });
+
+            alert("Book marked as returned.");
+          } catch (err) {
+            alert("Error returning book: " + err.message);
           }
-        });
+        };
+
+        tbody.appendChild(tr);
       }
+    }
+  );
+}
+
+
+
+
+
+
       // --- Approve Signup ---
       async function approveSignup(docId, data) {
         try {
@@ -688,7 +715,6 @@
             availabilityCell.appendChild(controlWrapper);
             tr.innerHTML = `
         
-			
 			<td>${book.title}</td>
 			<td>${book.author}</td>
       `;
@@ -716,7 +742,6 @@
             const tr = document.createElement("tr");
             tr.innerHTML = `
         
-			
 			<td>${user.fullname}</td>
 			<td>${user.email}</td>
 			<td>${user.dob}</td>
