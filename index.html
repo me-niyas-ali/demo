@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <h1 class="mb-4">Library App 15</h1>
+  <h1 class="mb-4">Library App 30</h1>
   <!-- Buttons to open modals -->
   <div class="mb-3">
    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -500,6 +500,7 @@
     }
    }
 
+
    // --- Load user history ---
    onSnapshot(query(
     collection(db, "bookRequests"),
@@ -508,14 +509,8 @@
     const historyTableBody = document.querySelector("#userHistoryTable tbody");
     historyTableBody.innerHTML = "";
 
-    // Convert snapshot docs to array
-    const requests = snapshot.docs.map(docSnap => docSnap.data());
-
-    // Sort descending by requestedAt (most recent first)
-    requests.sort((a, b) => new Date(b.requestedAt) - new Date(a.requestedAt));
-
-    // Render sorted requests
-    for (const req of requests) {
+    snapshot.forEach((docSnap) => {
+     const req = docSnap.data();
      const tr = document.createElement("tr");
      tr.innerHTML = `
      <td>${req.title}</td>
@@ -523,9 +518,10 @@
      <td>${new Date(req.requestedAt).toLocaleString()}</td>
      `;
      historyTableBody.appendChild(tr);
-    }
+    });
    });
   }
+
 
   // Request book
   async function requestBook(bookId) {
@@ -601,16 +597,12 @@
   function loadSignupRequests() {
    onSnapshot(collection(db, "signupRequests"), (snapshot) => {
     signupRequestsTableBody.innerHTML = "";
-
-    // Convert to array and sort by latest
-    const requests = snapshot.docs.map(doc => ({
-     id: doc.id, ...doc.data()
-    }));
-    requests.sort((a, b) => new Date(b.requestedAt || 0) - new Date(a.requestedAt || 0));
-
-    requests.forEach(data => {
+    snapshot.forEach((docSnap) => {
+     const data = docSnap.data();
      const tr = document.createElement("tr");
      tr.innerHTML = `
+
+
      <td>${data.fullname}</td>
      <td>${data.email}</td>
      <td>${data.dob}</td>
@@ -620,12 +612,11 @@
      <button class="btn btn-sm btn-danger">Reject</button>
      </td>
      `;
-     tr.querySelector(".btn-success").onclick = () => approveSignup(data.id, data);
-     tr.querySelector(".btn-danger").onclick = () => deleteDoc(doc(db, "signupRequests", data.id));
+     tr.querySelector(".btn-success").onclick = () => approveSignup(docSnap.id, data);
+     tr.querySelector(".btn-danger").onclick = () => deleteDoc(doc(db, "signupRequests", docSnap.id));
      signupRequestsTableBody.appendChild(tr);
     });
    });
-
   }
 
   function loadBookRequests() {
