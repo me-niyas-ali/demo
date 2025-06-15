@@ -418,96 +418,101 @@
     showLoggedOut();
    }
   });
-  
-  
+
+
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
-  adminSection.classList.add("d-none");
-  userSection.classList.remove("d-none");
+   adminSection.classList.add("d-none");
+   userSection.classList.remove("d-none");
 
-  // Load user info
-  const userDoc = await getDoc(doc(db, "users", uid));
-  userFullnameSpan.textContent = userDoc.exists() ? userDoc.data().fullname : "";
+   // Load user info
+   const userDoc = await getDoc(doc(db, "users", uid));
+   userFullnameSpan.textContent = userDoc.exists() ? userDoc.data().fullname: "";
 
-  // Listen to both books and bookRequests collections
-  const booksMap = new Map();
-  const activeRequestsMap = new Map(); // bookId => true if requested
+   // Listen to both books and bookRequests collections
+   const booksMap = new Map();
+   const activeRequestsMap = new Map(); // bookId => true if requested
 
-  // --- Real-time listener for active requests ---
-  onSnapshot(query(
+   // --- Real-time listener for active requests ---
+   onSnapshot(query(
     collection(db, "bookRequests"),
     where("status", "in", ["Pending", "Approved"])
-  ), (reqSnapshot) => {
-    activeRequestsMap.clear();
-    reqSnapshot.forEach(doc => {
+   ),
+    (reqSnapshot) => {
+     activeRequestsMap.clear();
+     reqSnapshot.forEach(doc => {
       const data = doc.data();
       activeRequestsMap.set(data.bookId, true);
+     });
+
+     // Force refresh of book list (if already loaded)
+     updateBooksTable();
     });
 
-    // Force refresh of book list (if already loaded)
-    updateBooksTable();
-  });
-
-  // --- Real-time listener for books ---
-  onSnapshot(collection(db, "books"), (bookSnapshot) => {
-    booksMap.clear();
-    bookSnapshot.forEach(doc => {
+   // --- Real-time listener for books ---
+   onSnapshot(collection(db, "books"),
+    (bookSnapshot) => {
+     booksMap.clear();
+     bookSnapshot.forEach(doc => {
       booksMap.set(doc.id, doc.data());
+     });
+
+     // Force refresh of book list (if already loaded)
+     updateBooksTable();
     });
 
-    // Force refresh of book list (if already loaded)
-    updateBooksTable();
-  });
-
-  // --- Function to merge both listeners and update the UI ---
-  function updateBooksTable() {
+   // --- Function to merge both listeners and update the UI ---
+   function updateBooksTable() {
     booksTableBody.innerHTML = "";
     for (const [bookId, book] of booksMap.entries()) {
-      const isRequested = activeRequestsMap.has(bookId);
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${book.title}</td>
-        <td>${book.author}</td>
-        <td>${book.availability}</td>
-        <td>${
-          book.availability === "Available" && !isRequested
-            ? `<button class="btn btn-sm btn-primary">Request</button>`
-            : `<span class="text-muted">${isRequested ? "Requested" : ""}</span>`
-        }</td>
-      `;
+     const isRequested = activeRequestsMap.has(bookId);
+     const tr = document.createElement("tr");
+     tr.innerHTML = `
+     <td>${book.title}</td>
+     <td>${book.author}</td>
+     <td>${book.availability}</td>
+     <td>
+     ${
+     book.availability === "Available"
+     ? isRequested
+     ? `<button class="btn btn-sm btn-secondary" disabled>Requested</button>`: `<button class="btn btn-sm btn-primary">Request</button>`: ""
+     }
+     </td>
 
-      if (book.availability === "Available" && !isRequested) {
-        const btn = tr.querySelector("button");
-        btn.onclick = () => requestBook(bookId);
-      }
+     `;
 
-      booksTableBody.appendChild(tr);
+     if (book.availability === "Available" && !isRequested) {
+      const btn = tr.querySelector("button");
+      btn.onclick = () => requestBook(bookId);
+     }
+
+     booksTableBody.appendChild(tr);
     }
-  }
+   }
 
-  // --- Load user history ---
-  onSnapshot(query(
+   // --- Load user history ---
+   onSnapshot(query(
     collection(db, "bookRequests"),
     where("userId", "==", uid)
-  ), (snapshot) => {
+   ), (snapshot) => {
     const historyTableBody = document.querySelector("#userHistoryTable tbody");
     historyTableBody.innerHTML = "";
 
     snapshot.forEach((docSnap) => {
-      const req = docSnap.data();
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${req.title}</td>
-        <td>${req.status}</td>
-        <td>${new Date(req.requestedAt).toLocaleString()}</td>
-      `;
-      historyTableBody.appendChild(tr);
+     const req = docSnap.data();
+     const tr = document.createElement("tr");
+     tr.innerHTML = `
+     <td>${req.title}</td>
+     <td>${req.status}</td>
+     <td>${new Date(req.requestedAt).toLocaleString()}</td>
+     `;
+     historyTableBody.appendChild(tr);
     });
-  });
-}
+   });
+  }
 
-  
-  // Request book 
+
+  // Request book
   async function requestBook(bookId) {
    try {
     const user = auth.currentUser;
@@ -541,8 +546,8 @@
     alert("Error requesting book: " + err.message);
    }
   }
-  
-  
+
+
   // --- Show Admin Dashboard ---
   function showAdminDashboard() {
    userSection.classList.add("d-none");
