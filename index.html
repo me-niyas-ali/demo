@@ -651,7 +651,7 @@
        const requestRef = doc(db, "bookRequests", requestId);
        try {
         await updateDoc(bookRef, {
-         availability: "Checked"
+         availability: "Checked Out"
         });
         await updateDoc(requestRef, {
          status: "Checked Out"
