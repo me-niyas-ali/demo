@@ -422,106 +422,105 @@
 
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
+   // Hide admin section, show user section
    adminSection.classList.add("d-none");
    userSection.classList.remove("d-none");
 
-   // Load user info
-   const userDoc = await getDoc(doc(db, "users", uid));
-   userFullnameSpan.textContent = userDoc.exists() ? userDoc.data().fullname: "";
-
-   // Listen to both books and bookRequests collections
-   const booksMap = new Map();
-   const activeRequestsMap = new Map(); // bookId => true if requested
-
-   // --- Real-time listener for active requests ---
-   onSnapshot(query(
-    collection(db, "bookRequests"),
-    where("status", "in", ["Pending", "Approved"])
-   ),
-    (reqSnapshot) => {
-     activeRequestsMap.clear();
-     reqSnapshot.forEach(doc => {
-      const data = doc.data();
-      activeRequestsMap.set(data.bookId, true);
-     });
-
-     // Force refresh of book list (if already loaded)
-     updateBooksTable();
-    });
-
-   // --- Real-time listener for books ---
-   onSnapshot(collection(db, "books"),
-    (bookSnapshot) => {
-     booksMap.clear();
-     bookSnapshot.forEach(doc => {
-      booksMap.set(doc.id, doc.data());
-     });
-
-     // Force refresh of book list (if already loaded)
-     updateBooksTable();
-    });
-
-   // --- Function to merge both listeners and update the UI ---
-   function updateBooksTable() {
-    booksTableBody.innerHTML = "";
-    for (const [bookId, book] of booksMap.entries()) {
-     const isRequested = activeRequestsMap.has(bookId);
-     const tr = document.createElement("tr");
-
-     tr.innerHTML = `
-     <td>${book.title}</td>
-     <td>${book.author}</td>
-     <td>${book.availability}</td>
-     <td>
-     <button
-     class="btn btn-sm ${isRequested || book.availability !== 'Available' ? 'btn-secondary': 'btn-primary'}"
-     ${isRequested || book.availability !== 'Available' ? 'disabled': ''}
-     >
-     ${isRequested ? 'Pending': book.availability === 'Available' ? 'Request': book.availability}
-     </button>
-     </td>
-
-     `;
-
-     if (book.availability === "Available" && !isRequested) {
-      const btn = tr.querySelector("button");
-      btn.onclick = () => {
-       // Disable the button immediately and change text to "Requested"
-       btn.disabled = true;
-       btn.className = "btn btn-sm btn-secondary";
-       btn.textContent = "Requested";
-
-       // Call the requestBook function
-       requestBook(bookId);
-      };
-     }
-
-     booksTableBody.appendChild(tr);
+   // --- Load User Info ---
+   try {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (userDoc.exists()) {
+     userFullnameSpan.textContent = userDoc.data().fullname || "";
     }
+   } catch (err) {
+    console.error("Error loading user info:", err);
    }
 
+   // --- Track Active Requests (Pending or Approved) ---
+   const activeRequests = new Set();
 
-   // --- Load user history ---
-   onSnapshot(query(
-    collection(db, "bookRequests"),
-    where("userId", "==", uid)
-   ), (snapshot) => {
-    const historyTableBody = document.querySelector("#userHistoryTable tbody");
-    historyTableBody.innerHTML = "";
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
+    (activeSnap) => {
+     activeRequests.clear();
+     activeSnap.forEach((doc) => {
+      activeRequests.add(doc.data().bookId);
+     });
 
-    snapshot.forEach((docSnap) => {
-     const req = docSnap.data();
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
-     <td>${req.title}</td>
-     <td>${req.status}</td>
-     <td>${new Date(req.requestedAt).toLocaleString()}</td>
-     `;
-     historyTableBody.appendChild(tr);
-    });
-   });
+     // --- Load and Display Books ---
+     onSnapshot(collection(db, "books"), (bookSnap) => {
+      booksTableBody.innerHTML = "";
+      bookSnap.forEach((docSnap) => {
+       const book = docSnap.data();
+       const bookId = docSnap.id;
+       const status = book.availability || "Unavailable";
+       const isAlreadyRequested = activeRequests.has(bookId);
+
+       const tr = document.createElement("tr");
+       tr.innerHTML = `
+       <td>${book.title || "Untitled"}</td>
+       <td>${book.author || "Unknown"}</td>
+       <td>${status}</td>
+       <td>
+       <button class="btn btn-sm btn-primary" ${status !== "Available" || isAlreadyRequested ? "disabled": ""}>
+       Request
+       </button>
+       </td>
+       `;
+
+       const btn = tr.querySelector("button");
+       if (!btn.disabled) {
+        btn.onclick = () => requestBook(bookId);
+       }
+
+       booksTableBody.appendChild(tr);
+      });
+     });
+    }
+   );
+
+   // --- Load and Display User Book History ---
+   onSnapshot(
+    query(
+     collection(db,
+      "bookRequests"),
+     where("userId",
+      "==",
+      uid),
+     orderBy("requestedAt",
+      "desc")
+    ),
+    (snapshot) => {
+     const historyTableBody = document.querySelector("#userHistoryTable tbody");
+     historyTableBody.innerHTML = "";
+
+     snapshot.forEach((docSnap) => {
+      const req = docSnap.data();
+      const title = req.title || "Untitled";
+      const status = req.status || "Unknown";
+      let requestedAt = "—";
+
+      try {
+       if (req.requestedAt) {
+        const ts = typeof req.requestedAt === "string"
+        ? new Date(req.requestedAt): req.requestedAt.toDate?.() || new Date();
+        requestedAt = ts.toLocaleString();
+       }
+      } catch (e) {
+       console.warn("Invalid requestedAt value:", req.requestedAt);
+      }
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+      <td>${title}</td>
+      <td>${status}</td>
+      <td>${requestedAt}</td>
+      `;
+      historyTableBody.appendChild(tr);
+     });
+    }
+   );
   }
-
 
   // Request book
   async function requestBook(bookId) {
@@ -620,58 +619,88 @@
   }
 
   function loadBookRequests() {
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Pending")), async (snapshot) => {
-    const tbody = document.querySelector("#bookRequestsTable tbody");
-    tbody.innerHTML = "";
-    for (const docSnap of snapshot.docs) {
-     const request = docSnap.data();
-     // Get user's name
-     const userSnap = await getDoc(doc(db, "users", request.userId));
-     const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "==", "Pending")),
+    async (snapshot) => {
+     const tbody = document.querySelector("#bookRequestsTable tbody");
+     tbody.innerHTML = "";
+
+     for (const docSnap of snapshot.docs) {
+      const request = docSnap.data();
+      const requestId = docSnap.id;
+
+      // Get user's name
+      const userSnap = await getDoc(doc(db, "users", request.userId));
+      const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+      <td>${userName}</td>
+      <td>${request.title}</td>
+      <td>${request.author}</td>
+      <td>${request.status}</td>
+      <td>
+      <button class="btn btn-sm btn-success me-2">Approve</button>
+      <button class="btn btn-sm btn-danger">Reject</button>
+      </td>
+      `;
+
+      // ✅ Approve book request
+      tr.querySelector(".btn-success").onclick = async () => {
+       const bookRef = doc(db, "books", request.bookId);
+       const requestRef = doc(db, "bookRequests", requestId);
+       try {
+        await updateDoc(bookRef, {
+         availability: "Checked"
+        });
+        await updateDoc(requestRef, {
+         status: "Checked Out"
+        });
+        alert("Book approved and marked as Checked Out.");
+       } catch (err) {
+        alert("Error approving request: " + err.message);
+       }
+      };
+
+      // ✅ Reject book request
+      tr.querySelector(".btn-danger").onclick = async () => {
+       const bookRef = doc(db, "books", request.bookId);
+       const requestRef = doc(db, "bookRequests", requestId);
+       try {
+        // Step 1: Ensure requestedAt exists (fallback to now)
+        const requestSnap = await getDoc(requestRef);
+        let requestedAt = new Date().toISOString();
+        if (requestSnap.exists()) {
+         const data = requestSnap.data();
+         if (data.requestedAt) {
+          requestedAt = data.requestedAt;
+         }
+        }
+
+        // Step 2: Update request status and preserve requestedAt
+        await updateDoc(requestRef, {
+         status: "Rejected",
+         requestedAt: requestedAt // ensure field is always present
+        });
+
+        // Step 3: Reset book availability
+        await updateDoc(bookRef, {
+         availability: "Available"
+        });
+
+        alert("Request rejected.");
+       } catch (err) {
+        alert("Error rejecting request: " + err.message);
+       }
+      };
 
 
-     <td>${userName}</td>
-     <td>${request.title}</td>
-     <td>${request.author}</td>
-     <td>${request.status}</td>
-     <td>
-     <button class="btn btn-sm btn-success me-2">Approve</button>
-     <button class="btn btn-sm btn-danger">Reject</button>
-     </td>
-     `;
-     // Approve book request
-     tr.querySelector(".btn-success").onclick = async () => {
-      const bookRef = doc(db, "books", request.bookId);
-      const requestRef = doc(db, "bookRequests", docSnap.id);
-      try {
-       await updateDoc(bookRef, {
-        availability: "Checked Out"
-       });
-       await updateDoc(requestRef, {
-        status: "Checked Out"
-       });
-       alert("Book approved and marked as Checked Out.");
-      } catch (err) {
-       alert("Error approving request: " + err.message);
-      }
-     };
-     // Reject book request
-     tr.querySelector(".btn-danger").onclick = async () => {
-      try {
-       await updateDoc(doc(db, "bookRequests", docSnap.id), {
-        status: "Rejected"
-       });
-       alert("Request rejected.");
-      } catch (err) {
-       alert("Error rejecting request: " + err.message);
-      }
-     };
-     tbody.appendChild(tr);
+      tbody.appendChild(tr);
+     }
     }
-   });
+   );
   }
+
 
   function loadCheckedOutBooks() {
    onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
@@ -771,7 +800,6 @@
      title,
      author,
      availability, // e.g. "Available" / "Unavailable"
-     checkoutStatus, // e.g. "Checked Out" / "Available" / "Returned"
      createdAt: Date.now()
     });
 
@@ -849,35 +877,47 @@
      });
     });
   }
+
   async function updateBookAvailability(bookId, newAvailability) {
    try {
-    // 1. Update book document
+    // 1. Update the book document
     await updateDoc(doc(db, "books", bookId), {
      availability: newAvailability
     });
 
-    // 2. If marked Available, update the corresponding bookRequests record to Returned
-    if (newAvailability === "Available") {
-     const q = query(
-      collection(db, "bookRequests"),
-      where("bookId", "==", bookId),
-      where("status", "==", "Checked Out")
-     );
+    // 2. Update all relevant bookRequests based on new availability
+    const q = query(
+     collection(db, "bookRequests"),
+     where("bookId", "==", bookId),
+     where("status", "in", ["Pending", "Approved", "Checked Out"])
+    );
 
-     const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(q);
 
-     for (const docSnap of querySnapshot.docs) {
+    for (const docSnap of querySnapshot.docs) {
+     let newStatus = null;
+
+     if (newAvailability === "Available") {
+      newStatus = "Returned";
+     } else if (newAvailability === "Checked Out") {
+      newStatus = "Checked Out";
+     } else if (newAvailability === "Requested") {
+      newStatus = "Pending";
+     }
+
+     if (newStatus) {
       await updateDoc(doc(db, "bookRequests", docSnap.id), {
-       status: "Returned"
+       status: newStatus
       });
      }
     }
 
-    alert("Book availability updated.");
+    alert("Book availability and request status updated.");
    } catch (err) {
     alert("Failed to update: " + err.message);
    }
   }
+
 
   // --- Load All Users (Admin) ---
   function loadAllUsers() {
