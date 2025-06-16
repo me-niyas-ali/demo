@@ -462,10 +462,12 @@
        <td>${book.author || "Unknown"}</td>
        <td>${status}</td>
        <td>
-       <button class="btn btn-sm btn-primary" ${status !== "Available" || isAlreadyRequested ? "disabled": ""}>
-       Request
+       <button class="btn btn-sm ${isAlreadyRequested || status !== "Available" ? "btn-secondary": "btn-primary"}" ${isAlreadyRequested || status !== "Available" ? "disabled": ""}>
+       ${isAlreadyRequested ? "Pending": "Request"}
        </button>
        </td>
+
+
        `;
 
        const btn = tr.querySelector("button");
