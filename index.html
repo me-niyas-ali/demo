@@ -9,7 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
  <style>
   .table-responsive {
    overflow-x: auto;
@@ -319,7 +318,67 @@
    </form>
   </div>
  </div>
-
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCNi9LPSBl2GecqYzoWJ8KLwPyQk02UG0k",
+    authDomain: "pkns-library.firebaseapp.com",
+    databaseURL: "https://pkns-library-default-rtdb.firebaseio.com",
+    projectId: "pkns-library",
+    storageBucket: "pkns-library.firebasestorage.app",
+    messagingSenderId: "950079680831",
+    appId: "1:950079680831:web:8a8588072403404686638a",
+    measurementId: "G-7WGD1BQR01"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Shortcuts for Firebase services
+  const auth = firebase.auth();
+  const db = firebase.database();
+  
+  // Signup form submit
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  if (!form.checkValidity()) {
+    form.classList.add('was-validated');
+    return;
+  }
+
+  const fullname = form.fullname.value.trim();
+  const email = form.email.value.trim();
+  const dob = form.dob.value;
+  const bloodGroup = form.bloodGroup.value.trim();
+  const password = form.password.value;
+
+  try {
+    // Create user with email and password
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    const uid = userCredential.user.uid;
+
+    // Save additional user data in Realtime Database
+    await db.ref('users/' + uid).set({
+      fullname,
+      email,
+      dob,
+      bloodGroup,
+      joinedAt: new Date().toISOString(),
+      role: 'user'  // default role
+    });
+
+    form.reset();
+    form.classList.remove('was-validated');
+    bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
+    showToast("Signup successful! Please log in.");
+  } catch (error) {
+    showToast("Signup failed: " + error.message);
+  }
+});
+
+</script>
+
 </html>
