@@ -25,19 +25,25 @@
 
 <body>
  <div class="container py-4">
-  <h1 class="mb-4">Library App 56</h1>
-  <!-- Buttons to open modals -->
-  <div class="mb-3" id="main-btn">
-   <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
-   <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">User Login</button>
-   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Admin Login</button>
+  <h1 class="mb-3">Library App 56</h1>
+  
+  <!-- Action Buttons -->
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
+      <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal">User Login</button>
+      <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Admin Login</button>
+    </div>
   </div>
+</div>
+
   
   <!-- User logged in message & book list -->
   <div id="userSection" class="d-none">
-   <div class="card">
-    <div class="card-body d-flex justify-content-between">
-     <h4>Welcome, <span id="userFullname"></span>
+   <div class="card mb-3">
+    <div class="p-3 d-flex justify-content-between">
+     <h4 class="m-0 p-0">Welcome, <span id="userFullname"></span>
      </h4>
      <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
     </div>
