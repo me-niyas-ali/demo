@@ -25,7 +25,7 @@
 
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 5</h1></center>
+  <center><h1 class="mb-2">PKNS Library</h1></center>
 
   <!-- Action Buttons -->
   <div class="card mb-2" id="main-btn">
@@ -482,7 +482,7 @@
    }
   });
 
-  // --- Show User Dashboard ---
+
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
    // Hide admin section, show user section
@@ -501,83 +501,82 @@
 
    // --- Track Active Requests (Pending or Approved) ---
    const activeRequests = new Set();
+   let latestActiveRequests = new Set();
+   let latestUserRequests = new Set();
 
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
-    async (activeSnap) => {
-     const activeRequests = new Set();
-     const userRequests = new Set();
+    (activeSnap) => {
+     latestActiveRequests.clear();
+     latestUserRequests.clear();
 
      activeSnap.forEach((doc) => {
       const data = doc.data();
-      activeRequests.add(data.bookId);
-      if (data.userId === uid) {
-       userRequests.add(data.bookId);
+      latestActiveRequests.add(data.bookId);
+      if (data.userId === auth.currentUser?.uid) {
+       latestUserRequests.add(data.bookId);
       }
      });
 
-     // Now render the books
-     onSnapshot(collection(db, "books"),
-      (bookSnap) => {
-       booksTableBody.innerHTML = "";
-       bookSnap.forEach((docSnap) => {
-        const book = docSnap.data();
-        const bookId = docSnap.id;
-        const status = book.availability || "Unavailable";
-
-        let buttonText = "Request";
-        let buttonClass = "btn-primary";
-        let buttonDisabled = false;
-        let isUserRequest = false;
-
-        if (activeRequests.has(bookId)) {
-         // Someone has requested it
-         buttonText = "Not Available";
-         buttonClass = "btn-secondary";
-         buttonDisabled = true;
-
-         if (userRequests.has(bookId)) {
-          // Current user requested this book
-          buttonText = "Cancel Request";
-          buttonClass = "btn-danger";
-          buttonDisabled = false;
-          isUserRequest = true;
-         }
-        } else if (status !== "Available") {
-         buttonText = "Not Available";
-         buttonClass = "btn-secondary";
-         buttonDisabled = true;
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-        <td>${book.title || "Untitled"}</td>
-        <td>${book.author || "Unknown"}</td>
-        <td>${status}</td>
-        <td>
-        <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
-        ${buttonText}
-        </button>
-        </td>
-        `;
-
-        const btn = tr.querySelector("button");
-        if (!btn.disabled) {
-         btn.onclick = () => {
-          if (isUserRequest) {
-           cancelBookRequest(bookId);
-          } else {
-           requestBook(bookId);
-          }
-         };
-        }
-
-        booksTableBody.appendChild(tr);
-       });
-
-      });
+     renderBooks();
     }
    );
+
+   function renderBooks() {
+    onSnapshot(collection(db,
+     "books"), (bookSnap) => {
+     booksTableBody.innerHTML = "";
+     bookSnap.forEach((docSnap) => {
+      const book = docSnap.data();
+      const bookId = docSnap.id;
+      const status = book.availability || "Unavailable";
+
+      let buttonText = "Request";
+      let buttonClass = "btn-primary";
+      let buttonDisabled = false;
+      let isUserRequest = false;
+
+      if (latestActiveRequests.has(bookId)) {
+       buttonText = "Not Available";
+       buttonClass = "btn-secondary";
+       buttonDisabled = true;
+
+       if (latestUserRequests.has(bookId)) {
+        buttonText = "Cancel Request";
+        buttonClass = "btn-danger";
+        buttonDisabled = false;
+        isUserRequest = true;
+       }
+      } else if (status !== "Available") {
+       buttonText = "Not Available";
+       buttonClass = "btn-secondary";
+       buttonDisabled = true;
+      }
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+      <td>${book.title || "Untitled"}</td>
+      <td>${book.author || "Unknown"}</td>
+      <td>${status}</td>
+      <td><button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>${buttonText}</button></td>
+      `;
+
+      const btn = tr.querySelector("button");
+      if (!btn.disabled) {
+       btn.onclick = () => {
+        if (isUserRequest) {
+         cancelBookRequest(bookId);
+        } else {
+         requestBook(bookId);
+        }
+       };
+      }
+
+      booksTableBody.appendChild(tr);
+     });
+    });
+   }
+
 
    // --- Load and Display User Book History ---// Cancel book request
    async function cancelBookRequest(bookId) {
@@ -639,52 +638,59 @@
   }
 
 
-let requesting = false;
-
-async function requestBook(bookId) {
-  if (requesting) return; // prevent multiple parallel calls
-  requesting = true;
-
-  try {
+  // Request book
+  async function requestBook(bookId) {
+   try {
     const user = auth.currentUser;
     if (!user) return alert("You must be logged in!");
 
-    const existing = await getDocs(query(
-      collection(db, "bookRequests"),
-      where("userId", "==", user.uid),
-      where("bookId", "==", bookId),
-      where("status", "in", ["Pending", "Approved"])
+    // Check current active requests (Pending or Approved)
+    const activeRequestsSnap = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("status", "in", ["Pending", "Approved"])
     ));
-    if (!existing.empty) {
-      return alert("You've already requested or checked out this book.");
+    if (activeRequestsSnap.size >= 3) {
+     return alert("You can only have up to 3 active book requests.");
     }
 
+    // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
     if (!bookSnap.exists()) return alert("Book not found!");
     const book = bookSnap.data();
 
+    // Check for duplicate request
+    const existing = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("bookId", "==", bookId),
+     where("status", "in", ["Pending", "Approved"])
+    ));
+    if (!existing.empty) {
+     return alert("You've already requested or checked out this book.");
+    }
+
+    // Save new request
     await addDoc(collection(db, "bookRequests"), {
-      userId: user.uid,
-      bookId: bookId,
-      title: book.title,
-      author: book.author,
-      status: "Pending",
-      requestedAt: new Date().toISOString()
+     userId: user.uid,
+     bookId: bookId,
+     title: book.title,
+     author: book.author,
+     status: "Pending",
+     requestedAt: new Date().toISOString()
     });
 
+    // Update book availability to "Requested"
     await updateDoc(bookRef, {
-      availability: "Requested"
+     availability: "Requested"
     });
 
     alert("Book request sent for approval.");
-  } catch (err) {
+   } catch (err) {
     alert("Error requesting book: " + err.message);
-  } finally {
-    requesting = false;
+   }
   }
-}
-
 
   // --- Show Admin Dashboard ---
   function showAdminDashboard() {
