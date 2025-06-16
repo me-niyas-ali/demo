@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <h1 class="mb-4">Library App 46</h1>
+  <h1 class="mb-4">Library App 45</h1>
   <!-- Buttons to open modals -->
   <div class="mb-3">
    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -440,89 +440,70 @@
    const activeRequests = new Set();
 
    onSnapshot(
-    query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
-    (activeSnap) => {
-     activeRequests.clear();
-     activeSnap.forEach((doc) => {
-      activeRequests.add(doc.data().bookId);
-     });
+  query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
+  async (activeSnap) => {
+    const activeRequests = new Set();
+    const userRequests = new Set();
 
-     // --- Load and Display Books ---
-     onSnapshot(collection(db, "books"), (bookSnap) => {
+    activeSnap.forEach((doc) => {
+      const data = doc.data();
+      activeRequests.add(data.bookId);
+      if (data.userId === uid) {
+        userRequests.add(data.bookId);
+      }
+    });
+
+    // Now render the books
+    onSnapshot(collection(db, "books"), (bookSnap) => {
       booksTableBody.innerHTML = "";
       bookSnap.forEach((docSnap) => {
-       const book = docSnap.data();
-       const bookId = docSnap.id;
-       const status = book.availability || "Unavailable";
-       let buttonText = "Request";
-       let buttonClass = "btn-primary";
-       let buttonDisabled = false;
+        const book = docSnap.data();
+        const bookId = docSnap.id;
+        const status = book.availability || "Unavailable";
 
-       // Check if this book is already requested
-       if (activeRequests.has(bookId)) {
-        // Check if this user made the request
-        buttonText = "Not Available";
-        buttonClass = "btn-secondary";
-        buttonDisabled = true;
+        let buttonText = "Request";
+        let buttonClass = "btn-primary";
+        let buttonDisabled = false;
 
-        // Additional check for this user's request
-        getDocs(query(
-         collection(db, "bookRequests"),
-         where("userId", "==", uid),
-         where("bookId", "==", bookId),
-         where("status", "in", ["Pending", "Approved"])
-        )).then((userRequestSnap) => {
-         if (!userRequestSnap.empty) {
-          // It's requested by this user
-          buttonText = "Pending Approval";
-          buttonDisabled = true;
+        if (activeRequests.has(bookId)) {
+          // Someone has requested this book
+          buttonText = "Not Available";
           buttonClass = "btn-secondary";
-         }
+          buttonDisabled = true;
 
-         const tr = document.createElement("tr");
-         tr.innerHTML = `
-         <td>${book.title || "Untitled"}</td>
-         <td>${book.author || "Unknown"}</td>
-         <td>${status}</td>
-         <td>
-         <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
-         ${buttonText}
-         </button>
-         </td>
-         `;
+          if (userRequests.has(bookId)) {
+            // Current user has requested this book
+            buttonText = "Pending";
+          }
+        } else if (status !== "Available") {
+          buttonText = "Not Available";
+          buttonClass = "btn-secondary";
+          buttonDisabled = true;
+        }
 
-         const btn = tr.querySelector("button");
-         if (!btn.disabled) {
-          btn.onclick = () => requestBook(bookId);
-         }
-
-         booksTableBody.appendChild(tr);
-        });
-       } else {
-        // Not requested by anyone
         const tr = document.createElement("tr");
         tr.innerHTML = `
-        <td>${book.title || "Untitled"}</td>
-        <td>${book.author || "Unknown"}</td>
-        <td>${status}</td>
-        <td>
-        <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
-        ${buttonText}
-        </button>
-        </td>
+          <td>${book.title || "Untitled"}</td>
+          <td>${book.author || "Unknown"}</td>
+          <td>${status}</td>
+          <td>
+            <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled" : ""}>
+              ${buttonText}
+            </button>
+          </td>
         `;
 
         const btn = tr.querySelector("button");
         if (!btn.disabled) {
-         btn.onclick = () => requestBook(bookId);
+          btn.onclick = () => requestBook(bookId);
         }
 
         booksTableBody.appendChild(tr);
-       }
       });
-     });
-    }
-   );
+    });
+  }
+);
+
 
    // --- Load and Display User Book History ---
    // Load user book request/checkouts
