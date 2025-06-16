@@ -456,21 +456,17 @@
        const status = book.availability || "Unavailable";
        const isAlreadyRequested = activeRequests.has(bookId);
 
-       const btnText = isAlreadyRequested ? "Pending": "Request";
-       const btnDisabled = status !== "Available" || isAlreadyRequested;
-
        const tr = document.createElement("tr");
        tr.innerHTML = `
        <td>${book.title || "Untitled"}</td>
        <td>${book.author || "Unknown"}</td>
        <td>${status}</td>
        <td>
-       <button class="btn btn-sm ${isAlreadyRequested ? 'btn-secondary': 'btn-primary'}" ${btnDisabled ? "disabled": ""}>
-       ${btnText}
+       <button class="btn btn-sm btn-primary" ${status !== "Available" || isAlreadyRequested ? "disabled": ""}>
+       Request
        </button>
        </td>
        `;
-
 
        const btn = tr.querySelector("button");
        if (!btn.disabled) {
@@ -538,8 +534,8 @@
      where("userId", "==", user.uid),
      where("status", "in", ["Pending", "Approved"])
     ));
-    if (activeRequestsSnap.size >= 2) {
-     return alert("You can only have up to 2 active book requests.");
+    if (activeRequestsSnap.size >= 3) {
+     return alert("You can only have up to 3 active book requests.");
     }
 
     // Get book details
