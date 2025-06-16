@@ -466,8 +466,6 @@
        ${isAlreadyRequested ? "Pending": "Request"}
        </button>
        </td>
-
-
        `;
 
        const btn = tr.querySelector("button");
@@ -482,47 +480,29 @@
    );
 
    // --- Load and Display User Book History ---
+   // Load user book request/checkouts
    onSnapshot(
-    query(
-     collection(db,
-      "bookRequests"),
-     where("userId",
-      "==",
-      uid),
-     orderBy("requestedAt",
-      "desc")
-    ),
+    query(collection(db,
+     "bookRequests"), where("userId",
+     "==",
+     uid)),
     (snapshot) => {
      const historyTableBody = document.querySelector("#userHistoryTable tbody");
      historyTableBody.innerHTML = "";
-
      snapshot.forEach((docSnap) => {
       const req = docSnap.data();
-      const title = req.title || "Untitled";
-      const status = req.status || "Unknown";
-      let requestedAt = "—";
-
-      try {
-       if (req.requestedAt) {
-        const ts = typeof req.requestedAt === "string"
-        ? new Date(req.requestedAt): req.requestedAt.toDate?.() || new Date();
-        requestedAt = ts.toLocaleString();
-       }
-      } catch (e) {
-       console.warn("Invalid requestedAt value:", req.requestedAt);
-      }
-
       const tr = document.createElement("tr");
       tr.innerHTML = `
-      <td>${title}</td>
-      <td>${status}</td>
-      <td>${requestedAt}</td>
+      <td>${req.title}</td>
+      <td>${req.status}</td>
+      <td>${new Date(req.requestedAt).toLocaleString()}</td>
       `;
       historyTableBody.appendChild(tr);
      });
     }
    );
   }
+
 
   // Request book
   async function requestBook(bookId) {
@@ -787,30 +767,31 @@
   }
   // --- Add New Book ---
 
-  addBookForm.addEventListener("submit", async (e) => {
-   e.preventDefault();
+  addBookForm.addEventListener("submit",
+   async (e) => {
+    e.preventDefault();
 
-   const title = document.getElementById("bookTitle").value.trim();
-   const author = document.getElementById("bookAuthor").value.trim();
-   const availability = document.getElementById("bookAvailability").value;
+    const title = document.getElementById("bookTitle").value.trim();
+    const author = document.getElementById("bookAuthor").value.trim();
+    const availability = document.getElementById("bookAvailability").value;
 
-   // Determine initial checkout status based on availability
-   const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
+    // Determine initial checkout status based on availability
+    const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
 
-   try {
-    await addDoc(collection(db, "books"), {
-     title,
-     author,
-     availability, // e.g. "Available" / "Unavailable"
-     createdAt: Date.now()
-    });
+    try {
+     await addDoc(collection(db, "books"), {
+      title,
+      author,
+      availability, // e.g. "Available" / "Unavailable"
+      createdAt: Date.now()
+     });
 
-    alert("Book added successfully.");
-    addBookForm.reset();
-   } catch (err) {
-    alert("Failed to add book: " + err.message);
-   }
-  });
+     alert("Book added successfully.");
+     addBookForm.reset();
+    } catch (err) {
+     alert("Failed to add book: " + err.message);
+    }
+   });
 
   // --- Load All Books (Admin) ---
   function loadAllBooks() {
