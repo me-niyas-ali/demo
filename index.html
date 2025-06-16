@@ -560,7 +560,7 @@
       availability: "Available"
      });
 
-     showToast("Request cancelled successfully.", "info");
+     showToast("Request cancelled successfully.", "error");
     } catch (err) {
      console.error("Error cancelling request:", err);
      showToast("Failed to cancel request: " + err.message, "error");
