@@ -454,26 +454,71 @@
        const book = docSnap.data();
        const bookId = docSnap.id;
        const status = book.availability || "Unavailable";
-       const isAlreadyRequested = activeRequests.has(bookId);
+       let buttonText = "Request";
+       let buttonClass = "btn-primary";
+       let buttonDisabled = false;
 
-       const tr = document.createElement("tr");
-       tr.innerHTML = `
-       <td>${book.title || "Untitled"}</td>
-       <td>${book.author || "Unknown"}</td>
-       <td>${status}</td>
-       <td>
-       <button class="btn btn-sm ${isAlreadyRequested || status !== "Available" ? "btn-secondary": "btn-primary"}" ${isAlreadyRequested || status !== "Available" ? "disabled": ""}>
-       ${isAlreadyRequested ? "Pending": "Request"}
-       </button>
-       </td>
-       `;
+       // Check if this book is already requested
+       if (activeRequests.has(bookId)) {
+        // Check if this user made the request
+        buttonText = "Not Available";
+        buttonClass = "btn-secondary";
+        buttonDisabled = true;
 
-       const btn = tr.querySelector("button");
-       if (!btn.disabled) {
-        btn.onclick = () => requestBook(bookId);
+        // Additional check for this user's request
+        getDocs(query(
+         collection(db, "bookRequests"),
+         where("userId", "==", uid),
+         where("bookId", "==", bookId),
+         where("status", "in", ["Pending", "Approved"])
+        )).then((userRequestSnap) => {
+         if (!userRequestSnap.empty) {
+          // It's requested by this user
+          buttonText = "Pending";
+          buttonDisabled = true;
+          buttonClass = "btn-secondary";
+         }
+
+         const tr = document.createElement("tr");
+         tr.innerHTML = `
+         <td>${book.title || "Untitled"}</td>
+         <td>${book.author || "Unknown"}</td>
+         <td>${status}</td>
+         <td>
+         <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
+         ${buttonText}
+         </button>
+         </td>
+         `;
+
+         const btn = tr.querySelector("button");
+         if (!btn.disabled) {
+          btn.onclick = () => requestBook(bookId);
+         }
+
+         booksTableBody.appendChild(tr);
+        });
+       } else {
+        // Not requested by anyone
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+        <td>${book.title || "Untitled"}</td>
+        <td>${book.author || "Unknown"}</td>
+        <td>${status}</td>
+        <td>
+        <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
+        ${buttonText}
+        </button>
+        </td>
+        `;
+
+        const btn = tr.querySelector("button");
+        if (!btn.disabled) {
+         btn.onclick = () => requestBook(bookId);
+        }
+
+        booksTableBody.appendChild(tr);
        }
-
-       booksTableBody.appendChild(tr);
       });
      });
     }
