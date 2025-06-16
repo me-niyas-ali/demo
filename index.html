@@ -447,7 +447,7 @@
     } else if (role === "user") {
       showUserDashboard(user.uid);
     } else {
-      showToast("No role assigned. Please contact admin.", "info");
+      showToast("No role assigned. Please contact admin.", "error");
       await signOut(auth);
       showLoggedOut();
     }
@@ -456,7 +456,6 @@
     showLoggedOut();
   }
 });
-
 
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
