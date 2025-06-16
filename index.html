@@ -25,7 +25,7 @@
 
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library</h1></center>
+  <center><h1 class="mb-2">PKNS Library 5</h1></center>
 
   <!-- Action Buttons -->
   <div class="card mb-2" id="main-btn">
@@ -639,59 +639,52 @@
   }
 
 
-  // Request book
-  async function requestBook(bookId) {
-   try {
+let requesting = false;
+
+async function requestBook(bookId) {
+  if (requesting) return; // prevent multiple parallel calls
+  requesting = true;
+
+  try {
     const user = auth.currentUser;
     if (!user) return alert("You must be logged in!");
 
-    // Check current active requests (Pending or Approved)
-    const activeRequestsSnap = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("status", "in", ["Pending", "Approved"])
+    const existing = await getDocs(query(
+      collection(db, "bookRequests"),
+      where("userId", "==", user.uid),
+      where("bookId", "==", bookId),
+      where("status", "in", ["Pending", "Approved"])
     ));
-    if (activeRequestsSnap.size >= 3) {
-     return alert("You can only have up to 3 active book requests.");
+    if (!existing.empty) {
+      return alert("You've already requested or checked out this book.");
     }
 
-    // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
     if (!bookSnap.exists()) return alert("Book not found!");
     const book = bookSnap.data();
 
-    // Check for duplicate request
-    const existing = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("bookId", "==", bookId),
-     where("status", "in", ["Pending", "Approved"])
-    ));
-    if (!existing.empty) {
-     return alert("You've already requested or checked out this book.");
-    }
-
-    // Save new request
     await addDoc(collection(db, "bookRequests"), {
-     userId: user.uid,
-     bookId: bookId,
-     title: book.title,
-     author: book.author,
-     status: "Pending",
-     requestedAt: new Date().toISOString()
+      userId: user.uid,
+      bookId: bookId,
+      title: book.title,
+      author: book.author,
+      status: "Pending",
+      requestedAt: new Date().toISOString()
     });
 
-    // Update book availability to "Requested"
     await updateDoc(bookRef, {
-     availability: "Requested"
+      availability: "Requested"
     });
 
     alert("Book request sent for approval.");
-   } catch (err) {
+  } catch (err) {
     alert("Error requesting book: " + err.message);
-   }
+  } finally {
+    requesting = false;
   }
+}
+
 
   // --- Show Admin Dashboard ---
   function showAdminDashboard() {
