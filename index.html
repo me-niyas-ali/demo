@@ -435,6 +435,27 @@
     showLoggedOut();
    }
   });
+  
+  onAuthStateChanged(auth, async (user) => {
+  const mainBtn = document.getElementById("main-btn");
+  if (user) {
+    mainBtn?.classList.add("d-none"); // hide when logged in
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const role = userDoc.exists() ? userDoc.data().role : null;
+    if (role === "admin") {
+      showAdminDashboard();
+    } else if (role === "user") {
+      showUserDashboard(user.uid);
+    } else {
+      showToast("No role assigned. Please contact admin.", "info");
+      await signOut(auth);
+      showLoggedOut();
+    }
+  } else {
+    mainBtn?.classList.remove("d-none"); // show when logged out
+    showLoggedOut();
+  }
+});
 
 
   // --- Show User Dashboard ---
