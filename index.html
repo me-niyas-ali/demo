@@ -32,11 +32,17 @@
    <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">User Login</button>
    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Admin Login</button>
   </div>
+  
   <!-- User logged in message & book list -->
   <div id="userSection" class="d-none">
-   <h3>Welcome, <span id="userFullname"></span>
-   </h3>
-   <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm mb-3">Logout</button>
+   <div class="card">
+    <div class="card-body d-flex justify-content-between">
+     <h4>Welcome, <span id="userFullname"></span>
+     </h4>
+     <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
+    </div>
+   </div>
+   
    <!-- Available Books display for user-->
    <h4>Available Books</h4>
    <div style="max-height: 250px; overflow-y: auto;">
@@ -435,27 +441,27 @@
     showLoggedOut();
    }
   });
-  
+
   onAuthStateChanged(auth, async (user) => {
-  const mainBtn = document.getElementById("main-btn");
-  if (user) {
+   const mainBtn = document.getElementById("main-btn");
+   if (user) {
     mainBtn?.classList.add("d-none"); // hide when logged in
     const userDoc = await getDoc(doc(db, "users", user.uid));
-    const role = userDoc.exists() ? userDoc.data().role : null;
+    const role = userDoc.exists() ? userDoc.data().role: null;
     if (role === "admin") {
-      showAdminDashboard();
+     showAdminDashboard();
     } else if (role === "user") {
-      showUserDashboard(user.uid);
+     showUserDashboard(user.uid);
     } else {
-      showToast("No role assigned. Please contact admin.", "error");
-      await signOut(auth);
-      showLoggedOut();
+     showToast("No role assigned. Please contact admin.", "error");
+     await signOut(auth);
+     showLoggedOut();
     }
-  } else {
+   } else {
     mainBtn?.classList.remove("d-none"); // show when logged out
     showLoggedOut();
-  }
-});
+   }
+  });
 
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
