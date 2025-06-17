@@ -10,8 +10,9 @@
  <div class="container py-4">
   <center><h1 class="mb-2">PKNS Library 33</h1></center>
 
-  <!-- Action Buttons -->
-  <div class="card mb-2" id="main-btn">
+  <!-- Main action Buttons -->
+  
+  <div class="card mb-2" id="main-action-btn">
    <div class="card-body">
     <div class="d-grid gap-4">
      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -22,9 +23,11 @@
   </div>
 
   <!-- User logged in message -->
+  
   <div id="userSection" class="d-none">
 
    <!-- Welcome Card -->
+   
    <div class="card mb-3">
     <div class="card-body d-flex justify-content-between align-items-center p-3">
      <h4 class="m-0">Welcome, <span id="userFullname"></span></h4>
@@ -32,8 +35,8 @@
     </div>
    </div>
 
-
    <!-- Available Books Card -->
+   
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Available Books</h5>
@@ -54,6 +57,7 @@
    </div>
 
    <!-- User History Card -->
+   
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Your Book Requests & Checkouts</h5>
@@ -75,6 +79,7 @@
   </div>
 
   <!-- Admin dashboard -->
+  
   <div id="adminSection" class="d-none">
    <h3>Admin Dashboard</h3>
    <button id="adminLogoutBtn" class="btn btn-outline-danger btn-sm mb-3">Logout</button>
@@ -171,7 +176,9 @@
    </div>
   </div>
  </div>
+ 
  <!-- Signup Modal -->
+ 
  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
    <form id="signupForm" class="modal-content needs-validation" novalidate>
@@ -222,7 +229,9 @@
    </form>
   </div>
  </div>
+ 
  <!-- User Login Modal -->
+ 
  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
    <form id="loginForm" class="modal-content needs-validation" novalidate>
@@ -252,7 +261,9 @@
    </form>
   </div>
  </div>
+ 
  <!-- Admin Login Modal -->
+ 
  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
    <form id="adminLoginForm" class="modal-content needs-validation" novalidate>
