@@ -666,7 +666,7 @@
     const activeRequestsSnap = await getDocs(query(
      collection(db, "bookRequests"),
      where("userId", "==", user.uid),
-     where("status", "in", ["Pending", "Approved"])
+     where("status", "in", ["Pending", "Checked Out"])
     ));
     if (activeRequestsSnap.size >= 3) {
      return alert("You can only have up to 3 active book requests.");
