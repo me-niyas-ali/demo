@@ -1124,7 +1124,7 @@
           return {
             ...data,
             id: docSnap.id,
-            rejectedAt: new Date(data.requestedAt || 0) // fallback to epoch
+            rejectedAt: new Date(data.rejectedAt || 0) // fallback to epoch
           };
         })
         .sort((a, b) => b.rejectedAt - a.rejectedAt);
