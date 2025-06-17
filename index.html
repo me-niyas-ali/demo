@@ -13,8 +13,8 @@
 
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw" id="main-action-btn">
    <div class="card-header">
-     <center><h2 class="mb-0 p-2">PKNS LIBRARY</h2></center>
-    </div>
+    <center><h2 class="mb-0 p-2">PKNS LIBRARY</h2></center>
+   </div>
    <div class="card-body">
     <div class="d-grid gap-4">
      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -41,7 +41,8 @@
 
    <div class="card mb-3">
     <div class="card-header">
-     <h5 class="mb-0">Available Books</h5>
+     <center><h5>Available Books</h5></center>
+     <input type="text" id="userBookSearch" class="form-control form-control" placeholder="Search books..." />
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="booksTable">
@@ -182,7 +183,8 @@
    <!-- All Books -->
    <div class="card mb-3">
     <div class="card-header">
-     <h5 class="mb-0">All Books</h5>
+     <center><h5>Available Books</h5></center>
+     <input type="text" id="userBookSearch" class="form-control" placeholder="Search books..." />
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allBooksTable">
@@ -578,66 +580,81 @@
       (bookSnap) => {
        booksTableBody.innerHTML = "";
        const books = [];
+
        bookSnap.forEach((docSnap) => {
         books.push({
          ...docSnap.data(), id: docSnap.id
         });
        });
 
-       books
-       .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-       .forEach((book) => {
-        const bookId = book.id;
-        const status = book.availability || "Unavailable";
+       books.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
 
-        let buttonText = "Request";
-        let buttonClass = "btn-primary";
-        let buttonDisabled = false;
-        let isUserRequest = false;
+       const searchInput = document.getElementById("userBookSearch");
 
-        if (activeRequests.has(bookId)) {
-         buttonText = "Not Available";
-         buttonClass = "btn-secondary";
-         buttonDisabled = true;
-         if (userRequests.has(bookId)) {
-          buttonText = "Cancel Request";
-          buttonClass = "btn-danger";
-          buttonDisabled = false;
-          isUserRequest = true;
-         }
-        } else if (status !== "Available") {
-         buttonText = "Not Available";
-         buttonClass = "btn-secondary";
-         buttonDisabled = true;
-        }
+       function renderBooks(filteredBooks) {
+        booksTableBody.innerHTML = "";
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-        <td>${book.title || "Untitled"}</td>
-        <td>${book.author || "Unknown"}</td>
-        <td>${status}</td>
-        <td>
-        <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
-        ${buttonText}
-        </button>
-        </td>
-        `;
+        filteredBooks.forEach((book) => {
+         const bookId = book.id;
+         const status = book.availability || "Unavailable";
 
-        const btn = tr.querySelector("button");
-        if (!btn.disabled) {
-         btn.onclick = () => {
-          if (isUserRequest) {
-           cancelBookRequest(bookId);
-          } else {
-           requestBook(bookId);
+         let buttonText = "Request";
+         let buttonClass = "btn-primary";
+         let buttonDisabled = false;
+         let isUserRequest = false;
+
+         if (activeRequests.has(bookId)) {
+          buttonText = "Not Available";
+          buttonClass = "btn-secondary";
+          buttonDisabled = true;
+          if (userRequests.has(bookId)) {
+           buttonText = "Cancel Request";
+           buttonClass = "btn-danger";
+           buttonDisabled = false;
+           isUserRequest = true;
           }
-         };
-        }
+         } else if (status !== "Available") {
+          buttonText = "Not Available";
+          buttonClass = "btn-secondary";
+          buttonDisabled = true;
+         }
 
-        booksTableBody.appendChild(tr);
-       });
+         const tr = document.createElement("tr");
+         tr.innerHTML = `
+         <td>${book.title || "Untitled"}</td>
+         <td>${book.author || "Unknown"}</td>
+         <td>${status}</td>
+         <td><button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>${buttonText}</button></td>
+         `;
 
+         const btn = tr.querySelector("button");
+         if (!btn.disabled) {
+          btn.onclick = () => {
+           if (isUserRequest) {
+            cancelBookRequest(bookId);
+           } else {
+            requestBook(bookId);
+           }
+          };
+         }
 
+         booksTableBody.appendChild(tr);
+        });
+       }
+
+       // Initial render
+       renderBooks(books);
+
+       // Search handler
+       searchInput.addEventListener("input",
+        () => {
+         const keyword = searchInput.value.trim().toLowerCase();
+         const filtered = books.filter(b =>
+          b.title.toLowerCase().includes(keyword) ||
+          b.author.toLowerCase().includes(keyword)
+         );
+         renderBooks(filtered);
+        });
       });
     }
    );
@@ -1008,75 +1025,95 @@
   function loadAllBooks() {
    onSnapshot(collection(db, "books"),
     (snapshot) => {
-     allBooksTableBody.innerHTML = "";
      const books = [];
+
      snapshot.forEach((docSnap) => {
       books.push({
        ...docSnap.data(), id: docSnap.id
       });
      });
 
-     books
-     .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-     .forEach((book) => {
-      const tr = document.createElement("tr");
-      const availabilityOptions = ["Available", "Checked Out", "Requested"];
-      const availabilitySelect = document.createElement("select");
-      availabilitySelect.className = "form-select form-select-sm";
-      let originalStatus = book.availability;
+     books.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
 
-      availabilityOptions.forEach((status) => {
-       const option = document.createElement("option");
-       option.value = status;
-       option.textContent = status;
-       if (status === originalStatus) option.selected = true;
-       availabilitySelect.appendChild(option);
-      });
+     const searchInput = document.getElementById("adminBookSearch");
 
-      const saveBtn = document.createElement("button");
-      saveBtn.className = "btn btn-sm btn-primary";
-      saveBtn.textContent = "Save";
-      saveBtn.style.display = "none";
-      saveBtn.onclick = () => {
-       updateBookAvailability(book.id,
-        availabilitySelect.value);
-       originalStatus = availabilitySelect.value;
+     function renderBooksAdmin(bookList) {
+      allBooksTableBody.innerHTML = "";
+
+      bookList.forEach((book) => {
+       const tr = document.createElement("tr");
+       const availabilityOptions = ["Available", "Checked Out", "Requested"];
+       const availabilitySelect = document.createElement("select");
+       availabilitySelect.className = "form-select form-select-sm";
+       let originalStatus = book.availability;
+
+       availabilityOptions.forEach((status) => {
+        const option = document.createElement("option");
+        option.value = status;
+        option.textContent = status;
+        if (status === originalStatus) option.selected = true;
+        availabilitySelect.appendChild(option);
+       });
+
+       const saveBtn = document.createElement("button");
+       saveBtn.className = "btn btn-sm btn-primary";
+       saveBtn.textContent = "Save";
        saveBtn.style.display = "none";
-      };
+       saveBtn.onclick = () => {
+        updateBookAvailability(book.id,
+         availabilitySelect.value);
+        originalStatus = availabilitySelect.value;
+        saveBtn.style.display = "none";
+       };
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn btn-sm btn-danger";
-      deleteBtn.textContent = "Delete";
-      deleteBtn.onclick = () => {
-       const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
-       if (confirmDelete) {
-        deleteDoc(doc(db, "books", book.id))
-        .then(() => alert("Book deleted successfully."))
-        .catch((err) => alert("Failed to delete: " + err.message));
-       }
-      };
+       const deleteBtn = document.createElement("button");
+       deleteBtn.className = "btn btn-sm btn-danger";
+       deleteBtn.textContent = "Delete";
+       deleteBtn.onclick = () => {
+        const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
+        if (confirmDelete) {
+         deleteDoc(doc(db, "books", book.id))
+         .then(() => alert("Book deleted successfully."))
+         .catch((err) => alert("Failed to delete: " + err.message));
+        }
+       };
 
-      availabilitySelect.addEventListener("change", () => {
-       saveBtn.style.display = availabilitySelect.value !== originalStatus ? "inline-block": "none";
+       availabilitySelect.addEventListener("change", () => {
+        saveBtn.style.display = availabilitySelect.value !== originalStatus ? "inline-block": "none";
+       });
+
+       const controlWrapper = document.createElement("div");
+       controlWrapper.className = "d-flex align-items-center gap-2";
+       controlWrapper.appendChild(availabilitySelect);
+       controlWrapper.appendChild(saveBtn);
+       controlWrapper.appendChild(deleteBtn);
+
+       const availabilityCell = document.createElement("td");
+       availabilityCell.appendChild(controlWrapper);
+
+       tr.innerHTML = `
+       <td>${book.title}</td>
+       <td>${book.author}</td>
+       `;
+       tr.appendChild(availabilityCell);
+
+       allBooksTableBody.appendChild(tr);
       });
+     }
 
-      const controlWrapper = document.createElement("div");
-      controlWrapper.className = "d-flex align-items-center gap-2";
-      controlWrapper.appendChild(availabilitySelect);
-      controlWrapper.appendChild(saveBtn);
-      controlWrapper.appendChild(deleteBtn);
+     // Initial render
+     renderBooksAdmin(books);
 
-      const availabilityCell = document.createElement("td");
-      availabilityCell.appendChild(controlWrapper);
-
-      tr.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      `;
-      tr.appendChild(availabilityCell);
-
-      allBooksTableBody.appendChild(tr);
-     });
+     // Search handler
+     searchInput.addEventListener("input",
+      () => {
+       const keyword = searchInput.value.trim().toLowerCase();
+       const filtered = books.filter(b =>
+        b.title.toLowerCase().includes(keyword) ||
+        b.author.toLowerCase().includes(keyword)
+       );
+       renderBooksAdmin(filtered);
+      });
     });
   }
 
