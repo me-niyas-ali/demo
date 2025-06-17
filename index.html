@@ -6,92 +6,50 @@
  <title>Library App - User & Admin</title>
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
-
-<style>
- .toast-container-custom {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1055;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  max-width: 90%;
-  width: auto;
- }
-</style>
-
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 32</h1></center>
-
-  <!-- Action Buttons -->
-  <div class="card mb-2" id="main-btn">
-   <div class="card-body">
-    <div class="d-grid gap-4">
-     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
-     <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal">User Login</button>
-     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Admin Login</button>
-    </div>
-   </div>
+  <h1 class="mb-4">PKNS Library</h1>
+  <!-- Buttons to open modals -->
+  <div class="mb-3">
+   <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
+   <button class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">User Login</button>
+   <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#adminLoginModal">Admin Login</button>
   </div>
-
-  <!-- User logged in message -->
+  <!-- User logged in message & book list -->
   <div id="userSection" class="d-none">
-
-   <!-- Welcome Card -->
-   <div class="card mb-3">
-    <div class="card-body d-flex justify-content-between align-items-center p-3">
-     <h4 class="m-0">Welcome, <span id="userFullname"></span></h4>
-     <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
-    </div>
+   <h3>Welcome, <span id="userFullname"></span>
+   </h3>
+   <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm mb-3">Logout</button>
+   <!-- Available Books display for user-->
+   <h4>Available Books</h4>
+   <div style="max-height: 250px; overflow-y: auto;">
+    <table class="table table-sm" id="booksTable">
+     <thead>
+      <tr>
+       <th>Title</th>
+       <th>Author</th>
+       <th>Status</th>
+       <th>Request</th>
+      </tr>
+     </thead>
+     <tbody></tbody>
+    </table>
    </div>
-
-
-   <!-- Available Books Card -->
-   <div class="card mb-3">
-    <div class="card-header">
-     <h5 class="mb-0">Available Books</h5>
-    </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="booksTable">
-      <thead>
-       <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Status</th>
-        <th>Request</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
-    </div>
+   <!-- User Your Book Requests & Checkouts -->
+   <h4>Your Book Requests & Checkouts</h4>
+   <div style="max-height:250px; overflow-y: auto;">
+    <table class="table table-sm" id="userHistoryTable">
+     <thead>
+      <tr>
+       <th>Title</th>
+       <th>Status</th>
+       <th>Requested At</th>
+      </tr>
+     </thead>
+     <tbody></tbody>
+    </table>
    </div>
-
-   <!-- User History Card -->
-   <div class="card mb-3">
-    <div class="card-header">
-     <h5 class="mb-0">Your Book Requests & Checkouts</h5>
-    </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="userHistoryTable">
-      <thead>
-       <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Requested At</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
-    </div>
-   </div>
-
   </div>
-
-
   <!-- Admin dashboard -->
   <div id="adminSection" class="d-none">
    <h3>Admin Dashboard</h3>
@@ -112,7 +70,7 @@
     </table>
    </div>
    <h5 class="mt-4">Pending Book Requests</h5>
-   <div style="max-height:300px; overflow-y: auto;">
+   <div style="max-height:200px; overflow-y: auto;">
     <table class="table table-sm" id="bookRequestsTable">
      <thead>
       <tr>
@@ -379,12 +337,12 @@
      password, // Warning: storing password in plain text - for demo only!
      createdAt: new Date().toISOString(),
     });
-    showToast("Signup request submitted. Wait for admin approval.", "info");
+    alert("Signup request submitted. Wait for admin approval.");
     signupForm.reset();
     signupForm.classList.remove("was-validated");
     signupModal.hide();
    } catch (error) {
-    showToast("Error submitting signup request: " + error.message, "error");
+    alert("Error submitting signup request: " + error.message);
    }
   });
   // --- USER LOGIN ---
@@ -401,7 +359,7 @@
     loginForm.classList.remove("was-validated");
     loginModal.hide();
    } catch (error) {
-    showToast("Login failed: " + error.message, "error");
+    alert("Login failed: " + error.message);
    }
   });
   // --- ADMIN LOGIN ---
@@ -419,14 +377,14 @@
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (!userDoc.exists() || userDoc.data().role !== "admin") {
      await signOut(auth);
-     showToast("Access denied: Not an admin.", "info");
+     alert("Access denied: Not an admin.");
      return;
     }
     adminLoginForm.reset();
     adminLoginForm.classList.remove("was-validated");
     adminLoginModal.hide();
    } catch (error) {
-    showToast("Admin login failed: " + error.message, "error");
+    alert("Admin login failed: " + error.message);
    }
   });
   // --- LOGOUT ---
@@ -452,7 +410,7 @@
     } else if (role === "user") {
      showUserDashboard(user.uid);
     } else {
-     showToast("No role assigned. Please contact admin.", "info");
+     alert("No role assigned. Please contact admin.");
      await signOut(auth);
      showLoggedOut();
     }
@@ -461,28 +419,7 @@
    }
   });
 
-  onAuthStateChanged(auth, async (user) => {
-   const mainBtn = document.getElementById("main-btn");
-   if (user) {
-    mainBtn?.classList.add("d-none"); // hide when logged in
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    const role = userDoc.exists() ? userDoc.data().role: null;
-    if (role === "admin") {
-     showAdminDashboard();
-    } else if (role === "user") {
-     showUserDashboard(user.uid);
-    } else {
-     showToast("No role assigned. Please contact admin.", "error");
-     await signOut(auth);
-     showLoggedOut();
-    }
-   } else {
-    mainBtn?.classList.remove("d-none"); // show when logged out
-    showLoggedOut();
-   }
-  });
 
-  // --- Show User Dashboard ---
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
    // Hide admin section, show user section
@@ -639,51 +576,59 @@
   }
 
 
-let requesting = false;
-
-async function requestBook(bookId) {
-  if (requesting) return; // prevent multiple parallel calls
-  requesting = true;
-
-  try {
+  // Request book
+  async function requestBook(bookId) {
+   try {
     const user = auth.currentUser;
     if (!user) return alert("You must be logged in!");
 
-    const existing = await getDocs(query(
-      collection(db, "bookRequests"),
-      where("userId", "==", user.uid),
-      where("bookId", "==", bookId),
-      where("status", "in", ["Pending", "Approved"])
+    // Check current active requests (Pending or Approved)
+    const activeRequestsSnap = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("status", "in", ["Pending", "Approved"])
     ));
-    if (!existing.empty) {
-      return alert("You've already requested or checked out this book.");
+    if (activeRequestsSnap.size >= 3) {
+     return alert("You can only have up to 3 active book requests.");
     }
 
+    // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
     if (!bookSnap.exists()) return alert("Book not found!");
     const book = bookSnap.data();
 
+    // Check for duplicate request
+    const existing = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("bookId", "==", bookId),
+     where("status", "in", ["Pending", "Approved"])
+    ));
+    if (!existing.empty) {
+     return alert("You've already requested or checked out this book.");
+    }
+
+    // Save new request
     await addDoc(collection(db, "bookRequests"), {
-      userId: user.uid,
-      bookId: bookId,
-      title: book.title,
-      author: book.author,
-      status: "Pending",
-      requestedAt: new Date().toISOString()
+     userId: user.uid,
+     bookId: bookId,
+     title: book.title,
+     author: book.author,
+     status: "Pending",
+     requestedAt: new Date().toISOString()
     });
 
+    // Update book availability to "Requested"
     await updateDoc(bookRef, {
-      availability: "Requested"
+     availability: "Requested"
     });
 
     alert("Book request sent for approval.");
-  } catch (err) {
+   } catch (err) {
     alert("Error requesting book: " + err.message);
-  } finally {
-    requesting = false;
+   }
   }
-}
 
 
   // --- Show Admin Dashboard ---
@@ -765,9 +710,9 @@ async function requestBook(bookId) {
         await updateDoc(requestRef, {
          status: "Checked Out"
         });
-        showToast("Book approved and marked as Checked Out.", "info");
+        alert("Book approved and marked as Checked Out.");
        } catch (err) {
-        showToast("Error approving request: " + err.message, "error");
+        alert("Error approving request: " + err.message);
        }
       };
 
@@ -797,9 +742,9 @@ async function requestBook(bookId) {
          availability: "Available"
         });
 
-        showToast("Request rejected.", "info");
+        alert("Request rejected.");
        } catch (err) {
-        showToast("Error rejecting request: " + err.message, "error");
+        alert("Error rejecting request: " + err.message);
        }
       };
 
@@ -849,11 +794,11 @@ async function requestBook(bookId) {
          status: "Returned"
         });
 
-        showToast("Book marked as returned.", "info");
+        alert("Book marked as returned.");
 
        } catch (err) {
         console.error("Error updating documents:", err);
-        showToast("Error returning book: " + err.message, "error");
+        alert("Error returning book: " + err.message);
        }
       };
 
@@ -887,11 +832,9 @@ async function requestBook(bookId) {
     await deleteDoc(doc(db, "signupRequests", docId));
     // Clean up the secondary app to avoid memory leaks
     await secondaryApp.delete();
-    showToast("Signup approved and user created without logging out admin.",
-     "info");
+    alert("Signup approved and user created without logging out admin.");
    } catch (error) {
-    showToast("Error approving signup: " + error.message,
-     "error");
+    alert("Error approving signup: " + error.message);
    }
   }
   // --- Add New Book ---
@@ -915,10 +858,10 @@ async function requestBook(bookId) {
       createdAt: Date.now()
      });
 
-     showToast("Book added successfully.", "info");
+     alert("Book added successfully.");
      addBookForm.reset();
     } catch (err) {
-     showToast("Failed to add book: " + err.message, "error");
+     alert("Failed to add book: " + err.message);
     }
    });
 
@@ -959,7 +902,7 @@ async function requestBook(bookId) {
       deleteBtn.onclick = () => {
        const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
        if (confirmDelete) {
-        deleteDoc(doc(db, "books", docSnap.id)).then(() => showToast("Book deleted successfully.")).catch((err) => alert("Failed to delete: " + err.message), "error");
+        deleteDoc(doc(db, "books", docSnap.id)).then(() => alert("Book deleted successfully.")).catch((err) => alert("Failed to delete: " + err.message));
        }
       };
       // Show Save button only when value changes
@@ -1024,9 +967,9 @@ async function requestBook(bookId) {
      }
     }
 
-    showToast("Book availability and request status updated.", "info");
+    alert("Book availability and request status updated.");
    } catch (err) {
-    showToast("Failed to update: " + err.message, "error");
+    alert("Failed to update: " + err.message);
    }
   }
 
@@ -1053,43 +996,5 @@ async function requestBook(bookId) {
   }
  </script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
- <!-- Toast Container -->
- <div id="toastContainer" class="toast-container-custom"></div>
-
- <script>
-  function showToast(message, type = "info") {
-   const colors = {
-    info: "bg-success text-white",
-    success: "bg-success text-white",
-    error: "bg-danger text-white",
-    warning: "bg-warning text-dark"
-   };
-
-   const toast = document.createElement("div");
-   toast.className = `toast ${colors[type] || colors.info} border-0`;
-   toast.setAttribute("role", "alert");
-   toast.setAttribute("aria-live", "assertive");
-   toast.setAttribute("aria-atomic", "true");
-
-   toast.innerHTML = `
-   <div class="d-flex">
-   <div class="toast-body">${message}</div>
-   <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-   </div>
-   `;
-
-   const container = document.getElementById("toastContainer");
-   container.appendChild(toast);
-
-   const toastInstance = new bootstrap.Toast(toast, {
-    delay: 3000
-   });
-   toastInstance.show();
-
-   toast.addEventListener("hidden.bs.toast", () => toast.remove());
-  }
- </script>
 </body>
 </html>
