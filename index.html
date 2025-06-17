@@ -803,7 +803,7 @@
         // Step 2: Update request status and preserve requestedAt
         await updateDoc(requestRef, {
          status: "Rejected",
-         requestedAt: requestedAt // ensure field is always present
+         rejectedAt: new Date().toISOString() // ensure field is always present
         });
 
         // Step 3: Reset book availability
