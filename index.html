@@ -79,1129 +79,1185 @@
   </div>
 
   <!-- Admin dashboard -->
-
   <div id="adminSection" class="d-none">
-   <h3>Admin Dashboard</h3>
-   <button id="adminLogoutBtn" class="btn btn-outline-danger btn-sm mb-3">Logout</button>
-   <h5>Pending Signup Requests</h5>
-   <div style="max-height:200px; overflow-y: auto;">
-    <table class="table table-sm" id="signupRequestsTable">
-     <thead>
-      <tr>
-       <th>Full Name</th>
-       <th>Email</th>
-       <th>DOB</th>
-       <th>Blood Group</th>
-       <th>Actions</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
-   </div>
-   <h5 class="mt-4">Pending Book Requests</h5>
-   <div style="max-height:200px; overflow-y: auto;">
-    <table class="table table-sm" id="bookRequestsTable">
-     <thead>
-      <tr>
-       <th>User</th>
-       <th>Title</th>
-       <th>Author</th>
-       <th>Status</th>
-       <th>Actions</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
-   </div>
-   <h5 class="mt-4">Active Checked Out Books</h5>
-   <div style="max-height:200px; overflow-y: auto;">
-    <table class="table table-sm" id="checkedOutBooksTable">
-     <thead>
-      <tr>
-       <th>User</th>
-       <th>Title</th>
-       <th>Author</th>
-       <th>Checked Out At</th>
-       <th>Actions</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
-   </div>
-   <h5 class="mt-4">Add New Book</h5>
-   <form id="addBookForm" class="row g-2 mb-3">
-    <div class="col-md-4">
-     <input type="text" id="bookTitle" class="form-control" placeholder="Title" required />
+
+   <!-- Welcome Card -->
+   <div class="card mb-3">
+    <div class="card-body d-flex justify-content-between align-items-center p-3">
+     <h4 class="m-0">Admin Dashboard</h4>
+     <button id="adminLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
     </div>
-    <div class="col-md-4">
-     <input type="text" id="bookAuthor" class="form-control" placeholder="Author" required />
-    </div>
-    <div class="col-md-2">
-     <select id="bookAvailability" class="form-select" required>
-      <option value="Available" selected>Available</option>
-      <option value="Checked Out">Checked Out</option>
-     </select>
-    </div>
-    <div class="col-md-2">
-     <button type="submit" class="btn btn-success w-100">Add Book</button>
-    </div>
-   </form>
-   <h5>All Books</h5>
-   <div style="max-height:250px; overflow-y: auto;">
-    <table class="table table-sm" id="allBooksTable">
-     <thead>
-      <tr>
-       <th>Title</th>
-       <th>Author</th>
-       <th>Availability</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
-   </div>
-   <h5 class="mt-4">All Users</h5>
-   <div style="max-height:250px; overflow-y: auto;">
-    <table class="table table-sm" id="allUsersTable">
-     <thead>
-      <tr>
-       <th>Full Name</th>
-       <th>Email</th>
-       <th>DOB</th>
-       <th>Blood Group</th>
-       <th>Joined At</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
-   </div>
-   <h5 class="mt-4">All Book Requests History</h5>
-   <div style="max-height:250px; overflow-y: auto;">
-    <table class="table table-sm" id="allBookRequestsTable">
-     <thead>
-      <tr>
-       <th>User</th>
-       <th>Book Title</th>
-       <th>Status</th>
-       <th>Requested At</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
-   </div>
-   <h5 class="mt-4">Rejected Book Requests</h5>
-   <div style="max-height:250px; overflow-y: auto;">
-    <table class="table table-sm" id="rejectedRequestsTable">
-     <thead>
-      <tr>
-       <th>User</th>
-       <th>Book Title</th>
-       <th>Current Status</th>
-       <th>Rejected At</th>
-      </tr>
-     </thead>
-     <tbody></tbody>
-    </table>
    </div>
 
+   <!-- Pending Signup Requests -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">Pending Signup Requests</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="signupRequestsTable">
+      <thead>
+       <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>DOB</th>
+        <th>Blood Group</th>
+        <th>Actions</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- Pending Book Requests -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">Pending Book Requests</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="bookRequestsTable">
+      <thead>
+       <tr>
+        <th>User</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Status</th>
+        <th>Actions</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- Active Checked Out Books -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">Active Checked Out Books</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="checkedOutBooksTable">
+      <thead>
+       <tr>
+        <th>User</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Checked Out At</th>
+        <th>Actions</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- Add New Book -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">Add New Book</h5>
+    </div>
+    <div class="card-body">
+     <form id="addBookForm" class="row g-2">
+      <div class="col-md-4">
+       <input type="text" id="bookTitle" class="form-control" placeholder="Title" required />
+      </div>
+      <div class="col-md-4">
+       <input type="text" id="bookAuthor" class="form-control" placeholder="Author" required />
+      </div>
+      <div class="col-md-2">
+       <select id="bookAvailability" class="form-select" required>
+        <option value="Available" selected>Available</option>
+        <option value="Checked Out">Checked Out</option>
+       </select>
+      </div>
+      <div class="col-md-2">
+       <button type="submit" class="btn btn-success w-100">Add Book</button>
+      </div>
+     </form>
+    </div>
+   </div>
+
+   <!-- All Books -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">All Books</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="allBooksTable">
+      <thead>
+       <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Availability</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- All Users -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">All Users</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="allUsersTable">
+      <thead>
+       <tr>
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>DOB</th>
+        <th>Blood Group</th>
+        <th>Joined At</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- All Book Requests History -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">All Book Requests History</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="allBookRequestsTable">
+      <thead>
+       <tr>
+        <th>User</th>
+        <th>Book Title</th>
+        <th>Status</th>
+        <th>Requested At</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
+
+   <!-- Rejected Book Requests -->
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">Rejected Book Requests</h5>
+    </div>
+    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+     <table class="table table-sm mb-0" id="rejectedRequestsTable">
+      <thead>
+       <tr>
+        <th>User</th>
+        <th>Book Title</th>
+        <th>Current Status</th>
+        <th>Rejected At</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </div>
+   </div>
   </div>
- </div>
 
- <!-- Signup Modal -->
 
- <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-   <form id="signupForm" class="modal-content needs-validation" novalidate>
-    <div class="modal-header">
-     <h5 class="modal-title">User Signup</h5>
-     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-    </div>
-    <div class="modal-body">
-     <div class="mb-3">
-      <label for="fullname" class="form-label">Full Name</label>
-      <input type="text" id="fullname" class="form-control" required />
-      <div class="invalid-feedback">
-       Please enter your full name.
+  <!-- Signup Modal -->
+
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog">
+    <form id="signupForm" class="modal-content needs-validation" novalidate>
+     <div class="modal-header">
+      <h5 class="modal-title">User Signup</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+     </div>
+     <div class="modal-body">
+      <div class="mb-3">
+       <label for="fullname" class="form-label">Full Name</label>
+       <input type="text" id="fullname" class="form-control" required />
+       <div class="invalid-feedback">
+        Please enter your full name.
+       </div>
+      </div>
+      <div class="mb-3">
+       <label for="email" class="form-label">Email address</label>
+       <input type="email" id="email" class="form-control" required />
+       <div class="invalid-feedback">
+        Please enter a valid email.
+       </div>
+      </div>
+      <div class="mb-3">
+       <label for="dob" class="form-label">Date of Birth</label>
+       <input type="date" id="dob" class="form-control" required />
+       <div class="invalid-feedback">
+        Please enter your date of birth.
+       </div>
+      </div>
+      <div class="mb-3">
+       <label for="bloodGroup" class="form-label">Blood Group</label>
+       <input type="text" id="bloodGroup" class="form-control" required />
+       <div class="invalid-feedback">
+        Please enter your blood group.
+       </div>
+      </div>
+      <div class="mb-3">
+       <label for="password" class="form-label">Password</label>
+       <input type="password" id="password" class="form-control" required minlength="6" />
+       <div class="invalid-feedback">
+        Please enter a password (min 6 characters).
+       </div>
       </div>
      </div>
-     <div class="mb-3">
-      <label for="email" class="form-label">Email address</label>
-      <input type="email" id="email" class="form-control" required />
-      <div class="invalid-feedback">
-       Please enter a valid email.
-      </div>
+     <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Sign Up</button>
      </div>
-     <div class="mb-3">
-      <label for="dob" class="form-label">Date of Birth</label>
-      <input type="date" id="dob" class="form-control" required />
-      <div class="invalid-feedback">
-       Please enter your date of birth.
-      </div>
-     </div>
-     <div class="mb-3">
-      <label for="bloodGroup" class="form-label">Blood Group</label>
-      <input type="text" id="bloodGroup" class="form-control" required />
-      <div class="invalid-feedback">
-       Please enter your blood group.
-      </div>
-     </div>
-     <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" id="password" class="form-control" required minlength="6" />
-      <div class="invalid-feedback">
-       Please enter a password (min 6 characters).
-      </div>
-     </div>
-    </div>
-    <div class="modal-footer">
-     <button type="submit" class="btn btn-primary">Sign Up</button>
-    </div>
-   </form>
+    </form>
+   </div>
   </div>
- </div>
 
- <!-- User Login Modal -->
+  <!-- User Login Modal -->
 
- <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-   <form id="loginForm" class="modal-content needs-validation" novalidate>
-    <div class="modal-header">
-     <h5 class="modal-title">User Login</h5>
-     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-    </div>
-    <div class="modal-body">
-     <div class="mb-3">
-      <label for="loginEmail" class="form-label">Email address</label>
-      <input type="email" id="loginEmail" class="form-control" required />
-      <div class="invalid-feedback">
-       Please enter your email.
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog">
+    <form id="loginForm" class="modal-content needs-validation" novalidate>
+     <div class="modal-header">
+      <h5 class="modal-title">User Login</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+     </div>
+     <div class="modal-body">
+      <div class="mb-3">
+       <label for="loginEmail" class="form-label">Email address</label>
+       <input type="email" id="loginEmail" class="form-control" required />
+       <div class="invalid-feedback">
+        Please enter your email.
+       </div>
+      </div>
+      <div class="mb-3">
+       <label for="loginPassword" class="form-label">Password</label>
+       <input type="password" id="loginPassword" class="form-control" required minlength="6" />
+       <div class="invalid-feedback">
+        Please enter your password.
+       </div>
       </div>
      </div>
-     <div class="mb-3">
-      <label for="loginPassword" class="form-label">Password</label>
-      <input type="password" id="loginPassword" class="form-control" required minlength="6" />
-      <div class="invalid-feedback">
-       Please enter your password.
-      </div>
+     <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Login</button>
      </div>
-    </div>
-    <div class="modal-footer">
-     <button type="submit" class="btn btn-primary">Login</button>
-    </div>
-   </form>
+    </form>
+   </div>
   </div>
- </div>
 
- <!-- Admin Login Modal -->
+  <!-- Admin Login Modal -->
 
- <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-   <form id="adminLoginForm" class="modal-content needs-validation" novalidate>
-    <div class="modal-header">
-     <h5 class="modal-title">Admin Login</h5>
-     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-    </div>
-    <div class="modal-body">
-     <div class="mb-3">
-      <label for="adminEmail" class="form-label">Email address</label>
-      <input type="email" id="adminEmail" class="form-control" required />
-      <div class="invalid-feedback">
-       Please enter your email.
+  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog">
+    <form id="adminLoginForm" class="modal-content needs-validation" novalidate>
+     <div class="modal-header">
+      <h5 class="modal-title">Admin Login</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+     </div>
+     <div class="modal-body">
+      <div class="mb-3">
+       <label for="adminEmail" class="form-label">Email address</label>
+       <input type="email" id="adminEmail" class="form-control" required />
+       <div class="invalid-feedback">
+        Please enter your email.
+       </div>
+      </div>
+      <div class="mb-3">
+       <label for="adminPassword" class="form-label">Password</label>
+       <input type="password" id="adminPassword" class="form-control" required minlength="6" />
+       <div class="invalid-feedback">
+        Please enter your password.
+       </div>
       </div>
      </div>
-     <div class="mb-3">
-      <label for="adminPassword" class="form-label">Password</label>
-      <input type="password" id="adminPassword" class="form-control" required minlength="6" />
-      <div class="invalid-feedback">
-       Please enter your password.
-      </div>
+     <div class="modal-footer">
+      <button type="submit" class="btn btn-danger">Login as Admin</button>
      </div>
-    </div>
-    <div class="modal-footer">
-     <button type="submit" class="btn btn-danger">Login as Admin</button>
-    </div>
-   </form>
+    </form>
+   </div>
   </div>
- </div>
- <script type="module">
-  import {
-   initializeApp
-  } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import {
-   getFirestore,
-   collection,
-   addDoc,
-   getDocs,
-   doc,
-   deleteDoc,
-   setDoc,
-   updateDoc,
-   query,
-   where,
-   onSnapshot,
-   getDoc
-  } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-  import {
-   getAuth,
-   createUserWithEmailAndPassword,
-   signInWithEmailAndPassword,
-   signOut,
-   onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-  // Your Firebase config (replace with your config)
-  const firebaseConfig = {
-   apiKey: "AIzaSyCzaPyBZ0t5R80ERXaCO2rVAAWGBCEILI8",
-   authDomain: "libraryapp-2025.firebaseapp.com",
-   databaseURL: "https://libraryapp-2025-default-rtdb.firebaseio.com",
-   projectId: "libraryapp-2025",
-   storageBucket: "libraryapp-2025.firebasestorage.app",
-   messagingSenderId: "681370266458",
-   appId: "1:681370266458:web:bd978d0567e629a13ea163",
-   measurementId: "G-6M4YEF78HY"
-  };
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  // Bootstrap modal helpers
-  const signupModalEl = document.getElementById('signupModal');
-  const loginModalEl = document.getElementById('loginModal');
-  const adminLoginModalEl = document.getElementById('adminLoginModal');
-  const signupModal = bootstrap.Modal.getOrCreateInstance(signupModalEl);
-  const loginModal = bootstrap.Modal.getOrCreateInstance(loginModalEl);
-  const adminLoginModal = bootstrap.Modal.getOrCreateInstance(adminLoginModalEl);
-  // Validation helper
-  function enableBootstrapValidation(form) {
-   form.addEventListener("submit", (event) => {
-    if (!form.checkValidity()) {
-     event.preventDefault();
-     event.stopPropagation();
+  
+  
+  <script type="module">
+   import {
+    initializeApp
+   } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+   import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    deleteDoc,
+    setDoc,
+    updateDoc,
+    query,
+    where,
+    onSnapshot,
+    getDoc
+   } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+   import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+   } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+   // Your Firebase config (replace with your config)
+   const firebaseConfig = {
+    apiKey: "AIzaSyCzaPyBZ0t5R80ERXaCO2rVAAWGBCEILI8",
+    authDomain: "libraryapp-2025.firebaseapp.com",
+    databaseURL: "https://libraryapp-2025-default-rtdb.firebaseio.com",
+    projectId: "libraryapp-2025",
+    storageBucket: "libraryapp-2025.firebasestorage.app",
+    messagingSenderId: "681370266458",
+    appId: "1:681370266458:web:bd978d0567e629a13ea163",
+    measurementId: "G-6M4YEF78HY"
+   };
+   // Initialize Firebase
+   const app = initializeApp(firebaseConfig);
+   const db = getFirestore(app);
+   const auth = getAuth(app);
+   // Bootstrap modal helpers
+   const signupModalEl = document.getElementById('signupModal');
+   const loginModalEl = document.getElementById('loginModal');
+   const adminLoginModalEl = document.getElementById('adminLoginModal');
+   const signupModal = bootstrap.Modal.getOrCreateInstance(signupModalEl);
+   const loginModal = bootstrap.Modal.getOrCreateInstance(loginModalEl);
+   const adminLoginModal = bootstrap.Modal.getOrCreateInstance(adminLoginModalEl);
+   // Validation helper
+   function enableBootstrapValidation(form) {
+    form.addEventListener("submit", (event) => {
+     if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+     }
+     form.classList.add("was-validated");
+    },
+     false);
+   }
+   // --- SIGNUP ---
+   const signupForm = document.getElementById("signupForm");
+   enableBootstrapValidation(signupForm);
+   signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!signupForm.checkValidity()) return;
+    const fullname = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const dob = document.getElementById("dob").value;
+    const bloodGroup = document.getElementById("bloodGroup").value.trim();
+    const password = document.getElementById("password").value;
+    try {
+     // Save signup request in Firestore
+     await addDoc(collection(db, "signupRequests"), {
+      fullname,
+      email,
+      dob,
+      bloodGroup,
+      password, // Warning: storing password in plain text - for demo only!
+      createdAt: new Date().toISOString(),
+     });
+     alert("Signup request submitted. Wait for admin approval.");
+     signupForm.reset();
+     signupForm.classList.remove("was-validated");
+     signupModal.hide();
+    } catch (error) {
+     alert("Error submitting signup request: " + error.message);
     }
-    form.classList.add("was-validated");
-   },
-    false);
-  }
-  // --- SIGNUP ---
-  const signupForm = document.getElementById("signupForm");
-  enableBootstrapValidation(signupForm);
-  signupForm.addEventListener("submit", async (e) => {
-   e.preventDefault();
-   if (!signupForm.checkValidity()) return;
-   const fullname = document.getElementById("fullname").value.trim();
-   const email = document.getElementById("email").value.trim();
-   const dob = document.getElementById("dob").value;
-   const bloodGroup = document.getElementById("bloodGroup").value.trim();
-   const password = document.getElementById("password").value;
-   try {
-    // Save signup request in Firestore
-    await addDoc(collection(db, "signupRequests"), {
-     fullname,
-     email,
-     dob,
-     bloodGroup,
-     password, // Warning: storing password in plain text - for demo only!
-     createdAt: new Date().toISOString(),
-    });
-    alert("Signup request submitted. Wait for admin approval.");
-    signupForm.reset();
-    signupForm.classList.remove("was-validated");
-    signupModal.hide();
-   } catch (error) {
-    alert("Error submitting signup request: " + error.message);
-   }
-  });
-  // --- USER LOGIN ---
-  const loginForm = document.getElementById("loginForm");
-  enableBootstrapValidation(loginForm);
-  loginForm.addEventListener("submit", async (e) => {
-   e.preventDefault();
-   if (!loginForm.checkValidity()) return;
-   const email = document.getElementById("loginEmail").value.trim();
-   const password = document.getElementById("loginPassword").value;
-   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    loginForm.reset();
-    loginForm.classList.remove("was-validated");
-    loginModal.hide();
-   } catch (error) {
-    alert("Login failed: " + error.message);
-   }
-  });
-  // --- ADMIN LOGIN ---
-  // Only allow login for admin users (role: "admin")
-  const adminLoginForm = document.getElementById("adminLoginForm");
-  enableBootstrapValidation(adminLoginForm);
-  adminLoginForm.addEventListener("submit", async (e) => {
-   e.preventDefault();
-   if (!adminLoginForm.checkValidity()) return;
-   const email = document.getElementById("adminEmail").value.trim();
-   const password = document.getElementById("adminPassword").value;
-   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (!userDoc.exists() || userDoc.data().role !== "admin") {
-     await signOut(auth);
-     alert("Access denied: Not an admin.");
-     return;
+   });
+   // --- USER LOGIN ---
+   const loginForm = document.getElementById("loginForm");
+   enableBootstrapValidation(loginForm);
+   loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!loginForm.checkValidity()) return;
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    try {
+     await signInWithEmailAndPassword(auth, email, password);
+     loginForm.reset();
+     loginForm.classList.remove("was-validated");
+     loginModal.hide();
+    } catch (error) {
+     alert("Login failed: " + error.message);
     }
-    adminLoginForm.reset();
-    adminLoginForm.classList.remove("was-validated");
-    adminLoginModal.hide();
-   } catch (error) {
-    alert("Admin login failed: " + error.message);
-   }
-  });
-  // --- LOGOUT ---
-  document.getElementById("userLogoutBtn").onclick = () => signOut(auth);
-  document.getElementById("adminLogoutBtn").onclick = () => signOut(auth);
-  // --- UI Elements ---
-  const userSection = document.getElementById("userSection");
-  const userFullnameSpan = document.getElementById("userFullname");
-  const booksTableBody = document.querySelector("#booksTable tbody");
-  const adminSection = document.getElementById("adminSection");
-  const signupRequestsTableBody = document.querySelector("#signupRequestsTable tbody");
-  const allBooksTableBody = document.querySelector("#allBooksTable tbody");
-  const allUsersTableBody = document.querySelector("#allUsersTable tbody");
-  const addBookForm = document.getElementById("addBookForm");
-  // --- Authentication State Observer ---
-  onAuthStateChanged(auth, async (user) => {
-   if (user) {
-    // Check role
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    const role = userDoc.exists() ? userDoc.data().role: null;
-    if (role === "admin") {
-     showAdminDashboard();
-    } else if (role === "user") {
-     showUserDashboard(user.uid);
+   });
+   // --- ADMIN LOGIN ---
+   // Only allow login for admin users (role: "admin")
+   const adminLoginForm = document.getElementById("adminLoginForm");
+   enableBootstrapValidation(adminLoginForm);
+   adminLoginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!adminLoginForm.checkValidity()) return;
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value;
+    try {
+     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+     const user = userCredential.user;
+     const userDoc = await getDoc(doc(db, "users", user.uid));
+     if (!userDoc.exists() || userDoc.data().role !== "admin") {
+      await signOut(auth);
+      alert("Access denied: Not an admin.");
+      return;
+     }
+     adminLoginForm.reset();
+     adminLoginForm.classList.remove("was-validated");
+     adminLoginModal.hide();
+    } catch (error) {
+     alert("Admin login failed: " + error.message);
+    }
+   });
+   // --- LOGOUT ---
+   document.getElementById("userLogoutBtn").onclick = () => signOut(auth);
+   document.getElementById("adminLogoutBtn").onclick = () => signOut(auth);
+   // --- UI Elements ---
+   const userSection = document.getElementById("userSection");
+   const userFullnameSpan = document.getElementById("userFullname");
+   const booksTableBody = document.querySelector("#booksTable tbody");
+   const adminSection = document.getElementById("adminSection");
+   const signupRequestsTableBody = document.querySelector("#signupRequestsTable tbody");
+   const allBooksTableBody = document.querySelector("#allBooksTable tbody");
+   const allUsersTableBody = document.querySelector("#allUsersTable tbody");
+   const addBookForm = document.getElementById("addBookForm");
+   // --- Authentication State Observer ---
+   onAuthStateChanged(auth, async (user) => {
+    if (user) {
+     // Check role
+     const userDoc = await getDoc(doc(db, "users", user.uid));
+     const role = userDoc.exists() ? userDoc.data().role: null;
+     if (role === "admin") {
+      showAdminDashboard();
+     } else if (role === "user") {
+      showUserDashboard(user.uid);
+     } else {
+      alert("No role assigned. Please contact admin.");
+      await signOut(auth);
+      showLoggedOut();
+     }
     } else {
-     alert("No role assigned. Please contact admin.");
-     await signOut(auth);
      showLoggedOut();
     }
-   } else {
-    showLoggedOut();
-   }
-  });
+   });
 
 
-  // --- Show User Dashboard ---
-  async function showUserDashboard(uid) {
-   // Hide admin section, show user section
-   adminSection.classList.add("d-none");
-   userSection.classList.remove("d-none");
-   document.getElementById("main-action-btn").classList.add("d-none");
+   // --- Show User Dashboard ---
+   async function showUserDashboard(uid) {
+    // Hide admin section, show user section
+    adminSection.classList.add("d-none");
+    userSection.classList.remove("d-none");
+    document.getElementById("main-action-btn").classList.add("d-none");
 
-   // --- Load User Info ---
-   try {
-    const userDoc = await getDoc(doc(db, "users", uid));
-    if (userDoc.exists()) {
-     userFullnameSpan.textContent = userDoc.data().fullname || "";
+    // --- Load User Info ---
+    try {
+     const userDoc = await getDoc(doc(db, "users", uid));
+     if (userDoc.exists()) {
+      userFullnameSpan.textContent = userDoc.data().fullname || "";
+     }
+    } catch (err) {
+     console.error("Error loading user info:", err);
     }
-   } catch (err) {
-    console.error("Error loading user info:", err);
-   }
 
-   // --- Track Active Requests (Pending or Approved) ---
-   const activeRequests = new Set();
+    // --- Track Active Requests (Pending or Approved) ---
+    const activeRequests = new Set();
 
-   onSnapshot(
-    query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
-    async (activeSnap) => {
-     const activeRequests = new Set();
-     const userRequests = new Set();
+    onSnapshot(
+     query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
+     async (activeSnap) => {
+      const activeRequests = new Set();
+      const userRequests = new Set();
 
-     activeSnap.forEach((doc) => {
-      const data = doc.data();
-      activeRequests.add(data.bookId);
-      if (data.userId === uid) {
-       userRequests.add(data.bookId);
-      }
-     });
-
-     // Now render the books
-     onSnapshot(collection(db, "books"),
-      (bookSnap) => {
-       booksTableBody.innerHTML = "";
-       const books = [];
-       bookSnap.forEach((docSnap) => {
-        books.push({
-         ...docSnap.data(), id: docSnap.id
-        });
-       });
-
-       books
-       .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-       .forEach((book) => {
-        const bookId = book.id;
-        const status = book.availability || "Unavailable";
-
-        let buttonText = "Request";
-        let buttonClass = "btn-primary";
-        let buttonDisabled = false;
-        let isUserRequest = false;
-
-        if (activeRequests.has(bookId)) {
-         buttonText = "Not Available";
-         buttonClass = "btn-secondary";
-         buttonDisabled = true;
-         if (userRequests.has(bookId)) {
-          buttonText = "Cancel Request";
-          buttonClass = "btn-danger";
-          buttonDisabled = false;
-          isUserRequest = true;
-         }
-        } else if (status !== "Available") {
-         buttonText = "Not Available";
-         buttonClass = "btn-secondary";
-         buttonDisabled = true;
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-        <td>${book.title || "Untitled"}</td>
-        <td>${book.author || "Unknown"}</td>
-        <td>${status}</td>
-        <td>
-        <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
-        ${buttonText}
-        </button>
-        </td>
-        `;
-
-        const btn = tr.querySelector("button");
-        if (!btn.disabled) {
-         btn.onclick = () => {
-          if (isUserRequest) {
-           cancelBookRequest(bookId);
-          } else {
-           requestBook(bookId);
-          }
-         };
-        }
-
-        booksTableBody.appendChild(tr);
-       });
-
-
+      activeSnap.forEach((doc) => {
+       const data = doc.data();
+       activeRequests.add(data.bookId);
+       if (data.userId === uid) {
+        userRequests.add(data.bookId);
+       }
       });
-    }
-   );
 
-   // --- Load and Display User Book History ---// Cancel book request
-   async function cancelBookRequest(bookId) {
+      // Now render the books
+      onSnapshot(collection(db, "books"),
+       (bookSnap) => {
+        booksTableBody.innerHTML = "";
+        const books = [];
+        bookSnap.forEach((docSnap) => {
+         books.push({
+          ...docSnap.data(), id: docSnap.id
+         });
+        });
+
+        books
+        .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
+        .forEach((book) => {
+         const bookId = book.id;
+         const status = book.availability || "Unavailable";
+
+         let buttonText = "Request";
+         let buttonClass = "btn-primary";
+         let buttonDisabled = false;
+         let isUserRequest = false;
+
+         if (activeRequests.has(bookId)) {
+          buttonText = "Not Available";
+          buttonClass = "btn-secondary";
+          buttonDisabled = true;
+          if (userRequests.has(bookId)) {
+           buttonText = "Cancel Request";
+           buttonClass = "btn-danger";
+           buttonDisabled = false;
+           isUserRequest = true;
+          }
+         } else if (status !== "Available") {
+          buttonText = "Not Available";
+          buttonClass = "btn-secondary";
+          buttonDisabled = true;
+         }
+
+         const tr = document.createElement("tr");
+         tr.innerHTML = `
+         <td>${book.title || "Untitled"}</td>
+         <td>${book.author || "Unknown"}</td>
+         <td>${status}</td>
+         <td>
+         <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
+         ${buttonText}
+         </button>
+         </td>
+         `;
+
+         const btn = tr.querySelector("button");
+         if (!btn.disabled) {
+          btn.onclick = () => {
+           if (isUserRequest) {
+            cancelBookRequest(bookId);
+           } else {
+            requestBook(bookId);
+           }
+          };
+         }
+
+         booksTableBody.appendChild(tr);
+        });
+
+
+       });
+     }
+    );
+
+    // --- Load and Display User Book History ---// Cancel book request
+    async function cancelBookRequest(bookId) {
+     try {
+      const user = auth.currentUser;
+      if (!user) return alert("You must be logged in!");
+
+      // Find the request doc ID
+      const reqSnap = await getDocs(query(
+       collection(db, "bookRequests"),
+       where("userId", "==", user.uid),
+       where("bookId", "==", bookId),
+       where("status", "==", "Pending")
+      ));
+
+      if (reqSnap.empty) {
+       return alert("No pending request found to cancel.");
+      }
+
+      // Delete request and update book availability
+      const requestDoc = reqSnap.docs[0];
+      await deleteDoc(requestDoc.ref);
+
+      const bookRef = doc(db, "books", bookId);
+      await updateDoc(bookRef, {
+       availability: "Available"
+      });
+
+      alert("Request cancelled successfully.");
+     } catch (err) {
+      console.error("Error cancelling request:", err);
+      alert("Failed to cancel request: " + err.message);
+     }
+    }
+
+
+
+    // Load user book request/checkouts
+    onSnapshot(
+     query(collection(db,
+      "bookRequests"), where("userId",
+      "==",
+      uid)),
+     (snapshot) => {
+      const historyTableBody = document.querySelector("#userHistoryTable tbody");
+      historyTableBody.innerHTML = "";
+      const sortedDocs = snapshot.docs
+      .map(docSnap => {
+       const data = docSnap.data();
+       return {
+        ...data,
+        requestedAt: new Date(data.requestedAt || 0) // fallback if missing
+       };
+      })
+      .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
+
+      sortedDocs.forEach(req => {
+       const tr = document.createElement("tr");
+       tr.innerHTML = `
+       <td>${req.title}</td>
+       <td>${req.status}</td>
+       <td>${req.requestedAt.toLocaleString()}</td>
+       `;
+       historyTableBody.appendChild(tr);
+      });
+     }
+    );
+   }
+
+
+   // Request book
+   async function requestBook(bookId) {
     try {
      const user = auth.currentUser;
      if (!user) return alert("You must be logged in!");
 
-     // Find the request doc ID
-     const reqSnap = await getDocs(query(
+     // Check current active requests (Pending or Approved)
+     const activeRequestsSnap = await getDocs(query(
+      collection(db, "bookRequests"),
+      where("userId", "==", user.uid),
+      where("status", "in", ["Pending", "Checked Out"])
+     ));
+     if (activeRequestsSnap.size >= 3) {
+      return alert("You can only have up to 3 active book requests.");
+     }
+
+     // Get book details
+     const bookRef = doc(db, "books", bookId);
+     const bookSnap = await getDoc(bookRef);
+     if (!bookSnap.exists()) return alert("Book not found!");
+     const book = bookSnap.data();
+
+     // Check for duplicate request
+     const existing = await getDocs(query(
       collection(db, "bookRequests"),
       where("userId", "==", user.uid),
       where("bookId", "==", bookId),
-      where("status", "==", "Pending")
+      where("status", "in", ["Pending", "Checked Out"])
      ));
-
-     if (reqSnap.empty) {
-      return alert("No pending request found to cancel.");
+     if (!existing.empty) {
+      return alert("You've already requested or checked out this book.");
      }
 
-     // Delete request and update book availability
-     const requestDoc = reqSnap.docs[0];
-     await deleteDoc(requestDoc.ref);
+     // Save new request
+     await addDoc(collection(db, "bookRequests"), {
+      userId: user.uid,
+      bookId: bookId,
+      title: book.title,
+      author: book.author,
+      status: "Pending",
+      requestedAt: new Date().toISOString()
+     });
 
-     const bookRef = doc(db, "books", bookId);
+     // Update book availability to "Requested"
      await updateDoc(bookRef, {
-      availability: "Available"
+      availability: "Requested"
      });
 
-     alert("Request cancelled successfully.");
+     alert("Book request sent for approval.");
     } catch (err) {
-     console.error("Error cancelling request:", err);
-     alert("Failed to cancel request: " + err.message);
+     alert("Error requesting book: " + err.message);
     }
    }
 
 
-
-   // Load user book request/checkouts
-   onSnapshot(
-    query(collection(db,
-     "bookRequests"), where("userId",
-     "==",
-     uid)),
-    (snapshot) => {
-     const historyTableBody = document.querySelector("#userHistoryTable tbody");
-     historyTableBody.innerHTML = "";
-     const sortedDocs = snapshot.docs
-     .map(docSnap => {
+   // --- Show Admin Dashboard ---
+   function showAdminDashboard() {
+    userSection.classList.add("d-none");
+    adminSection.classList.remove("d-none");
+    document.getElementById("main-action-btn").classList.add("d-none");
+    loadSignupRequests();
+    loadAllBooks();
+    loadAllUsers();
+    loadBookRequests();
+    loadCheckedOutBooks();
+    loadAllBookRequests();
+    loadRejectedBookRequests();
+   }
+   // --- Show Logged Out ---
+   function showLoggedOut() {
+    userSection.classList.add("d-none");
+    adminSection.classList.add("d-none");
+    document.getElementById("main-action-btn").classList.remove("d-none");
+   }
+   // --- Load Signup Requests ---
+   function loadSignupRequests() {
+    onSnapshot(collection(db, "signupRequests"), (snapshot) => {
+     signupRequestsTableBody.innerHTML = "";
+     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      return {
-       ...data,
-       requestedAt: new Date(data.requestedAt || 0) // fallback if missing
-      };
-     })
-     .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
-
-     sortedDocs.forEach(req => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-      <td>${req.title}</td>
-      <td>${req.status}</td>
-      <td>${req.requestedAt.toLocaleString()}</td>
-      `;
-      historyTableBody.appendChild(tr);
-     });
-    }
-   );
-  }
 
 
-  // Request book
-  async function requestBook(bookId) {
-   try {
-    const user = auth.currentUser;
-    if (!user) return alert("You must be logged in!");
-
-    // Check current active requests (Pending or Approved)
-    const activeRequestsSnap = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("status", "in", ["Pending", "Checked Out"])
-    ));
-    if (activeRequestsSnap.size >= 3) {
-     return alert("You can only have up to 3 active book requests.");
-    }
-
-    // Get book details
-    const bookRef = doc(db, "books", bookId);
-    const bookSnap = await getDoc(bookRef);
-    if (!bookSnap.exists()) return alert("Book not found!");
-    const book = bookSnap.data();
-
-    // Check for duplicate request
-    const existing = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("bookId", "==", bookId),
-     where("status", "in", ["Pending", "Checked Out"])
-    ));
-    if (!existing.empty) {
-     return alert("You've already requested or checked out this book.");
-    }
-
-    // Save new request
-    await addDoc(collection(db, "bookRequests"), {
-     userId: user.uid,
-     bookId: bookId,
-     title: book.title,
-     author: book.author,
-     status: "Pending",
-     requestedAt: new Date().toISOString()
-    });
-
-    // Update book availability to "Requested"
-    await updateDoc(bookRef, {
-     availability: "Requested"
-    });
-
-    alert("Book request sent for approval.");
-   } catch (err) {
-    alert("Error requesting book: " + err.message);
-   }
-  }
-
-
-  // --- Show Admin Dashboard ---
-  function showAdminDashboard() {
-   userSection.classList.add("d-none");
-   adminSection.classList.remove("d-none");
-   document.getElementById("main-action-btn").classList.add("d-none");
-   loadSignupRequests();
-   loadAllBooks();
-   loadAllUsers();
-   loadBookRequests();
-   loadCheckedOutBooks();
-   loadAllBookRequests();
-   loadRejectedBookRequests();
-  }
-  // --- Show Logged Out ---
-  function showLoggedOut() {
-   userSection.classList.add("d-none");
-   adminSection.classList.add("d-none");
-   document.getElementById("main-action-btn").classList.remove("d-none");
-  }
-  // --- Load Signup Requests ---
-  function loadSignupRequests() {
-   onSnapshot(collection(db, "signupRequests"), (snapshot) => {
-    signupRequestsTableBody.innerHTML = "";
-    snapshot.forEach((docSnap) => {
-     const data = docSnap.data();
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
-
-
-     <td>${data.fullname}</td>
-     <td>${data.email}</td>
-     <td>${data.dob}</td>
-     <td>${data.bloodGroup}</td>
-     <td>
-     <button class="btn btn-sm btn-success me-2">Approve</button>
-     <button class="btn btn-sm btn-danger">Reject</button>
-     </td>
-     `;
-     tr.querySelector(".btn-success").onclick = () => approveSignup(docSnap.id, data);
-     tr.querySelector(".btn-danger").onclick = () => deleteDoc(doc(db, "signupRequests", docSnap.id));
-     signupRequestsTableBody.appendChild(tr);
-    });
-   });
-  }
-
-  function loadBookRequests() {
-   onSnapshot(
-    query(collection(db, "bookRequests"), where("status", "==", "Pending")),
-    async (snapshot) => {
-     const tbody = document.querySelector("#bookRequestsTable tbody");
-     tbody.innerHTML = "";
-
-     for (const docSnap of snapshot.docs) {
-      const request = docSnap.data();
-      const requestId = docSnap.id;
-
-      // Get user's name
-      const userSnap = await getDoc(doc(db, "users", request.userId));
-      const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-      <td>${userName}</td>
-      <td>${request.title}</td>
-      <td>${request.author}</td>
-      <td>${request.status}</td>
+      <td>${data.fullname}</td>
+      <td>${data.email}</td>
+      <td>${data.dob}</td>
+      <td>${data.bloodGroup}</td>
       <td>
       <button class="btn btn-sm btn-success me-2">Approve</button>
       <button class="btn btn-sm btn-danger">Reject</button>
       </td>
       `;
+      tr.querySelector(".btn-success").onclick = () => approveSignup(docSnap.id, data);
+      tr.querySelector(".btn-danger").onclick = () => deleteDoc(doc(db, "signupRequests", docSnap.id));
+      signupRequestsTableBody.appendChild(tr);
+     });
+    });
+   }
 
-      // ✅ Approve book request
-      tr.querySelector(".btn-success").onclick = async () => {
-       const bookRef = doc(db, "books", request.bookId);
-       const requestRef = doc(db, "bookRequests", requestId);
-       try {
-        await updateDoc(bookRef, {
-         availability: "Checked Out"
-        });
-        await updateDoc(requestRef, {
-         status: "Checked Out"
-        });
-        alert("Book approved and marked as Checked Out.");
-       } catch (err) {
-        alert("Error approving request: " + err.message);
-       }
-      };
+   function loadBookRequests() {
+    onSnapshot(
+     query(collection(db, "bookRequests"), where("status", "==", "Pending")),
+     async (snapshot) => {
+      const tbody = document.querySelector("#bookRequestsTable tbody");
+      tbody.innerHTML = "";
 
-      // ✅ Reject book request
-      tr.querySelector(".btn-danger").onclick = async () => {
-       const bookRef = doc(db, "books", request.bookId);
-       const requestRef = doc(db, "bookRequests", requestId);
-       try {
-        // Step 1: Ensure requestedAt exists (fallback to now)
-        const requestSnap = await getDoc(requestRef);
-        let requestedAt = new Date().toISOString();
-        if (requestSnap.exists()) {
-         const data = requestSnap.data();
-         if (data.requestedAt) {
-          requestedAt = data.requestedAt;
-         }
-        }
+      for (const docSnap of snapshot.docs) {
+       const request = docSnap.data();
+       const requestId = docSnap.id;
 
-        // Step 2: Update request status and preserve requestedAt
-        await updateDoc(requestRef, {
-         status: "Rejected",
-         rejectedAt: new Date().toISOString() // ensure field is always present
-        });
+       // Get user's name
+       const userSnap = await getDoc(doc(db, "users", request.userId));
+       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
 
-        // Step 3: Reset book availability
-        await updateDoc(bookRef, {
-         availability: "Available"
-        });
+       const tr = document.createElement("tr");
+       tr.innerHTML = `
+       <td>${userName}</td>
+       <td>${request.title}</td>
+       <td>${request.author}</td>
+       <td>${request.status}</td>
+       <td>
+       <button class="btn btn-sm btn-success me-2">Approve</button>
+       <button class="btn btn-sm btn-danger">Reject</button>
+       </td>
+       `;
 
-        alert("Request rejected.");
-       } catch (err) {
-        alert("Error rejecting request: " + err.message);
-       }
-      };
-
-
-      tbody.appendChild(tr);
-     }
-    }
-   );
-  }
-
-
-  function loadCheckedOutBooks() {
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
-    async (snapshot) => {
-     const tbody = document.querySelector("#checkedOutBooksTable tbody");
-     tbody.innerHTML = "";
-     for (const docSnap of snapshot.docs) {
-      const record = docSnap.data();
-      const requestId = docSnap.id;
-      // Get user's name
-      const userSnap = await getDoc(doc(db, "users", record.userId));
-      const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-
-      <td>${userName}</td>
-      <td>${record.title}</td>
-      <td>${record.author}</td>
-      <td>${new Date(record.requestedAt).toLocaleString()}</td>
-      <td>
-      <button class="btn btn-sm btn-warning">Return</button>
-      </td>
-      `;
-      // Handle return action
-      tr.querySelector("button").onclick = async () => {
-       try {
-        const bookRef = doc(db, "books", record.bookId);
+       // ✅ Approve book request
+       tr.querySelector(".btn-success").onclick = async () => {
+        const bookRef = doc(db, "books", request.bookId);
         const requestRef = doc(db, "bookRequests", requestId);
+        try {
+         await updateDoc(bookRef, {
+          availability: "Checked Out"
+         });
+         await updateDoc(requestRef, {
+          status: "Checked Out"
+         });
+         alert("Book approved and marked as Checked Out.");
+        } catch (err) {
+         alert("Error approving request: " + err.message);
+        }
+       };
 
-        // ✅ Step 1: Mark the book as Available
-        await updateDoc(bookRef, {
-         availability: "Available"
-        });
+       // ✅ Reject book request
+       tr.querySelector(".btn-danger").onclick = async () => {
+        const bookRef = doc(db, "books", request.bookId);
+        const requestRef = doc(db, "bookRequests", requestId);
+        try {
+         // Step 1: Ensure requestedAt exists (fallback to now)
+         const requestSnap = await getDoc(requestRef);
+         let requestedAt = new Date().toISOString();
+         if (requestSnap.exists()) {
+          const data = requestSnap.data();
+          if (data.requestedAt) {
+           requestedAt = data.requestedAt;
+          }
+         }
 
-        // ✅ Step 2: Mark the request as Returned
-        await updateDoc(requestRef, {
-         status: "Returned"
-        });
+         // Step 2: Update request status and preserve requestedAt
+         await updateDoc(requestRef, {
+          status: "Rejected",
+          rejectedAt: new Date().toISOString() // ensure field is always present
+         });
 
-        alert("Book marked as returned.");
+         // Step 3: Reset book availability
+         await updateDoc(bookRef, {
+          availability: "Available"
+         });
 
-       } catch (err) {
-        console.error("Error updating documents:", err);
-        alert("Error returning book: " + err.message);
-       }
-      };
-
-      tbody.appendChild(tr);
-     }
-    });
-  }
-  // --- Approve Signup ---
-  async function approveSignup(docId, data) {
-   try {
-    // Initialize a secondary Firebase app instance
-    const secondaryApp = initializeApp(firebaseConfig,
-     "Secondary");
-    const secondaryAuth = getAuth(secondaryApp);
-    // Create user with secondary app (avoids logging out the admin)
-    const userCredential = await createUserWithEmailAndPassword(secondaryAuth,
-     data.email,
-     data.password);
-    const uid = userCredential.user.uid;
-    // Store user data in Firestore
-    await setDoc(doc(db, "users", uid),
-     {
-      fullname: data.fullname,
-      email: data.email,
-      dob: data.dob,
-      bloodGroup: data.bloodGroup,
-      joinedAt: new Date().toISOString(),
-      role: "user",
-     });
-    // Delete from signupRequests collection
-    await deleteDoc(doc(db, "signupRequests", docId));
-    // Clean up the secondary app to avoid memory leaks
-    await secondaryApp.delete();
-    alert("Signup approved and user created without logging out admin.");
-   } catch (error) {
-    alert("Error approving signup: " + error.message);
-   }
-  }
-  // --- Add New Book ---
-
-  addBookForm.addEventListener("submit",
-   async (e) => {
-    e.preventDefault();
-
-    const title = document.getElementById("bookTitle").value.trim();
-    const author = document.getElementById("bookAuthor").value.trim();
-    const availability = document.getElementById("bookAvailability").value;
-
-    // Determine initial checkout status based on availability
-    const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
-
-    try {
-     await addDoc(collection(db, "books"), {
-      title,
-      author,
-      availability, // e.g. "Available" / "Unavailable"
-      createdAt: Date.now()
-     });
-
-     alert("Book added successfully.");
-     addBookForm.reset();
-    } catch (err) {
-     alert("Failed to add book: " + err.message);
-    }
-   });
-
-  // --- Load All Books (Admin) ---
-  function loadAllBooks() {
-   onSnapshot(collection(db, "books"),
-    (snapshot) => {
-     allBooksTableBody.innerHTML = "";
-     const books = [];
-     snapshot.forEach((docSnap) => {
-      books.push({
-       ...docSnap.data(), id: docSnap.id
-      });
-     });
-
-     books
-     .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-     .forEach((book) => {
-      const tr = document.createElement("tr");
-      const availabilityOptions = ["Available", "Checked Out", "Requested"];
-      const availabilitySelect = document.createElement("select");
-      availabilitySelect.className = "form-select form-select-sm";
-      let originalStatus = book.availability;
-
-      availabilityOptions.forEach((status) => {
-       const option = document.createElement("option");
-       option.value = status;
-       option.textContent = status;
-       if (status === originalStatus) option.selected = true;
-       availabilitySelect.appendChild(option);
-      });
-
-      const saveBtn = document.createElement("button");
-      saveBtn.className = "btn btn-sm btn-primary";
-      saveBtn.textContent = "Save";
-      saveBtn.style.display = "none";
-      saveBtn.onclick = () => {
-       updateBookAvailability(book.id,
-        availabilitySelect.value);
-       originalStatus = availabilitySelect.value;
-       saveBtn.style.display = "none";
-      };
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn btn-sm btn-danger";
-      deleteBtn.textContent = "Delete";
-      deleteBtn.onclick = () => {
-       const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
-       if (confirmDelete) {
-        deleteDoc(doc(db, "books", book.id))
-        .then(() => alert("Book deleted successfully."))
-        .catch((err) => alert("Failed to delete: " + err.message));
-       }
-      };
-
-      availabilitySelect.addEventListener("change", () => {
-       saveBtn.style.display = availabilitySelect.value !== originalStatus ? "inline-block": "none";
-      });
-
-      const controlWrapper = document.createElement("div");
-      controlWrapper.className = "d-flex align-items-center gap-2";
-      controlWrapper.appendChild(availabilitySelect);
-      controlWrapper.appendChild(saveBtn);
-      controlWrapper.appendChild(deleteBtn);
-
-      const availabilityCell = document.createElement("td");
-      availabilityCell.appendChild(controlWrapper);
-
-      tr.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      `;
-      tr.appendChild(availabilityCell);
-
-      allBooksTableBody.appendChild(tr);
-     });
-    });
-  }
-
-  async function updateBookAvailability(bookId, newAvailability) {
-   try {
-    // 1. Update the book document
-    await updateDoc(doc(db,
-     "books",
-     bookId), {
-     availability: newAvailability
-    });
-
-    // 2. Update all relevant bookRequests based on new availability
-    const q = query(
-     collection(db,
-      "bookRequests"),
-     where("bookId",
-      "==",
-      bookId),
-     where("status",
-      "in",
-      ["Pending",
-       "Approved",
-       "Checked Out"])
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    for (const docSnap of querySnapshot.docs) {
-     let newStatus = null;
-
-     if (newAvailability === "Available") {
-      newStatus = "Returned";
-     } else if (newAvailability === "Checked Out") {
-      newStatus = "Checked Out";
-     } else if (newAvailability === "Requested") {
-      newStatus = "Pending";
-     }
-
-     if (newStatus) {
-      await updateDoc(doc(db, "bookRequests", docSnap.id), {
-       status: newStatus
-      });
-     }
-    }
-
-    alert("Book availability and request status updated.");
-   } catch (err) {
-    alert("Failed to update: " + err.message);
-   }
-  }
+         alert("Request rejected.");
+        } catch (err) {
+         alert("Error rejecting request: " + err.message);
+        }
+       };
 
 
-  // --- Load All Users (Admin) ---
-  function loadAllUsers() {
-   onSnapshot(collection(db, "users"), (snapshot) => {
-    allUsersTableBody.innerHTML = "";
-    snapshot.forEach((docSnap) => {
-     const user = docSnap.data();
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
-
-
-     <td>${user.fullname}</td>
-     <td>${user.email}</td>
-     <td>${user.dob}</td>
-     <td>${user.bloodGroup}</td>
-     <td>${new Date(user.joinedAt).toLocaleString()}</td>
-     `;
-     allUsersTableBody.appendChild(tr);
-    });
-   });
-  }
-
-  // --- Load All Book Request History (Admin) ---
-
-  function loadAllBookRequests() {
-   const tbody = document.querySelector("#allBookRequestsTable tbody");
-
-   onSnapshot(collection(db, "bookRequests"), async (snapshot) => {
-    tbody.innerHTML = "";
-
-    // Convert docs to array and sort manually
-    const sortedDocs = snapshot.docs
-    .map(docSnap => {
-     const data = docSnap.data();
-     return {
-      ...data,
-      id: docSnap.id,
-      requestedAt: new Date(data.requestedAt || 0), // fallback to epoch if missing
-     };
-    })
-    .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
-
-    for (const request of sortedDocs) {
-     // Get user name
-     let userName = "Unknown";
-     try {
-      const userSnap = await getDoc(doc(db, "users", request.userId));
-      if (userSnap.exists()) {
-       userName = userSnap.data().fullname || "Unnamed";
+       tbody.appendChild(tr);
       }
+     }
+    );
+   }
+
+
+   function loadCheckedOutBooks() {
+    onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
+     async (snapshot) => {
+      const tbody = document.querySelector("#checkedOutBooksTable tbody");
+      tbody.innerHTML = "";
+      for (const docSnap of snapshot.docs) {
+       const record = docSnap.data();
+       const requestId = docSnap.id;
+       // Get user's name
+       const userSnap = await getDoc(doc(db, "users", record.userId));
+       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
+       const tr = document.createElement("tr");
+       tr.innerHTML = `
+
+       <td>${userName}</td>
+       <td>${record.title}</td>
+       <td>${record.author}</td>
+       <td>${new Date(record.requestedAt).toLocaleString()}</td>
+       <td>
+       <button class="btn btn-sm btn-warning">Return</button>
+       </td>
+       `;
+       // Handle return action
+       tr.querySelector("button").onclick = async () => {
+        try {
+         const bookRef = doc(db, "books", record.bookId);
+         const requestRef = doc(db, "bookRequests", requestId);
+
+         // ✅ Step 1: Mark the book as Available
+         await updateDoc(bookRef, {
+          availability: "Available"
+         });
+
+         // ✅ Step 2: Mark the request as Returned
+         await updateDoc(requestRef, {
+          status: "Returned"
+         });
+
+         alert("Book marked as returned.");
+
+        } catch (err) {
+         console.error("Error updating documents:", err);
+         alert("Error returning book: " + err.message);
+        }
+       };
+
+       tbody.appendChild(tr);
+      }
+     });
+   }
+   // --- Approve Signup ---
+   async function approveSignup(docId, data) {
+    try {
+     // Initialize a secondary Firebase app instance
+     const secondaryApp = initializeApp(firebaseConfig,
+      "Secondary");
+     const secondaryAuth = getAuth(secondaryApp);
+     // Create user with secondary app (avoids logging out the admin)
+     const userCredential = await createUserWithEmailAndPassword(secondaryAuth,
+      data.email,
+      data.password);
+     const uid = userCredential.user.uid;
+     // Store user data in Firestore
+     await setDoc(doc(db, "users", uid),
+      {
+       fullname: data.fullname,
+       email: data.email,
+       dob: data.dob,
+       bloodGroup: data.bloodGroup,
+       joinedAt: new Date().toISOString(),
+       role: "user",
+      });
+     // Delete from signupRequests collection
+     await deleteDoc(doc(db, "signupRequests", docId));
+     // Clean up the secondary app to avoid memory leaks
+     await secondaryApp.delete();
+     alert("Signup approved and user created without logging out admin.");
+    } catch (error) {
+     alert("Error approving signup: " + error.message);
+    }
+   }
+   // --- Add New Book ---
+
+   addBookForm.addEventListener("submit",
+    async (e) => {
+     e.preventDefault();
+
+     const title = document.getElementById("bookTitle").value.trim();
+     const author = document.getElementById("bookAuthor").value.trim();
+     const availability = document.getElementById("bookAvailability").value;
+
+     // Determine initial checkout status based on availability
+     const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
+
+     try {
+      await addDoc(collection(db, "books"), {
+       title,
+       author,
+       availability, // e.g. "Available" / "Unavailable"
+       createdAt: Date.now()
+      });
+
+      alert("Book added successfully.");
+      addBookForm.reset();
      } catch (err) {
-      console.error("Error fetching user info", err);
+      alert("Failed to add book: " + err.message);
+     }
+    });
+
+   // --- Load All Books (Admin) ---
+   function loadAllBooks() {
+    onSnapshot(collection(db, "books"),
+     (snapshot) => {
+      allBooksTableBody.innerHTML = "";
+      const books = [];
+      snapshot.forEach((docSnap) => {
+       books.push({
+        ...docSnap.data(), id: docSnap.id
+       });
+      });
+
+      books
+      .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
+      .forEach((book) => {
+       const tr = document.createElement("tr");
+       const availabilityOptions = ["Available", "Checked Out", "Requested"];
+       const availabilitySelect = document.createElement("select");
+       availabilitySelect.className = "form-select form-select-sm";
+       let originalStatus = book.availability;
+
+       availabilityOptions.forEach((status) => {
+        const option = document.createElement("option");
+        option.value = status;
+        option.textContent = status;
+        if (status === originalStatus) option.selected = true;
+        availabilitySelect.appendChild(option);
+       });
+
+       const saveBtn = document.createElement("button");
+       saveBtn.className = "btn btn-sm btn-primary";
+       saveBtn.textContent = "Save";
+       saveBtn.style.display = "none";
+       saveBtn.onclick = () => {
+        updateBookAvailability(book.id,
+         availabilitySelect.value);
+        originalStatus = availabilitySelect.value;
+        saveBtn.style.display = "none";
+       };
+
+       const deleteBtn = document.createElement("button");
+       deleteBtn.className = "btn btn-sm btn-danger";
+       deleteBtn.textContent = "Delete";
+       deleteBtn.onclick = () => {
+        const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
+        if (confirmDelete) {
+         deleteDoc(doc(db, "books", book.id))
+         .then(() => alert("Book deleted successfully."))
+         .catch((err) => alert("Failed to delete: " + err.message));
+        }
+       };
+
+       availabilitySelect.addEventListener("change", () => {
+        saveBtn.style.display = availabilitySelect.value !== originalStatus ? "inline-block": "none";
+       });
+
+       const controlWrapper = document.createElement("div");
+       controlWrapper.className = "d-flex align-items-center gap-2";
+       controlWrapper.appendChild(availabilitySelect);
+       controlWrapper.appendChild(saveBtn);
+       controlWrapper.appendChild(deleteBtn);
+
+       const availabilityCell = document.createElement("td");
+       availabilityCell.appendChild(controlWrapper);
+
+       tr.innerHTML = `
+       <td>${book.title}</td>
+       <td>${book.author}</td>
+       `;
+       tr.appendChild(availabilityCell);
+
+       allBooksTableBody.appendChild(tr);
+      });
+     });
+   }
+
+   async function updateBookAvailability(bookId, newAvailability) {
+    try {
+     // 1. Update the book document
+     await updateDoc(doc(db,
+      "books",
+      bookId), {
+      availability: newAvailability
+     });
+
+     // 2. Update all relevant bookRequests based on new availability
+     const q = query(
+      collection(db,
+       "bookRequests"),
+      where("bookId",
+       "==",
+       bookId),
+      where("status",
+       "in",
+       ["Pending",
+        "Approved",
+        "Checked Out"])
+     );
+
+     const querySnapshot = await getDocs(q);
+
+     for (const docSnap of querySnapshot.docs) {
+      let newStatus = null;
+
+      if (newAvailability === "Available") {
+       newStatus = "Returned";
+      } else if (newAvailability === "Checked Out") {
+       newStatus = "Checked Out";
+      } else if (newAvailability === "Requested") {
+       newStatus = "Pending";
+      }
+
+      if (newStatus) {
+       await updateDoc(doc(db, "bookRequests", docSnap.id), {
+        status: newStatus
+       });
+      }
      }
 
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
-     <td>${userName}</td>
-     <td>${request.title || "Untitled"}</td>
-     <td>${request.status}</td>
-     <td>${request.requestedAt.toLocaleString()}</td>
-     `;
-     tbody.appendChild(tr);
+     alert("Book availability and request status updated.");
+    } catch (err) {
+     alert("Failed to update: " + err.message);
     }
-   });
-  }
+   }
 
-  // --- Load All Rejected Book Request History (Admin) ---
 
-  function loadRejectedBookRequests() {
-   const tbody = document.querySelector("#rejectedRequestsTable tbody");
+   // --- Load All Users (Admin) ---
+   function loadAllUsers() {
+    onSnapshot(collection(db, "users"), (snapshot) => {
+     allUsersTableBody.innerHTML = "";
+     snapshot.forEach((docSnap) => {
+      const user = docSnap.data();
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
 
-   // Listen to all "Rejected" bookRequests
-   onSnapshot(
-    query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
-    async (snapshot) => {
+
+      <td>${user.fullname}</td>
+      <td>${user.email}</td>
+      <td>${user.dob}</td>
+      <td>${user.bloodGroup}</td>
+      <td>${new Date(user.joinedAt).toLocaleString()}</td>
+      `;
+      allUsersTableBody.appendChild(tr);
+     });
+    });
+   }
+
+   // --- Load All Book Request History (Admin) ---
+
+   function loadAllBookRequests() {
+    const tbody = document.querySelector("#allBookRequestsTable tbody");
+
+    onSnapshot(collection(db, "bookRequests"), async (snapshot) => {
      tbody.innerHTML = "";
 
-     const requests = snapshot.docs
-     .map((docSnap) => {
+     // Convert docs to array and sort manually
+     const sortedDocs = snapshot.docs
+     .map(docSnap => {
       const data = docSnap.data();
       return {
        ...data,
        id: docSnap.id,
-       rejectedAt: new Date(data.rejectedAt || 0),
+       requestedAt: new Date(data.requestedAt || 0), // fallback to epoch if missing
       };
      })
-     .sort((a, b) => b.rejectedAt - a.rejectedAt); // newest first
+     .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
 
-     for (const req of requests) {
-      // --- Fetch User Name ---
+     for (const request of sortedDocs) {
+      // Get user name
       let userName = "Unknown";
       try {
-       const userSnap = await getDoc(doc(db, "users", req.userId));
+       const userSnap = await getDoc(doc(db, "users", request.userId));
        if (userSnap.exists()) {
         userName = userSnap.data().fullname || "Unnamed";
        }
       } catch (err) {
-       console.error("Error fetching user info:", err);
+       console.error("Error fetching user info", err);
       }
 
-      // --- Create table row with placeholder first ---
       const tr = document.createElement("tr");
       tr.innerHTML = `
       <td>${userName}</td>
-      <td>${req.title || "Untitled"}</td>
-      <td><span class="book-status">Loading...</span></td>
-      <td>${req.rejectedAt.toLocaleString()}</td>
+      <td>${request.title || "Untitled"}</td>
+      <td>${request.status}</td>
+      <td>${request.requestedAt.toLocaleString()}</td>
       `;
       tbody.appendChild(tr);
-
-      // --- Real-time listener for book availability ---
-      const bookRef = doc(db, "books", req.bookId);
-      onSnapshot(bookRef, (bookSnap) => {
-       const statusCell = tr.querySelector(".book-status");
-       if (bookSnap.exists()) {
-        const availability = bookSnap.data().availability || "Unavailable";
-        statusCell.textContent = availability;
-       } else {
-        statusCell.textContent = "Deleted";
-       }
-      });
      }
-    }
-   );
-  }
+    });
+   }
+
+   // --- Load All Rejected Book Request History (Admin) ---
+
+   function loadRejectedBookRequests() {
+    const tbody = document.querySelector("#rejectedRequestsTable tbody");
+
+    // Listen to all "Rejected" bookRequests
+    onSnapshot(
+     query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
+     async (snapshot) => {
+      tbody.innerHTML = "";
+
+      const requests = snapshot.docs
+      .map((docSnap) => {
+       const data = docSnap.data();
+       return {
+        ...data,
+        id: docSnap.id,
+        rejectedAt: new Date(data.rejectedAt || 0),
+       };
+      })
+      .sort((a, b) => b.rejectedAt - a.rejectedAt); // newest first
+
+      for (const req of requests) {
+       // --- Fetch User Name ---
+       let userName = "Unknown";
+       try {
+        const userSnap = await getDoc(doc(db, "users", req.userId));
+        if (userSnap.exists()) {
+         userName = userSnap.data().fullname || "Unnamed";
+        }
+       } catch (err) {
+        console.error("Error fetching user info:", err);
+       }
+
+       // --- Create table row with placeholder first ---
+       const tr = document.createElement("tr");
+       tr.innerHTML = `
+       <td>${userName}</td>
+       <td>${req.title || "Untitled"}</td>
+       <td><span class="book-status">Loading...</span></td>
+       <td>${req.rejectedAt.toLocaleString()}</td>
+       `;
+       tbody.appendChild(tr);
+
+       // --- Real-time listener for book availability ---
+       const bookRef = doc(db, "books", req.bookId);
+       onSnapshot(bookRef, (bookSnap) => {
+        const statusCell = tr.querySelector(".book-status");
+        if (bookSnap.exists()) {
+         const availability = bookSnap.data().availability || "Unavailable";
+         statusCell.textContent = availability;
+        } else {
+         statusCell.textContent = "Deleted";
+        }
+       });
+      }
+     }
+    );
+   }
 
 
- </script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ </body>
 </html>
