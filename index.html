@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 3</h1></center>
+  <center><h1 class="mb-2">PKNS Library 332</h1></center>
 
   <!-- Main action Buttons -->
 
@@ -1052,12 +1052,23 @@
   
   function loadAllBookRequests() {
   const tbody = document.querySelector("#allBookRequestsTable tbody");
+
   onSnapshot(collection(db, "bookRequests"), async (snapshot) => {
     tbody.innerHTML = "";
 
-    for (const docSnap of snapshot.docs) {
-      const request = docSnap.data();
+    // Convert docs to array and sort manually
+    const sortedDocs = snapshot.docs
+      .map(docSnap => {
+        const data = docSnap.data();
+        return {
+          ...data,
+          id: docSnap.id,
+          requestedAt: new Date(data.requestedAt || 0), // fallback to epoch if missing
+        };
+      })
+      .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
 
+    for (const request of sortedDocs) {
       // Get user name
       let userName = "Unknown";
       try {
@@ -1074,12 +1085,13 @@
         <td>${userName}</td>
         <td>${request.title || "Untitled"}</td>
         <td>${request.status}</td>
-        <td>${new Date(request.requestedAt).toLocaleString()}</td>
+        <td>${request.requestedAt.toLocaleString()}</td>
       `;
       tbody.appendChild(tr);
     }
   });
 }
+
 
  </script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
