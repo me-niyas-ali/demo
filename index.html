@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 456</h1></center>
+  <center><h1 class="mb-2">PKNS Library 333</h1></center>
 
   <!-- Main action Buttons -->
 
@@ -75,7 +75,6 @@
      </table>
     </div>
    </div>
-
   </div>
 
   <!-- Admin dashboard -->
@@ -376,8 +375,6 @@
     </form>
    </div>
   </div>
-  
-  
   <script type="module">
    import {
     initializeApp
@@ -545,7 +542,6 @@
     // Hide admin section, show user section
     adminSection.classList.add("d-none");
     userSection.classList.remove("d-none");
-    document.getElementById("main-action-btn").classList.add("d-none");
 
     // --- Load User Info ---
     try {
@@ -578,17 +574,9 @@
       onSnapshot(collection(db, "books"),
        (bookSnap) => {
         booksTableBody.innerHTML = "";
-        const books = [];
         bookSnap.forEach((docSnap) => {
-         books.push({
-          ...docSnap.data(), id: docSnap.id
-         });
-        });
-
-        books
-        .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-        .forEach((book) => {
-         const bookId = book.id;
+         const book = docSnap.data();
+         const bookId = docSnap.id;
          const status = book.availability || "Unavailable";
 
          let buttonText = "Request";
@@ -597,10 +585,13 @@
          let isUserRequest = false;
 
          if (activeRequests.has(bookId)) {
+          // Someone has requested it
           buttonText = "Not Available";
           buttonClass = "btn-secondary";
           buttonDisabled = true;
+
           if (userRequests.has(bookId)) {
+           // Current user requested this book
            buttonText = "Cancel Request";
            buttonClass = "btn-danger";
            buttonDisabled = false;
@@ -637,7 +628,6 @@
 
          booksTableBody.appendChild(tr);
         });
-
 
        });
      }
@@ -688,22 +678,13 @@
      (snapshot) => {
       const historyTableBody = document.querySelector("#userHistoryTable tbody");
       historyTableBody.innerHTML = "";
-      const sortedDocs = snapshot.docs
-      .map(docSnap => {
-       const data = docSnap.data();
-       return {
-        ...data,
-        requestedAt: new Date(data.requestedAt || 0) // fallback if missing
-       };
-      })
-      .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
-
-      sortedDocs.forEach(req => {
+      snapshot.forEach((docSnap) => {
+       const req = docSnap.data();
        const tr = document.createElement("tr");
        tr.innerHTML = `
        <td>${req.title}</td>
        <td>${req.status}</td>
-       <td>${req.requestedAt.toLocaleString()}</td>
+       <td>${new Date(req.requestedAt).toLocaleString()}</td>
        `;
        historyTableBody.appendChild(tr);
       });
@@ -722,7 +703,7 @@
      const activeRequestsSnap = await getDocs(query(
       collection(db, "bookRequests"),
       where("userId", "==", user.uid),
-      where("status", "in", ["Pending", "Checked Out"])
+      where("status", "in", ["Pending", "Approved"])
      ));
      if (activeRequestsSnap.size >= 3) {
       return alert("You can only have up to 3 active book requests.");
@@ -739,7 +720,7 @@
       collection(db, "bookRequests"),
       where("userId", "==", user.uid),
       where("bookId", "==", bookId),
-      where("status", "in", ["Pending", "Checked Out"])
+      where("status", "in", ["Pending", "Approved"])
      ));
      if (!existing.empty) {
       return alert("You've already requested or checked out this book.");
@@ -771,20 +752,16 @@
    function showAdminDashboard() {
     userSection.classList.add("d-none");
     adminSection.classList.remove("d-none");
-    document.getElementById("main-action-btn").classList.add("d-none");
     loadSignupRequests();
     loadAllBooks();
     loadAllUsers();
     loadBookRequests();
     loadCheckedOutBooks();
-    loadAllBookRequests();
-    loadRejectedBookRequests();
    }
    // --- Show Logged Out ---
    function showLoggedOut() {
     userSection.classList.add("d-none");
     adminSection.classList.add("d-none");
-    document.getElementById("main-action-btn").classList.remove("d-none");
    }
    // --- Load Signup Requests ---
    function loadSignupRequests() {
@@ -874,7 +851,7 @@
          // Step 2: Update request status and preserve requestedAt
          await updateDoc(requestRef, {
           status: "Rejected",
-          rejectedAt: new Date().toISOString() // ensure field is always present
+          requestedAt: requestedAt // ensure field is always present
          });
 
          // Step 3: Reset book availability
@@ -1010,22 +987,13 @@
     onSnapshot(collection(db, "books"),
      (snapshot) => {
       allBooksTableBody.innerHTML = "";
-      const books = [];
       snapshot.forEach((docSnap) => {
-       books.push({
-        ...docSnap.data(), id: docSnap.id
-       });
-      });
-
-      books
-      .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
-      .forEach((book) => {
+       const book = docSnap.data();
        const tr = document.createElement("tr");
        const availabilityOptions = ["Available", "Checked Out", "Requested"];
        const availabilitySelect = document.createElement("select");
        availabilitySelect.className = "form-select form-select-sm";
        let originalStatus = book.availability;
-
        availabilityOptions.forEach((status) => {
         const option = document.createElement("option");
         option.value = status;
@@ -1033,49 +1001,50 @@
         if (status === originalStatus) option.selected = true;
         availabilitySelect.appendChild(option);
        });
-
+       // Save button (hidden initially)
        const saveBtn = document.createElement("button");
        saveBtn.className = "btn btn-sm btn-primary";
        saveBtn.textContent = "Save";
-       saveBtn.style.display = "none";
+       saveBtn.style.display = "none"; // hidden by default
        saveBtn.onclick = () => {
-        updateBookAvailability(book.id,
+        updateBookAvailability(docSnap.id,
          availabilitySelect.value);
         originalStatus = availabilitySelect.value;
         saveBtn.style.display = "none";
        };
-
+       // Delete button
        const deleteBtn = document.createElement("button");
        deleteBtn.className = "btn btn-sm btn-danger";
        deleteBtn.textContent = "Delete";
        deleteBtn.onclick = () => {
         const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
         if (confirmDelete) {
-         deleteDoc(doc(db, "books", book.id))
-         .then(() => alert("Book deleted successfully."))
-         .catch((err) => alert("Failed to delete: " + err.message));
+         deleteDoc(doc(db, "books", docSnap.id)).then(() => alert("Book deleted successfully.")).catch((err) => alert("Failed to delete: " + err.message));
         }
        };
-
+       // Show Save button only when value changes
        availabilitySelect.addEventListener("change", () => {
-        saveBtn.style.display = availabilitySelect.value !== originalStatus ? "inline-block": "none";
+        if (availabilitySelect.value !== originalStatus) {
+         saveBtn.style.display = "inline-block";
+        } else {
+         saveBtn.style.display = "none";
+        }
        });
-
+       // Flex container
        const controlWrapper = document.createElement("div");
        controlWrapper.className = "d-flex align-items-center gap-2";
        controlWrapper.appendChild(availabilitySelect);
        controlWrapper.appendChild(saveBtn);
        controlWrapper.appendChild(deleteBtn);
-
        const availabilityCell = document.createElement("td");
        availabilityCell.appendChild(controlWrapper);
-
        tr.innerHTML = `
+
+
        <td>${book.title}</td>
        <td>${book.author}</td>
        `;
        tr.appendChild(availabilityCell);
-
        allBooksTableBody.appendChild(tr);
       });
      });
@@ -1084,24 +1053,15 @@
    async function updateBookAvailability(bookId, newAvailability) {
     try {
      // 1. Update the book document
-     await updateDoc(doc(db,
-      "books",
-      bookId), {
+     await updateDoc(doc(db, "books", bookId), {
       availability: newAvailability
      });
 
      // 2. Update all relevant bookRequests based on new availability
      const q = query(
-      collection(db,
-       "bookRequests"),
-      where("bookId",
-       "==",
-       bookId),
-      where("status",
-       "in",
-       ["Pending",
-        "Approved",
-        "Checked Out"])
+      collection(db, "bookRequests"),
+      where("bookId", "==", bookId),
+      where("status", "in", ["Pending", "Approved", "Checked Out"])
      );
 
      const querySnapshot = await getDocs(q);
@@ -1151,112 +1111,6 @@
      });
     });
    }
-
-   // --- Load All Book Request History (Admin) ---
-
-   function loadAllBookRequests() {
-    const tbody = document.querySelector("#allBookRequestsTable tbody");
-
-    onSnapshot(collection(db, "bookRequests"), async (snapshot) => {
-     tbody.innerHTML = "";
-
-     // Convert docs to array and sort manually
-     const sortedDocs = snapshot.docs
-     .map(docSnap => {
-      const data = docSnap.data();
-      return {
-       ...data,
-       id: docSnap.id,
-       requestedAt: new Date(data.requestedAt || 0), // fallback to epoch if missing
-      };
-     })
-     .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
-
-     for (const request of sortedDocs) {
-      // Get user name
-      let userName = "Unknown";
-      try {
-       const userSnap = await getDoc(doc(db, "users", request.userId));
-       if (userSnap.exists()) {
-        userName = userSnap.data().fullname || "Unnamed";
-       }
-      } catch (err) {
-       console.error("Error fetching user info", err);
-      }
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-      <td>${userName}</td>
-      <td>${request.title || "Untitled"}</td>
-      <td>${request.status}</td>
-      <td>${request.requestedAt.toLocaleString()}</td>
-      `;
-      tbody.appendChild(tr);
-     }
-    });
-   }
-
-   // --- Load All Rejected Book Request History (Admin) ---
-
-   function loadRejectedBookRequests() {
-    const tbody = document.querySelector("#rejectedRequestsTable tbody");
-
-    // Listen to all "Rejected" bookRequests
-    onSnapshot(
-     query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
-     async (snapshot) => {
-      tbody.innerHTML = "";
-
-      const requests = snapshot.docs
-      .map((docSnap) => {
-       const data = docSnap.data();
-       return {
-        ...data,
-        id: docSnap.id,
-        rejectedAt: new Date(data.rejectedAt || 0),
-       };
-      })
-      .sort((a, b) => b.rejectedAt - a.rejectedAt); // newest first
-
-      for (const req of requests) {
-       // --- Fetch User Name ---
-       let userName = "Unknown";
-       try {
-        const userSnap = await getDoc(doc(db, "users", req.userId));
-        if (userSnap.exists()) {
-         userName = userSnap.data().fullname || "Unnamed";
-        }
-       } catch (err) {
-        console.error("Error fetching user info:", err);
-       }
-
-       // --- Create table row with placeholder first ---
-       const tr = document.createElement("tr");
-       tr.innerHTML = `
-       <td>${userName}</td>
-       <td>${req.title || "Untitled"}</td>
-       <td><span class="book-status">Loading...</span></td>
-       <td>${req.rejectedAt.toLocaleString()}</td>
-       `;
-       tbody.appendChild(tr);
-
-       // --- Real-time listener for book availability ---
-       const bookRef = doc(db, "books", req.bookId);
-       onSnapshot(bookRef, (bookSnap) => {
-        const statusCell = tr.querySelector(".book-status");
-        if (bookSnap.exists()) {
-         const availability = bookSnap.data().availability || "Unavailable";
-         statusCell.textContent = availability;
-        } else {
-         statusCell.textContent = "Deleted";
-        }
-       });
-      }
-     }
-    );
-   }
-
-
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
  </body>
