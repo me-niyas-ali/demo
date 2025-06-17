@@ -460,6 +460,7 @@
    // Hide admin section, show user section
    adminSection.classList.add("d-none");
    userSection.classList.remove("d-none");
+   document.getElementById("main-action-btn").classList.add("d-none");
 
    // --- Load User Info ---
    try {
@@ -670,6 +671,7 @@
   function showAdminDashboard() {
    userSection.classList.add("d-none");
    adminSection.classList.remove("d-none");
+   document.getElementById("main-action-btn").classList.add("d-none");
    loadSignupRequests();
    loadAllBooks();
    loadAllUsers();
@@ -680,6 +682,7 @@
   function showLoggedOut() {
    userSection.classList.add("d-none");
    adminSection.classList.add("d-none");
+   document.getElementById("main-action-btn").classList.remove("d-none");
   }
   // --- Load Signup Requests ---
   function loadSignupRequests() {
