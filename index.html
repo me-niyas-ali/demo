@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 433</h1></center>
+  <center><h1 class="mb-2">PKNS Library 444</h1></center>
 
   <!-- Main action Buttons -->
 
@@ -683,7 +683,7 @@
      collection(db, "bookRequests"),
      where("userId", "==", user.uid),
      where("bookId", "==", bookId),
-     where("status", "in", ["Pending", "Approved"])
+     where("status", "in", ["Pending", "Checked Out"])
     ));
     if (!existing.empty) {
      return alert("You've already requested or checked out this book.");
