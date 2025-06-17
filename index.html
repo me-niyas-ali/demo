@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 43</h1></center>
+  <center><h1 class="mb-2">PKNS Library 33</h1></center>
 
   <!-- Action Buttons -->
   <div class="card mb-2" id="main-btn">
@@ -439,27 +439,6 @@
      showLoggedOut();
     }
    } else {
-    showLoggedOut();
-   }
-  });
-  
-  onAuthStateChanged(auth, async (user) => {
-   const mainBtn = document.getElementById("main-btn");
-   if (user) {
-    mainBtn?.classList.add("d-none"); // hide when logged in
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    const role = userDoc.exists() ? userDoc.data().role: null;
-    if (role === "admin") {
-     showAdminDashboard();
-    } else if (role === "user") {
-     showUserDashboard(user.uid);
-    } else {
-     showToast("No role assigned. Please contact admin.", "error");
-     await signOut(auth);
-     showLoggedOut();
-    }
-   } else {
-    mainBtn?.classList.remove("d-none"); // show when logged out
     showLoggedOut();
    }
   });
