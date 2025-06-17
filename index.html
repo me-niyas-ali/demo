@@ -8,7 +8,7 @@
 </head>
 <body>
  <div class="container py-4">
-  <center><h1 class="mb-2">PKNS Library 350</h1></center>
+  <center><h1 class="mb-2">PKNS Library 415</h1></center>
 
   <!-- Main action Buttons -->
 
@@ -626,13 +626,22 @@
     (snapshot) => {
      const historyTableBody = document.querySelector("#userHistoryTable tbody");
      historyTableBody.innerHTML = "";
-     snapshot.forEach((docSnap) => {
-      const req = docSnap.data();
+     const sortedDocs = snapshot.docs
+     .map(docSnap => {
+      const data = docSnap.data();
+      return {
+       ...data,
+       requestedAt: new Date(data.requestedAt || 0) // fallback if missing
+      };
+     })
+     .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
+
+     sortedDocs.forEach(req => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
       <td>${req.title}</td>
       <td>${req.status}</td>
-      <td>${new Date(req.requestedAt).toLocaleString()}</td>
+      <td>${req.requestedAt.toLocaleString()}</td>
       `;
       historyTableBody.appendChild(tr);
      });
@@ -1107,63 +1116,63 @@
     }
    });
   }
-  
-  // --- Load All Rejected Book Request History (Admin) ---
-  
-  function loadRejectedBookRequests() {
-  const tbody = document.querySelector("#rejectedRequestsTable tbody");
 
-  onSnapshot(
+  // --- Load All Rejected Book Request History (Admin) ---
+
+  function loadRejectedBookRequests() {
+   const tbody = document.querySelector("#rejectedRequestsTable tbody");
+
+   onSnapshot(
     query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
     async (snapshot) => {
-      tbody.innerHTML = "";
+     tbody.innerHTML = "";
 
-      const requests = snapshot.docs
-        .map(docSnap => {
-          const data = docSnap.data();
-          return {
-            ...data,
-            id: docSnap.id,
-            rejectedAt: new Date(data.rejectedAt || 0) // fallback to epoch
-          };
-        })
-        .sort((a, b) => b.rejectedAt - a.rejectedAt);
+     const requests = snapshot.docs
+     .map(docSnap => {
+      const data = docSnap.data();
+      return {
+       ...data,
+       id: docSnap.id,
+       rejectedAt: new Date(data.rejectedAt || 0) // fallback to epoch
+      };
+     })
+     .sort((a, b) => b.rejectedAt - a.rejectedAt);
 
-      for (const req of requests) {
-        // Get user name
-        let userName = "Unknown";
-        try {
-          const userSnap = await getDoc(doc(db, "users", req.userId));
-          if (userSnap.exists()) {
-            userName = userSnap.data().fullname || "Unnamed";
-          }
-        } catch (err) {
-          console.error("Error fetching user info", err);
-        }
-
-        // Get current book availability
-        let bookStatus = "Unknown";
-        try {
-          const bookSnap = await getDoc(doc(db, "books", req.bookId));
-          if (bookSnap.exists()) {
-            bookStatus = bookSnap.data().availability || "Unavailable";
-          }
-        } catch (err) {
-          console.error("Error fetching book info", err);
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${userName}</td>
-          <td>${req.title || "Untitled"}</td>
-          <td>${bookStatus}</td>
-          <td>${req.rejectedAt.toLocaleString()}</td>
-        `;
-        tbody.appendChild(tr);
+     for (const req of requests) {
+      // Get user name
+      let userName = "Unknown";
+      try {
+       const userSnap = await getDoc(doc(db, "users", req.userId));
+       if (userSnap.exists()) {
+        userName = userSnap.data().fullname || "Unnamed";
+       }
+      } catch (err) {
+       console.error("Error fetching user info", err);
       }
+
+      // Get current book availability
+      let bookStatus = "Unknown";
+      try {
+       const bookSnap = await getDoc(doc(db, "books", req.bookId));
+       if (bookSnap.exists()) {
+        bookStatus = bookSnap.data().availability || "Unavailable";
+       }
+      } catch (err) {
+       console.error("Error fetching book info", err);
+      }
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+      <td>${userName}</td>
+      <td>${req.title || "Untitled"}</td>
+      <td>${bookStatus}</td>
+      <td>${req.rejectedAt.toLocaleString()}</td>
+      `;
+      tbody.appendChild(tr);
+     }
     }
-  );
-}
+   );
+  }
 
  </script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
