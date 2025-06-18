@@ -1235,7 +1235,9 @@
       const cardHeader = document.createElement("div");
       cardHeader.className = "card-header text-center";
       cardHeader.innerHTML = `
-      <img src="${coverImage}" alt="Book Cover" class="img-fluid" style="height: 120px; object-fit: contain;">
+      <img src="${coverImage}" alt="Book Cover"
+      class="img-fluid w-100"
+      style="aspect-ratio: 1 / 1.414; object-fit: cover; border-radius: 2px;" />
       `;
       card.appendChild(cardHeader);
 
