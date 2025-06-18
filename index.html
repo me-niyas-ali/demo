@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -42,7 +43,7 @@
 
   <!-- Main action Buttons -->
 
-  <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw" id="main-action-btn">
+  <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
     <center><h2 class="mb-0 p-2">1133 PKNS LIBRARY</h2></center>
    </div>
@@ -74,6 +75,9 @@
     <div class="card-header">
      <h5 class="mb-0">Available Books</h5>
     </div>
+    <div class="p-2">
+  <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+</div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="booksTable">
       <thead>
@@ -95,6 +99,10 @@
     <div class="card-header">
      <h5 class="mb-0">Your Book Requests & Checkouts</h5>
     </div>
+    <div class="p-2">
+  <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
+</div>
+
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="userHistoryTable">
       <thead>
@@ -122,71 +130,84 @@
     </div>
    </div>
 
-   <!-- Pending Signup Requests -->
+   <div class="container-fluid p-0">
+  <div class="row g-3 mb-3">
+    
+    <!-- Pending Signup Requests -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">Pending Signup Requests</h5>
+        </div>
+        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+          <table class="table table-sm mb-0" id="signupRequestsTable">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>DOB</th>
+                <th>Blood Group</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-   <div class="card mb-3">
-    <div class="card-header">
-     <h5 class="mb-0">Pending Signup Requests</h5>
+    <!-- Pending Book Requests -->
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">Pending Book Requests</h5>
+        </div>
+        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+          <table class="table table-sm mb-0" id="bookRequestsTable">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="signupRequestsTable">
-      <thead>
-       <tr>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>DOB</th>
-        <th>Blood Group</th>
-        <th>Actions</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
-    </div>
-   </div>
 
-   <!-- Pending Book Requests -->
+    <!-- Active Checked Out Books -->
+    <div class="col-12">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">Active Checked Out Books</h5>
+        </div>
+        <div class="p-2">
+  <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
+</div>
+        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+          <table class="table table-sm mb-0" id="checkedOutBooksTable">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Checked Out At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-   <div class="card mb-3">
-    <div class="card-header">
-     <h5 class="mb-0">Pending Book Requests</h5>
-    </div>
-    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="bookRequestsTable">
-      <thead>
-       <tr>
-        <th>User</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Status</th>
-        <th>Actions</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
-    </div>
-   </div>
+  </div>
+</div>
 
-   <!-- Active Checked Out Books -->
-
-   <div class="card mb-3">
-    <div class="card-header">
-     <h5 class="mb-0">Active Checked Out Books</h5>
-    </div>
-    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="checkedOutBooksTable">
-      <thead>
-       <tr>
-        <th>User</th>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Checked Out At</th>
-        <th>Actions</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
-    </div>
-   </div>
 
    <!-- Add New Book -->
 
@@ -221,6 +242,9 @@
     <div class="card-header">
      <h5 class="mb-0">All Books</h5>
     </div>
+    <div class="p-2">
+  <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+</div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allBooksTable">
       <thead>
@@ -241,7 +265,10 @@
     <div class="card-header">
      <h5 class="mb-0">All Users</h5>
     </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+    <div class="p-2">
+  <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
+</div>
+<div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allUsersTable">
       <thead>
        <tr>
@@ -263,6 +290,9 @@
     <div class="card-header">
      <h5 class="mb-0">All Book Requests History</h5>
     </div>
+    <div class="p-2">
+  <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
+</div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allBookRequestsTable">
       <thead>
@@ -1307,6 +1337,55 @@
     }
    );
   }
+  
+// --- Generic Table Filter Utility ---
+function filterTable(tableId, searchValue, columnsToCheck = [0]) {
+  const filter = searchValue.toLowerCase();
+  const table = document.getElementById(tableId);
+  const rows = table?.getElementsByTagName("tr") || [];
+
+  for (let i = 1; i < rows.length; i++) { // skip header row
+    const cells = rows[i].getElementsByTagName("td");
+    const matchFound = columnsToCheck.some(colIdx =>
+      cells[colIdx]?.textContent.toLowerCase().includes(filter)
+    );
+    rows[i].style.display = matchFound ? "" : "none";
+  }
+}
+
+// --- Search Filters ---
+
+// User dashboard: Available Books
+document.getElementById("userBookSearch")?.addEventListener("input", function () {
+  filterTable("booksTable", this.value, [0, 1]); // title, author
+});
+
+// Admin dashboard: All Books
+document.getElementById("adminBookSearch")?.addEventListener("input", function () {
+  filterTable("allBooksTable", this.value, [0, 1]); // title, author
+});
+
+// Admin dashboard: Active Checked Out Books
+document.getElementById("searchCheckedOutBooks")?.addEventListener("input", function () {
+  filterTable("checkedOutBooksTable", this.value, [0, 1]); // user name, book title
+});
+
+// Admin dashboard: All Users
+document.getElementById("searchAllUsers")?.addEventListener("input", function () {
+  filterTable("allUsersTable", this.value, [0, 1, 2, 3]); // full name, email, DOB, blood group
+});
+
+// Admin dashboard: All Book Requests
+document.getElementById("searchAllBookRequests")?.addEventListener("input", function () {
+  filterTable("allBookRequestsTable", this.value, [0, 1]); // user name, book title
+});
+
+// User dashboard: Book Request History
+document.getElementById("searchUserHistory")?.addEventListener("input", function () {
+  filterTable("userHistoryTable", this.value, [0]); // book title only
+});
+
+
 
   function showToast(message, bgColor = "bg-primary") {
    const container = document.getElementById("toastContainer");
