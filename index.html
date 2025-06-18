@@ -389,7 +389,25 @@
 
  <!-- Toast Notification-->
 
- <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;"></div>
+ <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;margin-bottom: -15px"></div>
+ 
+ <style>
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast.slide-in {
+  animation: slideInRight 0.5s ease forwards;
+}
+</style>
+
 
  <!-- Conntent End-->
 
@@ -1280,7 +1298,7 @@
   function showToast(message, bgColor = "bg-primary") {
    const container = document.getElementById("toastContainer");
    const toastEl = document.createElement("div");
-   toastEl.className = `toast align-items-center text-white ${bgColor} border-0`;
+   toastEl.className = `toast slide-in m-2 align-items-center text-white ${bgColor} border-0`;
    toastEl.setAttribute("role", "alert");
    toastEl.setAttribute("aria-live", "assertive");
    toastEl.setAttribute("aria-atomic", "true");
