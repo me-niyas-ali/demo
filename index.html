@@ -742,7 +742,7 @@
       const data = docSnap.data();
       return {
        ...data,
-       requestedAt: new Date(data.requestedAt || 0) // fallback if missing
+       requestedAt: data.requestedAt ? new Date(data.requestedAt) : new Date(0), // fallback if missing
       };
      })
      .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
