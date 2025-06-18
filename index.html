@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -37,7 +36,40 @@
  .toast.slide-out {
   animation: slideOutRight 0.4s ease forwards;
  }
+
+
+
+ .book-title-wrapper {
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+ }
+
+ .book-title {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
+  animation: scroll-title 10s linear infinite;
+  animation-play-state: paused;
+ }
+
+@keyframes scroll-title {
+  0% {
+   transform: translateX(0%);
+  }
+  30% {
+   transform: translateX(0%);
+  }
+  100% {
+   transform: translateX(-100%);
+  }
+ }
+
+
+
 </style>
+
 <body>
  <div class="container py-4">
 
@@ -76,20 +108,10 @@
      <h5 class="mb-0">Available Books</h5>
     </div>
     <div class="p-2">
-  <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
-</div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="booksTable">
-      <thead>
-       <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Status</th>
-        <th>Request</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
+     <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+    </div>
+    <div class="card-body p-2">
+     <div id="booksCardContainer" class="d-flex overflow-auto gap-2"></div>
     </div>
    </div>
 
@@ -100,8 +122,8 @@
      <h5 class="mb-0">Your Book Requests & Checkouts</h5>
     </div>
     <div class="p-2">
-  <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
-</div>
+     <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
+    </div>
 
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="userHistoryTable">
@@ -131,82 +153,82 @@
    </div>
 
    <div class="container-fluid p-0">
-  <div class="row g-3 mb-3">
-    
-    <!-- Pending Signup Requests -->
-    <div class="col-12 col-lg-6">
-      <div class="card h-100">
-        <div class="card-header">
-          <h5 class="mb-0">Pending Signup Requests</h5>
-        </div>
-        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-          <table class="table table-sm mb-0" id="signupRequestsTable">
-            <thead>
-              <tr>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>DOB</th>
-                <th>Blood Group</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <div class="row g-3 mb-3">
 
-    <!-- Pending Book Requests -->
-    <div class="col-12 col-lg-6">
+     <!-- Pending Signup Requests -->
+     <div class="col-12 col-lg-6">
       <div class="card h-100">
-        <div class="card-header">
-          <h5 class="mb-0">Pending Book Requests</h5>
-        </div>
-        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-          <table class="table table-sm mb-0" id="bookRequestsTable">
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
+       <div class="card-header">
+        <h5 class="mb-0">Pending Signup Requests</h5>
+       </div>
+       <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+        <table class="table table-sm mb-0" id="signupRequestsTable">
+         <thead>
+          <tr>
+           <th>Full Name</th>
+           <th>Email</th>
+           <th>DOB</th>
+           <th>Blood Group</th>
+           <th>Actions</th>
+          </tr>
+         </thead>
+         <tbody></tbody>
+        </table>
+       </div>
       </div>
-    </div>
+     </div>
 
-    <!-- Active Checked Out Books -->
-    <div class="col-12">
+     <!-- Pending Book Requests -->
+     <div class="col-12 col-lg-6">
       <div class="card h-100">
-        <div class="card-header">
-          <h5 class="mb-0">Active Checked Out Books</h5>
-        </div>
-        <div class="p-2">
-  <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
-</div>
-        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-          <table class="table table-sm mb-0" id="checkedOutBooksTable">
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Checked Out At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
+       <div class="card-header">
+        <h5 class="mb-0">Pending Book Requests</h5>
+       </div>
+       <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+        <table class="table table-sm mb-0" id="bookRequestsTable">
+         <thead>
+          <tr>
+           <th>User</th>
+           <th>Title</th>
+           <th>Author</th>
+           <th>Status</th>
+           <th>Actions</th>
+          </tr>
+         </thead>
+         <tbody></tbody>
+        </table>
+       </div>
       </div>
-    </div>
+     </div>
 
-  </div>
-</div>
+     <!-- Active Checked Out Books -->
+     <div class="col-12">
+      <div class="card h-100">
+       <div class="card-header">
+        <h5 class="mb-0">Active Checked Out Books</h5>
+       </div>
+       <div class="p-2">
+        <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
+       </div>
+       <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+        <table class="table table-sm mb-0" id="checkedOutBooksTable">
+         <thead>
+          <tr>
+           <th>User</th>
+           <th>Title</th>
+           <th>Author</th>
+           <th>Checked Out At</th>
+           <th>Actions</th>
+          </tr>
+         </thead>
+         <tbody></tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+
+    </div>
+   </div>
 
 
    <!-- Add New Book -->
@@ -222,6 +244,9 @@
       </div>
       <div class="col-md-4">
        <input type="text" id="bookAuthor" class="form-control" placeholder="Author" required />
+      </div>
+      <div class="col-md-4">
+       <input type="url" id="bookCoverUrl" class="form-control" placeholder="Cover Image URL (GitHub)" />
       </div>
       <div class="col-md-2">
        <select id="bookAvailability" class="form-select" required>
@@ -243,19 +268,10 @@
      <h5 class="mb-0">All Books</h5>
     </div>
     <div class="p-2">
-  <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
-</div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="allBooksTable">
-      <thead>
-       <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Availability</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
+     <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+    </div>
+    <div class="card-body p-2">
+     <div id="allBooksCardContainer" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
     </div>
    </div>
 
@@ -266,9 +282,9 @@
      <h5 class="mb-0">All Users</h5>
     </div>
     <div class="p-2">
-  <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
-</div>
-<div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+     <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
+    </div>
+    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allUsersTable">
       <thead>
        <tr>
@@ -291,8 +307,8 @@
      <h5 class="mb-0">All Book Requests History</h5>
     </div>
     <div class="p-2">
-  <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
-</div>
+     <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
+    </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allBookRequestsTable">
       <thead>
@@ -452,6 +468,28 @@
 
  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;margin-bottom: -15px"></div>
 
+ <!-- Delete Confirmation Modal -->
+ <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+   <div class="modal-content">
+    <div class="modal-header px-4 p-2">
+     <h5 class="modal-title">Confirm Delete</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body px-3 m-0">
+     <p id="deleteConfirmText">
+      Are you sure you want to delete this book?
+     </p>
+    </div>
+    <div class="modal-footer m-0">
+     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+     <button type="button" class="btn btn-sm btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+
  <!-- Conntent End-->
 
  <script type="module">
@@ -501,6 +539,15 @@
   const signupModal = bootstrap.Modal.getOrCreateInstance(signupModalEl);
   const loginModal = bootstrap.Modal.getOrCreateInstance(loginModalEl);
   const adminLoginModal = bootstrap.Modal.getOrCreateInstance(adminLoginModalEl);
+  const deleteConfirmModalEl = document.getElementById("deleteConfirmModal");
+  const deleteConfirmModal = bootstrap.Modal.getOrCreateInstance(deleteConfirmModalEl);
+  const deleteConfirmText = document.getElementById("deleteConfirmText");
+  const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+  let bookIdToDelete = null;
+  let bookTitleToDelete = null;
+
+
   // Validation helper
   function enableBootstrapValidation(form) {
    form.addEventListener("submit", (event) => {
@@ -533,12 +580,12 @@
      password, // Warning: storing password in plain text - for demo only!
      createdAt: new Date().toISOString(),
     });
-    showToast("Signup request submitted. Wait for admin approval.");
+    showToast("Signup request submitted. Wait for admin approval.", "bg-warning");
     signupForm.reset();
     signupForm.classList.remove("was-validated");
     signupModal.hide();
    } catch (error) {
-    showToast("Error submitting signup request: " + error.message);
+    showToast("Error submitting signup request: " + error.message, "bg-danger");
    }
   });
   // --- USER LOGIN ---
@@ -555,7 +602,7 @@
     loginForm.classList.remove("was-validated");
     loginModal.hide();
    } catch (error) {
-    showToast("Login failed: " + error.message);
+    showToast("Login failed: " + error.message, "bg-danger");
    }
   });
   // --- ADMIN LOGIN ---
@@ -573,14 +620,14 @@
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (!userDoc.exists() || userDoc.data().role !== "admin") {
      await signOut(auth);
-     showToast("Access denied: Not an admin.");
+     showToast("Access denied: Not an admin.", "bg-danger");
      return;
     }
     adminLoginForm.reset();
     adminLoginForm.classList.remove("was-validated");
     adminLoginModal.hide();
    } catch (error) {
-    showToast("Admin login failed: " + error.message);
+    showToast("Admin login failed: " + error.message, "bg-danger");
    }
   });
   // --- LOGOUT ---
@@ -606,7 +653,7 @@
     } else if (role === "user") {
      showUserDashboard(user.uid);
     } else {
-     showToast("No role assigned. Please contact admin.");
+     showToast("No role assigned. Please contact admin.", "bg-warning");
      await signOut(auth);
      showLoggedOut();
     }
@@ -618,7 +665,6 @@
 
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
-   // Hide admin section, show user section
    adminSection.classList.add("d-none");
    userSection.classList.remove("d-none");
    document.getElementById("main-action-btn").classList.add("d-none");
@@ -626,7 +672,6 @@
    loginModal.hide();
    adminLoginModal.hide();
 
-   // --- Load User Info ---
    try {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
@@ -635,9 +680,6 @@
    } catch (err) {
     console.error("Error loading user info:", err);
    }
-
-   // --- Track Active Requests (Pending or Approved) ---
-   const activeRequests = new Set();
 
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
@@ -653,10 +695,10 @@
       }
      });
 
-     // Now render the books
      onSnapshot(collection(db, "books"),
       (bookSnap) => {
-       booksTableBody.innerHTML = "";
+       const booksCardContainer = document.getElementById("booksCardContainer");
+       booksCardContainer.innerHTML = "";
        const books = [];
        bookSnap.forEach((docSnap) => {
         books.push({
@@ -691,19 +733,89 @@
          buttonDisabled = true;
         }
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-        <td>${book.title || "Untitled"}</td>
-        <td>${book.author || "Unknown"}</td>
-        <td>${status}</td>
-        <td>
-        <button class="btn btn-sm ${buttonClass}" ${buttonDisabled ? "disabled": ""}>
-        ${buttonText}
-        </button>
-        </td>
-        `;
+        // Create card container
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.minWidth = "180px";
+        card.style.maxWidth = "180px";
 
-        const btn = tr.querySelector("button");
+        // Determine badge color
+        let badgeColor = "secondary";
+        if (status === "Available") badgeColor = "success";
+        else if (status === "Requested") badgeColor = "warning";
+        else if (status === "Checked Out") badgeColor = "danger";
+
+        // Card Header with Cover
+        const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
+
+        const cardHeader = document.createElement("div");
+        cardHeader.className = "card-header text-center";
+        cardHeader.innerHTML = `
+        <img src="${coverImage}" alt="Book Cover" class="img-fluid" style="height: 120px; object-fit: contain;">
+        `;
+        card.appendChild(cardHeader);
+
+
+        // Card Body
+        const cardBody = document.createElement("div");
+        cardBody.className = "card-body p-2";
+
+        // Title scroll wrapper
+        const titleWrapper = document.createElement("div");
+        titleWrapper.className = "book-title-wrapper";
+
+        const titleSpan = document.createElement("h5");
+        titleSpan.className = "book-title";
+        titleSpan.textContent = book.title || "Untitled";
+        titleWrapper.appendChild(titleSpan);
+        cardBody.appendChild(titleWrapper);
+
+        // Author scroll wrapper
+        const authorWrapper = document.createElement("div");
+        authorWrapper.className = "book-title-wrapper";
+
+        const authorSpan = document.createElement("h6");
+        authorSpan.className = "book-title text-muted";
+        authorSpan.textContent = book.author || "Unknown";
+        authorWrapper.appendChild(authorSpan);
+        cardBody.appendChild(authorWrapper);
+
+        // Status badge
+        const badge = document.createElement("span");
+        badge.className = `badge w-100 bg-${badgeColor}`;
+        badge.textContent = status;
+        cardBody.appendChild(badge);
+
+        // Button
+        const button = document.createElement("button");
+        button.className = `btn w-100 btn-sm mt-2 ${buttonClass}`;
+        button.textContent = buttonText;
+        if (buttonDisabled) button.disabled = true;
+
+        button.onclick = () => {
+         if (isUserRequest) {
+          cancelBookRequest(book.id);
+         } else {
+          requestBook(book.id);
+         }
+        };
+
+        cardBody.appendChild(button);
+        card.appendChild(cardBody);
+        booksCardContainer.appendChild(card);
+
+        // Start scroll animation for both title and author if overflow
+        setTimeout(() => {
+         if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
+          titleSpan.style.animationPlayState = 'running';
+         }
+         if (authorSpan.scrollWidth > authorWrapper.clientWidth) {
+          authorSpan.style.animationPlayState = 'running';
+         }
+        },
+         50);
+
+        const btn = card.querySelector("button");
         if (!btn.disabled) {
          btn.onclick = () => {
           if (isUserRequest) {
@@ -714,51 +826,13 @@
          };
         }
 
-        booksTableBody.appendChild(tr);
+        booksCardContainer.appendChild(card);
        });
-
-
       });
     }
    );
 
-   // --- Load and Display User Book History ---// Cancel book request
-   async function cancelBookRequest(bookId) {
-    try {
-     const user = auth.currentUser;
-     if (!user) return showToast("You must be logged in!");
-
-     // Find the request doc ID
-     const reqSnap = await getDocs(query(
-      collection(db, "bookRequests"),
-      where("userId", "==", user.uid),
-      where("bookId", "==", bookId),
-      where("status", "==", "Pending")
-     ));
-
-     if (reqSnap.empty) {
-      return showToast("No pending request found to cancel.");
-     }
-
-     // Delete request and update book availability
-     const requestDoc = reqSnap.docs[0];
-     await deleteDoc(requestDoc.ref);
-
-     const bookRef = doc(db, "books", bookId);
-     await updateDoc(bookRef, {
-      availability: "Available"
-     });
-
-     showToast("Request cancelled successfully.");
-    } catch (err) {
-     console.error("Error cancelling request:", err);
-     showToast("Failed to cancel request: " + err.message);
-    }
-   }
-
-
-
-   // Load user book request/checkouts
+   // Book History Table
    onSnapshot(
     query(collection(db,
      "bookRequests"), where("userId",
@@ -772,10 +846,11 @@
       const data = docSnap.data();
       return {
        ...data,
-       requestedAt: data.requestedAt ? new Date(data.requestedAt) : new Date(0), // fallback if missing
+       requestedAt: data.requestedAt ? new Date(data.requestedAt): new Date(0),
       };
      })
-     .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
+     .sort((a,
+      b) => b.requestedAt - a.requestedAt);
 
      sortedDocs.forEach(req => {
       const tr = document.createElement("tr");
@@ -791,11 +866,46 @@
   }
 
 
+  // --- Load and Display User Book History ---// Cancel book request
+  async function cancelBookRequest(bookId) {
+   try {
+    const user = auth.currentUser;
+    if (!user) return showToast("You must be logged in!", "bg-warning");
+
+    // Find the request doc ID
+    const reqSnap = await getDocs(query(
+     collection(db, "bookRequests"),
+     where("userId", "==", user.uid),
+     where("bookId", "==", bookId),
+     where("status", "==", "Pending")
+    ));
+
+    if (reqSnap.empty) {
+     return showToast("No pending request found to cancel.", "bg-warning");
+    }
+
+    // Delete request and update book availability
+    const requestDoc = reqSnap.docs[0];
+    await deleteDoc(requestDoc.ref);
+
+    const bookRef = doc(db, "books", bookId);
+    await updateDoc(bookRef, {
+     availability: "Available"
+    });
+
+    showToast("Request cancelled successfully.", "bg-success");
+   } catch (err) {
+    console.error("Error cancelling request:", err);
+    showToast("Failed to cancel request: " + err.message, "bg-danger");
+   }
+  }
+
+
   // Request book
   async function requestBook(bookId) {
    try {
     const user = auth.currentUser;
-    if (!user) return showToast("You must be logged in!");
+    if (!user) return showToast("You must be logged in!", "bg-warning");
 
     // Check current active requests (Pending or Approved)
     const activeRequestsSnap = await getDocs(query(
@@ -804,13 +914,13 @@
      where("status", "in", ["Pending", "Checked Out"])
     ));
     if (activeRequestsSnap.size >= 3) {
-     return showToast("You can only have up to 3 active book requests.");
+     return showToast("You can only have up to 3 active book requests.", "bg-warning");
     }
 
     // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
-    if (!bookSnap.exists()) return showToast("Book not found!");
+    if (!bookSnap.exists()) return showToast("Book not found!", "bg-danger");
     const book = bookSnap.data();
 
     // Check for duplicate request
@@ -821,7 +931,7 @@
      where("status", "in", ["Pending", "Checked Out"])
     ));
     if (!existing.empty) {
-     return showToast("You've already requested or checked out this book.");
+     return showToast("You've already requested or checked out this book.", "bg-warning");
     }
 
     // Save new request
@@ -839,9 +949,9 @@
      availability: "Requested"
     });
 
-    showToast("Book request sent for approval.");
+    showToast("Book request sent for approval.", "bg-success");
    } catch (err) {
-    showToast("Error requesting book: " + err.message);
+    showToast("Error requesting book: " + err.message, "bg-danger");
    }
   }
 
@@ -932,9 +1042,9 @@
         await updateDoc(requestRef, {
          status: "Checked Out"
         });
-        showToast("Book approved and marked as Checked Out.");
+        showToast("Book approved and marked as Checked Out.", "bg-success");
        } catch (err) {
-        showToast("Error approving request: " + err.message);
+        showToast("Error approving request: " + err.message, "bg-danger");
        }
       };
 
@@ -964,9 +1074,9 @@
          availability: "Available"
         });
 
-        showToast("Request rejected.");
+        showToast("Request rejected.", "bg-success");
        } catch (err) {
-        showToast("Error rejecting request: " + err.message);
+        showToast("Error rejecting request: " + err.message, "bg-danger");
        }
       };
 
@@ -1016,11 +1126,11 @@
          status: "Returned"
         });
 
-        showToast("Book marked as returned.");
+        showToast("Book marked as returned.", "bg-success");
 
        } catch (err) {
         console.error("Error updating documents:", err);
-        showToast("Error returning book: " + err.message);
+        showToast("Error returning book: " + err.message, "bg-danger");
        }
       };
 
@@ -1054,9 +1164,11 @@
     await deleteDoc(doc(db, "signupRequests", docId));
     // Clean up the secondary app to avoid memory leaks
     await secondaryApp.delete();
-    showToast("Signup approved and user created without logging out admin.");
+    showToast("Signup approved and user created without logging out admin.",
+     "bg-success");
    } catch (error) {
-    showToast("Error approving signup: " + error.message);
+    showToast("Error approving signup: " + error.message,
+     "bg-danger");
    }
   }
   // --- Add New Book ---
@@ -1068,6 +1180,7 @@
     const title = document.getElementById("bookTitle").value.trim();
     const author = document.getElementById("bookAuthor").value.trim();
     const availability = document.getElementById("bookAvailability").value;
+    const coverUrl = document.getElementById("bookCoverUrl").value.trim();
 
     // Determine initial checkout status based on availability
     const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
@@ -1077,21 +1190,33 @@
       title,
       author,
       availability, // e.g. "Available" / "Unavailable"
+      coverUrl,
       createdAt: Date.now()
      });
 
-     showToast("Book added successfully.");
+     showToast("Book added successfully.", "bg-success");
      addBookForm.reset();
     } catch (err) {
-     showToast("Failed to add book: " + err.message);
+     showToast("Failed to add book: " + err.message, "bg-danger");
     }
    });
 
+
+
+
+
+
+
+
+
   // --- Load All Books (Admin) ---
   function loadAllBooks() {
+   const allBooksCardContainer = document.getElementById("allBooksCardContainer");
+
    onSnapshot(collection(db, "books"),
     (snapshot) => {
-     allBooksTableBody.innerHTML = "";
+     allBooksCardContainer.innerHTML = "";
+
      const books = [];
      snapshot.forEach((docSnap) => {
       books.push({
@@ -1102,66 +1227,142 @@
      books
      .sort((a, b) => (a.title || "").localeCompare(b.title || ""))
      .forEach((book) => {
-      const tr = document.createElement("tr");
-      const availabilityOptions = ["Available", "Checked Out", "Requested"];
+      const status = book.availability || "Unavailable";
+      const badgeColor = status === "Available" ? "success": (status === "Checked Out" ? "warning": "secondary");
+
+      // Create card container
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.minWidth = "180px";
+      card.style.maxWidth = "180px";
+
+      // Card Header with Cover
+      const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
+      const cardHeader = document.createElement("div");
+      cardHeader.className = "card-header text-center";
+      cardHeader.innerHTML = `
+      <img src="${coverImage}" alt="Book Cover" class="img-fluid" style="height: 120px; object-fit: contain;">
+      `;
+      card.appendChild(cardHeader);
+
+      // Card Body
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body p-2";
+
+      // Title
+      const titleWrapper = document.createElement("div");
+      titleWrapper.className = "book-title-wrapper overflow-hidden";
+      const titleSpan = document.createElement("h6");
+      titleSpan.className = "card-title book-title m-0";
+      titleSpan.textContent = book.title || "Untitled";
+      titleWrapper.appendChild(titleSpan);
+      cardBody.appendChild(titleWrapper);
+
+      // Author
+      const authorWrapper = document.createElement("div");
+      authorWrapper.className = "book-title-wrapper overflow-hidden";
+      const authorSpan = document.createElement("p");
+      authorSpan.className = "mb-1 text-muted book-title";
+      authorSpan.textContent = book.author || "Unknown";
+      authorWrapper.appendChild(authorSpan);
+      cardBody.appendChild(authorWrapper);
+
+      // Badge
+      const badge = document.createElement("span");
+      badge.className = `badge w-100 mb-2 bg-${badgeColor}`;
+      badge.textContent = status;
+      cardBody.appendChild(badge);
+
+      // Availability Dropdown
       const availabilitySelect = document.createElement("select");
-      availabilitySelect.className = "form-select form-select-sm";
+      availabilitySelect.className = "form-select form-select-sm mb-2";
+      const options = ["Available", "Checked Out", "Requested"];
       let originalStatus = book.availability;
 
-      availabilityOptions.forEach((status) => {
+      options.forEach((opt) => {
        const option = document.createElement("option");
-       option.value = status;
-       option.textContent = status;
-       if (status === originalStatus) option.selected = true;
+       option.value = opt;
+       option.textContent = opt;
+       if (opt === book.availability) option.selected = true;
        availabilitySelect.appendChild(option);
       });
 
+      // Save Button
       const saveBtn = document.createElement("button");
-      saveBtn.className = "btn btn-sm btn-primary";
+      saveBtn.className = "btn btn-sm btn-primary w-100";
       saveBtn.textContent = "Save";
       saveBtn.style.display = "none";
+
+      // Delete Button
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "btn btn-sm btn-danger w-100";
+      deleteBtn.textContent = "Delete";
+
+      // Toggle buttons when status changes
+      availabilitySelect.addEventListener("change",
+       () => {
+        const changed = availabilitySelect.value !== originalStatus;
+        saveBtn.style.display = changed ? "inline-block": "none";
+        deleteBtn.style.display = changed ? "none": "inline-block";
+       });
+
+      // Save button logic
       saveBtn.onclick = () => {
        updateBookAvailability(book.id,
         availabilitySelect.value);
        originalStatus = availabilitySelect.value;
        saveBtn.style.display = "none";
+       deleteBtn.style.display = "inline-block";
       };
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = "btn btn-sm btn-danger";
-      deleteBtn.textContent = "Delete";
+      // Delete button logic
       deleteBtn.onclick = () => {
-       const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
-       if (confirmDelete) {
-        deleteDoc(doc(db, "books", book.id))
-        .then(() => showToast("Book deleted successfully."))
-        .catch((err) => showToast("Failed to delete: " + err.message));
-       }
+       bookIdToDelete = book.id;
+       bookTitleToDelete = book.title || "Untitled";
+       deleteConfirmText.innerHTML = `Are you sure you want to delete <span class="fw-bold text-white p-1 bg-danger">"${bookTitleToDelete}"</span> ?`;
+       deleteConfirmModal.show();
       };
 
-      availabilitySelect.addEventListener("change", () => {
-       saveBtn.style.display = availabilitySelect.value !== originalStatus ? "inline-block": "none";
-      });
 
-      const controlWrapper = document.createElement("div");
-      controlWrapper.className = "d-flex align-items-center gap-2";
-      controlWrapper.appendChild(availabilitySelect);
-      controlWrapper.appendChild(saveBtn);
-      controlWrapper.appendChild(deleteBtn);
 
-      const availabilityCell = document.createElement("td");
-      availabilityCell.appendChild(controlWrapper);
+      // Append controls to body
+      cardBody.appendChild(availabilitySelect);
+      cardBody.appendChild(saveBtn);
+      cardBody.appendChild(deleteBtn);
 
-      tr.innerHTML = `
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      `;
-      tr.appendChild(availabilityCell);
+      // Animate scroll if overflowing
+      setTimeout(() => {
+       if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
+        titleSpan.style.animation = "scroll-text 6s linear infinite";
+       }
+       if (authorSpan.scrollWidth > authorWrapper.clientWidth) {
+        authorSpan.style.animation = "scroll-text 6s linear infinite";
+       }
+      },
+       50);
 
-      allBooksTableBody.appendChild(tr);
+      card.appendChild(cardBody);
+      allBooksCardContainer.appendChild(card);
      });
     });
   }
+
+
+  confirmDeleteBtn.onclick = async () => {
+   if (!bookIdToDelete) return;
+
+   try {
+    await deleteDoc(doc(db, "books", bookIdToDelete));
+    showToast(`"${bookTitleToDelete}" deleted successfully.`, "bg-success");
+   } catch (err) {
+    showToast("Failed to delete: " + err.message, "bg-danger");
+   }
+
+   // Reset state and hide modal
+   bookIdToDelete = null;
+   bookTitleToDelete = null;
+   deleteConfirmModal.hide();
+  };
 
   async function updateBookAvailability(bookId, newAvailability) {
    try {
@@ -1337,53 +1538,74 @@
     }
    );
   }
-  
-// --- Generic Table Filter Utility ---
-function filterTable(tableId, searchValue, columnsToCheck = [0]) {
-  const filter = searchValue.toLowerCase();
-  const table = document.getElementById(tableId);
-  const rows = table?.getElementsByTagName("tr") || [];
 
-  for (let i = 1; i < rows.length; i++) { // skip header row
+  // --- Generic Table Filter Utility ---
+  function filterTable(tableId, searchValue, columnsToCheck = [0]) {
+   const filter = searchValue.toLowerCase();
+   const table = document.getElementById(tableId);
+   const rows = table?.getElementsByTagName("tr") || [];
+
+   for (let i = 1; i < rows.length; i++) {
+    // skip header row
     const cells = rows[i].getElementsByTagName("td");
     const matchFound = columnsToCheck.some(colIdx =>
-      cells[colIdx]?.textContent.toLowerCase().includes(filter)
+     cells[colIdx]?.textContent.toLowerCase().includes(filter)
     );
-    rows[i].style.display = matchFound ? "" : "none";
+    rows[i].style.display = matchFound ? "": "none";
+   }
   }
-}
 
-// --- Search Filters ---
+  // --- Search Filters ---
 
-// User dashboard: Available Books
-document.getElementById("userBookSearch")?.addEventListener("input", function () {
-  filterTable("booksTable", this.value, [0, 1]); // title, author
-});
+  // Admin dashboard: Active Checked Out Books
+  document.getElementById("searchCheckedOutBooks")?.addEventListener("input", function () {
+   filterTable("checkedOutBooksTable", this.value, [0, 1]); // user name, book title
+  });
 
-// Admin dashboard: All Books
-document.getElementById("adminBookSearch")?.addEventListener("input", function () {
-  filterTable("allBooksTable", this.value, [0, 1]); // title, author
-});
+  // Admin dashboard: All Users
+  document.getElementById("searchAllUsers")?.addEventListener("input", function () {
+   filterTable("allUsersTable", this.value, [0, 1, 2, 3]); // full name, email, DOB, blood group
+  });
 
-// Admin dashboard: Active Checked Out Books
-document.getElementById("searchCheckedOutBooks")?.addEventListener("input", function () {
-  filterTable("checkedOutBooksTable", this.value, [0, 1]); // user name, book title
-});
+  // Admin dashboard: All Book Requests
+  document.getElementById("searchAllBookRequests")?.addEventListener("input", function () {
+   filterTable("allBookRequestsTable", this.value, [0, 1]); // user name, book title
+  });
 
-// Admin dashboard: All Users
-document.getElementById("searchAllUsers")?.addEventListener("input", function () {
-  filterTable("allUsersTable", this.value, [0, 1, 2, 3]); // full name, email, DOB, blood group
-});
+  // User dashboard: Book Request History
+  document.getElementById("searchUserHistory")?.addEventListener("input", function () {
+   filterTable("userHistoryTable", this.value, [0]); // book title only
+  });
 
-// Admin dashboard: All Book Requests
-document.getElementById("searchAllBookRequests")?.addEventListener("input", function () {
-  filterTable("allBookRequestsTable", this.value, [0, 1]); // user name, book title
-});
 
-// User dashboard: Book Request History
-document.getElementById("searchUserHistory")?.addEventListener("input", function () {
-  filterTable("userHistoryTable", this.value, [0]); // book title only
-});
+
+
+  // Filter card elements by text
+  function filterCards(containerId, searchText) {
+   const container = document.getElementById(containerId);
+   const cards = container.querySelectorAll(".card");
+   const query = searchText.toLowerCase();
+
+   cards.forEach(card => {
+    const title = card.querySelector("h5")?.textContent.toLowerCase() || "";
+    const author = card.querySelector("h6")?.textContent.toLowerCase() || "";
+    const matches = title.includes(query) || author.includes(query);
+    card.style.display = matches ? "": "none";
+   });
+  }
+
+
+  // User dashboard: Available Books (cards)
+  document.getElementById("userBookSearch")?.addEventListener("input", function () {
+   filterCards("booksCardContainer", this.value);
+  });
+
+  // Admin dashboard: All Books (cards)
+  document.getElementById("adminBookSearch")?.addEventListener("input", function () {
+   filterCards("allBooksCardContainer", this.value);
+  });
+
+
 
 
 
