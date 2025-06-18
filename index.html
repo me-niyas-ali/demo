@@ -13,8 +13,8 @@
 
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw" id="main-action-btn">
    <div class="card-header">
-     <center><h2 class="mb-0 p-2">PKNS LIBRARY</h2></center>
-    </div>
+    <center><h2 class="mb-0 p-2">PKNS LIBRARY</h2></center>
+   </div>
    <div class="card-body">
     <div class="d-grid gap-4">
      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signupModal">User Sign Up</button>
@@ -80,6 +80,7 @@
   </div>
 
   <!-- Admin dashboard -->
+
   <div id="adminSection" class="d-none">
 
    <!-- Welcome Card -->
@@ -91,6 +92,7 @@
    </div>
 
    <!-- Pending Signup Requests -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Pending Signup Requests</h5>
@@ -112,6 +114,7 @@
    </div>
 
    <!-- Pending Book Requests -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Pending Book Requests</h5>
@@ -133,6 +136,7 @@
    </div>
 
    <!-- Active Checked Out Books -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Active Checked Out Books</h5>
@@ -154,6 +158,7 @@
    </div>
 
    <!-- Add New Book -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Add New Book</h5>
@@ -180,6 +185,7 @@
    </div>
 
    <!-- All Books -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">All Books</h5>
@@ -199,6 +205,7 @@
    </div>
 
    <!-- All Users -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">All Users</h5>
@@ -220,6 +227,7 @@
    </div>
 
    <!-- All Book Requests History -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">All Book Requests History</h5>
@@ -240,6 +248,7 @@
    </div>
 
    <!-- Rejected Book Requests -->
+
    <div class="card mb-3">
     <div class="card-header">
      <h5 class="mb-0">Rejected Book Requests</h5>
@@ -377,6 +386,13 @@
    </form>
   </div>
  </div>
+
+ <!-- Toast Notification-->
+
+ <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;"></div>
+
+ <!-- Conntent End-->
+
  <script type="module">
   import {
    initializeApp
@@ -456,12 +472,12 @@
      password, // Warning: storing password in plain text - for demo only!
      createdAt: new Date().toISOString(),
     });
-    alert("Signup request submitted. Wait for admin approval.");
+    showToast("Signup request submitted. Wait for admin approval.");
     signupForm.reset();
     signupForm.classList.remove("was-validated");
     signupModal.hide();
    } catch (error) {
-    alert("Error submitting signup request: " + error.message);
+    showToast("Error submitting signup request: " + error.message);
    }
   });
   // --- USER LOGIN ---
@@ -478,7 +494,7 @@
     loginForm.classList.remove("was-validated");
     loginModal.hide();
    } catch (error) {
-    alert("Login failed: " + error.message);
+    showToast("Login failed: " + error.message);
    }
   });
   // --- ADMIN LOGIN ---
@@ -496,14 +512,14 @@
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (!userDoc.exists() || userDoc.data().role !== "admin") {
      await signOut(auth);
-     alert("Access denied: Not an admin.");
+     showToast("Access denied: Not an admin.");
      return;
     }
     adminLoginForm.reset();
     adminLoginForm.classList.remove("was-validated");
     adminLoginModal.hide();
    } catch (error) {
-    alert("Admin login failed: " + error.message);
+    showToast("Admin login failed: " + error.message);
    }
   });
   // --- LOGOUT ---
@@ -529,7 +545,7 @@
     } else if (role === "user") {
      showUserDashboard(user.uid);
     } else {
-     alert("No role assigned. Please contact admin.");
+     showToast("No role assigned. Please contact admin.");
      await signOut(auth);
      showLoggedOut();
     }
@@ -545,6 +561,9 @@
    adminSection.classList.add("d-none");
    userSection.classList.remove("d-none");
    document.getElementById("main-action-btn").classList.add("d-none");
+   signupModal.hide();
+   loginModal.hide();
+   adminLoginModal.hide();
 
    // --- Load User Info ---
    try {
@@ -646,7 +665,7 @@
    async function cancelBookRequest(bookId) {
     try {
      const user = auth.currentUser;
-     if (!user) return alert("You must be logged in!");
+     if (!user) return showToast("You must be logged in!");
 
      // Find the request doc ID
      const reqSnap = await getDocs(query(
@@ -657,7 +676,7 @@
      ));
 
      if (reqSnap.empty) {
-      return alert("No pending request found to cancel.");
+      return showToast("No pending request found to cancel.");
      }
 
      // Delete request and update book availability
@@ -669,10 +688,10 @@
       availability: "Available"
      });
 
-     alert("Request cancelled successfully.");
+     showToast("Request cancelled successfully.");
     } catch (err) {
      console.error("Error cancelling request:", err);
-     alert("Failed to cancel request: " + err.message);
+     showToast("Failed to cancel request: " + err.message);
     }
    }
 
@@ -715,7 +734,7 @@
   async function requestBook(bookId) {
    try {
     const user = auth.currentUser;
-    if (!user) return alert("You must be logged in!");
+    if (!user) return showToast("You must be logged in!");
 
     // Check current active requests (Pending or Approved)
     const activeRequestsSnap = await getDocs(query(
@@ -724,13 +743,13 @@
      where("status", "in", ["Pending", "Checked Out"])
     ));
     if (activeRequestsSnap.size >= 3) {
-     return alert("You can only have up to 3 active book requests.");
+     return showToast("You can only have up to 3 active book requests.");
     }
 
     // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
-    if (!bookSnap.exists()) return alert("Book not found!");
+    if (!bookSnap.exists()) return showToast("Book not found!");
     const book = bookSnap.data();
 
     // Check for duplicate request
@@ -741,7 +760,7 @@
      where("status", "in", ["Pending", "Checked Out"])
     ));
     if (!existing.empty) {
-     return alert("You've already requested or checked out this book.");
+     return showToast("You've already requested or checked out this book.");
     }
 
     // Save new request
@@ -759,9 +778,9 @@
      availability: "Requested"
     });
 
-    alert("Book request sent for approval.");
+    showToast("Book request sent for approval.");
    } catch (err) {
-    alert("Error requesting book: " + err.message);
+    showToast("Error requesting book: " + err.message);
    }
   }
 
@@ -771,6 +790,9 @@
    userSection.classList.add("d-none");
    adminSection.classList.remove("d-none");
    document.getElementById("main-action-btn").classList.add("d-none");
+   signupModal.hide();
+   loginModal.hide();
+   adminLoginModal.hide();
    loadSignupRequests();
    loadAllBooks();
    loadAllUsers();
@@ -849,9 +871,9 @@
         await updateDoc(requestRef, {
          status: "Checked Out"
         });
-        alert("Book approved and marked as Checked Out.");
+        showToast("Book approved and marked as Checked Out.");
        } catch (err) {
-        alert("Error approving request: " + err.message);
+        showToast("Error approving request: " + err.message);
        }
       };
 
@@ -881,9 +903,9 @@
          availability: "Available"
         });
 
-        alert("Request rejected.");
+        showToast("Request rejected.");
        } catch (err) {
-        alert("Error rejecting request: " + err.message);
+        showToast("Error rejecting request: " + err.message);
        }
       };
 
@@ -933,11 +955,11 @@
          status: "Returned"
         });
 
-        alert("Book marked as returned.");
+        showToast("Book marked as returned.");
 
        } catch (err) {
         console.error("Error updating documents:", err);
-        alert("Error returning book: " + err.message);
+        showToast("Error returning book: " + err.message);
        }
       };
 
@@ -971,9 +993,9 @@
     await deleteDoc(doc(db, "signupRequests", docId));
     // Clean up the secondary app to avoid memory leaks
     await secondaryApp.delete();
-    alert("Signup approved and user created without logging out admin.");
+    showToast("Signup approved and user created without logging out admin.");
    } catch (error) {
-    alert("Error approving signup: " + error.message);
+    showToast("Error approving signup: " + error.message);
    }
   }
   // --- Add New Book ---
@@ -997,10 +1019,10 @@
       createdAt: Date.now()
      });
 
-     alert("Book added successfully.");
+     showToast("Book added successfully.");
      addBookForm.reset();
     } catch (err) {
-     alert("Failed to add book: " + err.message);
+     showToast("Failed to add book: " + err.message);
     }
    });
 
@@ -1051,8 +1073,8 @@
        const confirmDelete = confirm(`Are you sure you want to delete "${book.title}"?`);
        if (confirmDelete) {
         deleteDoc(doc(db, "books", book.id))
-        .then(() => alert("Book deleted successfully."))
-        .catch((err) => alert("Failed to delete: " + err.message));
+        .then(() => showToast("Book deleted successfully."))
+        .catch((err) => showToast("Failed to delete: " + err.message));
        }
       };
 
@@ -1123,9 +1145,9 @@
      }
     }
 
-    alert("Book availability and request status updated.");
+    showToast("Book availability and request status updated.");
    } catch (err) {
-    alert("Failed to update: " + err.message);
+    showToast("Failed to update: " + err.message);
    }
   }
 
@@ -1254,6 +1276,34 @@
     }
    );
   }
+
+  function showToast(message, bgColor = "bg-primary") {
+   const container = document.getElementById("toastContainer");
+   const toastEl = document.createElement("div");
+   toastEl.className = `toast align-items-center text-white ${bgColor} border-0`;
+   toastEl.setAttribute("role", "alert");
+   toastEl.setAttribute("aria-live", "assertive");
+   toastEl.setAttribute("aria-atomic", "true");
+
+   toastEl.innerHTML = `
+   <div class="d-flex">
+   <div class="toast-body">${message}</div>
+   <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+   </div>
+   `;
+
+   container.appendChild(toastEl);
+
+   const toast = new bootstrap.Toast(toastEl, {
+    delay: 4000
+   });
+   toast.show();
+
+   toastEl.addEventListener("hidden.bs.toast", () => {
+    toastEl.remove();
+   });
+  }
+
 
 
  </script>
