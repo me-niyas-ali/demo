@@ -980,7 +980,9 @@
    adminSection.classList.add("d-none");
    document.getElementById("main-action-btn").classList.remove("d-none");
   }
+  
   // --- Load Signup Requests ---
+  
   function loadSignupRequests() {
    onSnapshot(collection(db, "signupRequests"), (snapshot) => {
     signupRequestsTableBody.innerHTML = "";
@@ -1005,6 +1007,8 @@
     });
    });
   }
+  
+  // --- Load Book Requests ---
 
   function loadBookRequests() {
    onSnapshot(
@@ -1033,7 +1037,7 @@
       </td>
       `;
 
-      // ✅ Approve book request
+      // Approve book request
       tr.querySelector(".btn-success").onclick = async () => {
        const bookRef = doc(db, "books", request.bookId);
        const requestRef = doc(db, "bookRequests", requestId);
@@ -1050,12 +1054,12 @@
        }
       };
 
-      // ✅ Reject book request
+      // Reject book request
       tr.querySelector(".btn-danger").onclick = async () => {
        const bookRef = doc(db, "books", request.bookId);
        const requestRef = doc(db, "bookRequests", requestId);
        try {
-        // Step 1: Ensure requestedAt exists (fallback to now)
+        
         const requestSnap = await getDoc(requestRef);
         let requestedAt = new Date().toISOString();
         if (requestSnap.exists()) {
@@ -1064,14 +1068,12 @@
           requestedAt = data.requestedAt;
          }
         }
-
-        // Step 2: Update request status and preserve requestedAt
+        
         await updateDoc(requestRef, {
          status: "Rejected",
          rejectedAt: new Date().toISOString() // ensure field is always present
         });
 
-        // Step 3: Reset book availability
         await updateDoc(bookRef, {
          availability: "Available"
         });
@@ -1081,8 +1083,6 @@
         showToast("Error rejecting request: " + err.message, "bg-danger");
        }
       };
-
-
       tbody.appendChild(tr);
      }
     }
