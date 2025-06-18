@@ -390,23 +390,38 @@
  <!-- Toast Notification-->
 
  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;margin-bottom: -15px"></div>
- 
+
  <style>
 @keyframes slideInRight {
   from {
-    transform: translateX(100%);
-    opacity: 0;
+   transform: translateX(100%);
+   opacity: 0;
   }
   to {
-    transform: translateX(0);
-    opacity: 1;
+   transform: translateX(0);
+   opacity: 1;
   }
-}
+ }
 
-.toast.slide-in {
-  animation: slideInRight 0.5s ease forwards;
-}
-</style>
+@keyframes slideOutRight {
+  from {
+   transform: translateX(0);
+   opacity: 1;
+  }
+  to {
+   transform: translateX(100%);
+   opacity: 0;
+  }
+ }
+
+  .toast.slide-in {
+   animation: slideInRight 0.4s ease forwards;
+  }
+
+  .toast.slide-out {
+   animation: slideOutRight 0.4s ease forwards;
+  }
+ </style>
 
 
  <!-- Conntent End-->
@@ -1297,6 +1312,7 @@
 
   function showToast(message, bgColor = "bg-primary") {
    const container = document.getElementById("toastContainer");
+
    const toastEl = document.createElement("div");
    toastEl.className = `toast slide-in m-2 align-items-center text-white ${bgColor} border-0`;
    toastEl.setAttribute("role", "alert");
@@ -1306,25 +1322,37 @@
    toastEl.innerHTML = `
    <div class="d-flex">
    <div class="toast-body">${message}</div>
-   <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+   <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"></button>
    </div>
    `;
 
    container.appendChild(toastEl);
 
+   const closeBtn = toastEl.querySelector(".btn-close");
+
    const toast = new bootstrap.Toast(toastEl, {
-    delay: 4000
+    autohide: false // we'll handle dismissal
    });
+
    toast.show();
 
-   toastEl.addEventListener("hidden.bs.toast", () => {
-    toastEl.remove();
-   });
+   // Auto-dismiss after 3s with animation
+   const dismiss = () => {
+    if (!toastEl.classList.contains("slide-out")) {
+     toastEl.classList.remove("slide-in");
+     toastEl.classList.add("slide-out");
+     setTimeout(() => toastEl.remove(), 400); // match duration
+    }
+   };
+
+   closeBtn.addEventListener("click", dismiss);
+   setTimeout(dismiss, 3000);
   }
 
-
-
  </script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+ </script>
+
 </body>
 </html>
