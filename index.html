@@ -1116,12 +1116,12 @@
         const bookRef = doc(db, "books", record.bookId);
         const requestRef = doc(db, "bookRequests", requestId);
 
-        // ✅ Step 1: Mark the book as Available
+        // Step 1: Mark the book as Available
         await updateDoc(bookRef, {
          availability: "Available"
         });
 
-        // ✅ Step 2: Mark the request as Returned
+        // Step 2: Mark the request as Returned
         await updateDoc(requestRef, {
          status: "Returned"
         });
