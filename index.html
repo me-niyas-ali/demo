@@ -1128,41 +1128,50 @@
       </td>
       `;
 
+      // --- Approve Button ---
       tr.querySelector(".btn-success").onclick = async () => {
-       showLoader();
+       showLoader(); // show loader immediately
+       await new Promise((resolve) => setTimeout(resolve, 800)); // wait 1 sec
+
        try {
         await updateDoc(doc(db, "books", request.bookId), {
          availability: "Checked Out"
         });
+
         await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Checked Out"
         });
+
         showToast("Book approved and marked as Checked Out.", "bg-success");
-        hideLoader();
        } catch (err) {
         showToast("Error approving request: " + err.message, "bg-danger");
-        hideLoader();
+       } finally {
+        hideLoader(); // always hide loader
        }
       };
 
+      // --- Reject Button ---
       tr.querySelector(".btn-danger").onclick = async () => {
        showLoader();
+       await new Promise((resolve) => setTimeout(resolve, 800)); // wait 1 sec
+
        try {
         await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Rejected",
          rejectedAt: new Date().toISOString()
         });
+
         await updateDoc(doc(db, "books", request.bookId), {
          availability: "Available"
         });
+
         showToast("Request rejected.", "bg-success");
-        hideLoader();
        } catch (err) {
         showToast("Error rejecting request: " + err.message, "bg-danger");
+       } finally {
         hideLoader();
        }
       };
-
       tbody.appendChild(tr);
      }
     }
@@ -1194,6 +1203,7 @@
       `;
       // Handle return action
       tr.querySelector("button").onclick = async () => {
+       showLoader();
        try {
         const bookRef = doc(db, "books", record.bookId);
         const requestRef = doc(db, "bookRequests", requestId);
