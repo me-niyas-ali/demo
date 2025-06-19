@@ -1197,6 +1197,7 @@
    );
   }
 
+// --- Load All Checked Out Books ---
 
   function loadCheckedOutBooks() {
    onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
@@ -1298,9 +1299,8 @@
    }
   }
 
-
-
   // --- Add New Book ---
+  
   addBookForm.addEventListener("submit", async (e) => {
    e.preventDefault();
 
@@ -1334,8 +1334,8 @@
    }
   });
 
-
   // --- Load All Books (Admin) ---
+  
   function loadAllBooks() {
    const allBooksCardContainer = document.getElementById("allBooksCardContainer");
 
