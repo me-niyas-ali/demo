@@ -731,7 +731,6 @@
    signupModal.hide();
    loginModal.hide();
    adminLoginModal.hide();
-
    try {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
@@ -796,8 +795,8 @@
         // Create card container
         const card = document.createElement("div");
         card.className = "card";
-        card.style.minWidth = "180px";
-        card.style.maxWidth = "180px";
+        card.style.minWidth = "190px";
+        card.style.maxWidth = "190px";
 
         // Determine badge color
         let badgeColor = "secondary";
@@ -895,7 +894,7 @@
     }
    );
 
-   // Book History Table
+   // --- Book History Table ---
    onSnapshot(
     query(collection(db,
      "bookRequests"), where("userId",
@@ -928,7 +927,7 @@
    );
   }
 
-  // --- Cancel book request
+  // --- Cancel book request ---
 
   async function cancelBookRequest(bookId) {
    showLoader();
@@ -968,14 +967,15 @@
    }
   }
 
-
-  // Request book
+  // --- Request book ---
+  
   async function requestBook(bookId) {
    showLoader();
    try {
     const user = auth.currentUser;
     if (!user) return showToast("You must be logged in!", "bg-warning");
     hideLoader();
+    
     // Check current active requests (Pending or Approved)
     const activeRequestsSnap = await getDocs(query(
      collection(db, "bookRequests"),
@@ -1064,7 +1064,6 @@
     psr.classList.remove("d-none");
     adjustColumns();
 
-
     snapshot.forEach((docSnap) => {
      const data = docSnap.data();
      const tr = document.createElement("tr");
@@ -1078,6 +1077,7 @@
      <button class="btn btn-sm btn-danger">Reject</button>
      </td>
      `;
+     
      // Approve button
      tr.querySelector(".btn-success").onclick = async () => {
       showLoader();
@@ -1090,6 +1090,7 @@
        hideLoader();
       }
      };
+     
      // Reject button
      tr.querySelector(".btn-danger").onclick = async () => {
       showLoader();
@@ -1149,8 +1150,8 @@
 
       // --- Approve Button ---
       tr.querySelector(".btn-success").onclick = async () => {
-       showLoader(); // show loader immediately
-       await new Promise((resolve) => setTimeout(resolve, 800)); // wait 1 sec
+       showLoader();
+       await new Promise((resolve) => setTimeout(resolve, 800));
 
        try {
         await updateDoc(doc(db, "books", request.bookId), {
@@ -1165,7 +1166,7 @@
        } catch (err) {
         showToast("Error approving request: " + err.message, "bg-danger");
        } finally {
-        hideLoader(); // always hide loader
+        hideLoader();
        }
       };
 
@@ -1256,7 +1257,7 @@
   // --- Approve Signup ---
 
   async function approveSignup(docId, data) {
-   showLoader(); // Show loader at the beginning
+   showLoader(); 
 
    try {
     // Initialize a secondary Firebase app instance
@@ -1359,8 +1360,8 @@
       // Create card container
       const card = document.createElement("div");
       card.className = "card";
-      card.style.minWidth = "180px";
-      card.style.maxWidth = "180px";
+      card.style.minWidth = "190px";
+      card.style.maxWidth = "190px";
 
       // Card Header with Cover
       const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
