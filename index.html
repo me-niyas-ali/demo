@@ -469,6 +469,49 @@
   </div>
  </div>
 
+ <!-- Edit Book Modal -->
+ <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+   <form id="editBookForm" class="modal-content needs-validation" novalidate>
+    <div class="modal-header">
+     <h5 class="modal-title">Edit Book</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+     <input type="hidden" id="editBookId" />
+     <div class="mb-2">
+      <label class="form-label">Title</label>
+      <input type="text" id="editBookTitle" class="form-control" required />
+     </div>
+     <div class="mb-2">
+      <label class="form-label">Author</label>
+      <input type="text" id="editBookAuthor" class="form-control" required />
+     </div>
+     <div class="mb-2">
+      <label class="form-label">Cover Image URL</label>
+      <input type="url" id="editBookCoverUrl" class="form-control" />
+     </div>
+     <div class="mb-2">
+      <label class="form-label">Sponsor</label>
+      <input type="text" id="editBookSponsor" class="form-control" />
+     </div>
+     <div class="mb-2">
+      <label class="form-label">Availability</label>
+      <select id="editBookAvailability" class="form-select" required>
+       <option value="Available">Available</option>
+       <option value="Checked Out">Checked Out</option>
+       <option value="Requested">Requested</option>
+      </select>
+     </div>
+    </div>
+    <div class="modal-footer">
+     <button type="submit" class="btn btn-primary">Update</button>
+     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    </div>
+   </form>
+  </div>
+ </div>
+
  <!-- Toast Notification-->
 
  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;margin-bottom: -15px"></div>
@@ -511,6 +554,27 @@
 
 
  <script type="module">
+
+  // --- Global Loader ---
+  let finalizeLoading = () => {};
+
+  function showLoader() {
+   document.getElementById("loadingBackdrop").classList.remove("d-none");
+   const start = performance.now();
+   finalizeLoading = () => {
+    const elapsed = performance.now() - start;
+    const delay = Math.max(0, 1000 - elapsed); // at least 1 second
+    setTimeout(() => {
+     document.getElementById("loadingBackdrop").classList.add("d-none");
+    }, delay);
+   };
+  }
+
+  function hideLoader() {
+   finalizeLoading();
+  }
+
+
   import {
    initializeApp
   } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
@@ -561,6 +625,10 @@
   const deleteConfirmModal = bootstrap.Modal.getOrCreateInstance(deleteConfirmModalEl);
   const deleteConfirmText = document.getElementById("deleteConfirmText");
   const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+  const editBookModalEl = document.getElementById("editBookModal");
+  const editBookModal = bootstrap.Modal.getOrCreateInstance(editBookModalEl);
+  const editBookForm = document.getElementById("editBookForm");
+
 
   let bookIdToDelete = null;
   let bookTitleToDelete = null;
@@ -585,28 +653,27 @@
   signupForm.addEventListener("submit", async (e) => {
    e.preventDefault();
    if (!signupForm.checkValidity()) return;
+
    const fullname = document.getElementById("fullname").value.trim();
    const email = document.getElementById("email").value.trim();
    const dob = document.getElementById("dob").value;
    const bloodGroup = document.getElementById("bloodGroup").value.trim();
    const password = document.getElementById("password").value;
+
+   showLoader();
    try {
-    showLoader();
     await addDoc(collection(db, "signupRequests"), {
-     fullname,
-     email,
-     dob,
-     bloodGroup,
-     password,
+     fullname, email, dob, bloodGroup, password,
      createdAt: new Date().toISOString(),
     });
     showToast("Signup request submitted. Wait for admin approval.", "bg-warning");
-    hideLoader();
     signupForm.reset();
     signupForm.classList.remove("was-validated");
     signupModal.hide();
    } catch (error) {
     showToast("Error submitting signup request: " + error.message, "bg-danger");
+   } finally {
+    hideLoader();
    }
   });
 
@@ -617,8 +684,10 @@
   loginForm.addEventListener("submit", async (e) => {
    e.preventDefault();
    if (!loginForm.checkValidity()) return;
+
    const email = document.getElementById("loginEmail").value.trim();
    const password = document.getElementById("loginPassword").value;
+
    showLoader();
    try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -627,9 +696,11 @@
     loginModal.hide();
    } catch (error) {
     showToast("Login failed: " + error.message, "bg-danger");
+   } finally {
     hideLoader();
    }
   });
+
 
   // --- ADMIN LOGIN ---
   // Only allow login for admin users (role: "admin")
@@ -639,8 +710,10 @@
   adminLoginForm.addEventListener("submit", async (e) => {
    e.preventDefault();
    if (!adminLoginForm.checkValidity()) return;
+
    const email = document.getElementById("adminEmail").value.trim();
    const password = document.getElementById("adminPassword").value;
+
    showLoader();
    try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -649,7 +722,6 @@
     if (!userDoc.exists() || userDoc.data().role !== "admin") {
      await signOut(auth);
      showToast("Access denied: Not an admin.", "bg-danger");
-     hideLoader();
      return;
     }
     adminLoginForm.reset();
@@ -657,30 +729,29 @@
     adminLoginModal.hide();
    } catch (error) {
     showToast("Admin login failed: " + error.message, "bg-danger");
+   } finally {
     hideLoader();
    }
   });
 
   // --- LOGOUT ---
 
-  function handleLogout() {
+  async function handleLogout() {
    showLoader();
-   setTimeout(async () => {
-    try {
-     await signOut(auth);
-     showToast("You have been logged out.", "bg-success");
-     hideLoader();
-    } catch (err) {
-     showToast("Logout failed: " + err.message, "bg-danger");
-     hideLoader();
-    }
-   },
-    1000);
+   try {
+    await signOut(auth);
+    showToast("You have been logged out.",
+     "bg-success");
+   } catch (err) {
+    showToast("Logout failed: " + err.message,
+     "bg-danger");
+   } finally {
+    hideLoader();
+   }
   }
 
   document.getElementById("userLogoutBtn").onclick = handleLogout;
   document.getElementById("adminLogoutBtn").onclick = handleLogout;
-
 
   // --- UI Elements ---
 
@@ -806,7 +877,6 @@
 
         // Card Header with Cover
         const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
-
         const cardHeader = document.createElement("div");
         cardHeader.className = "card-header text-center";
         cardHeader.innerHTML = `
@@ -815,7 +885,6 @@
         style="aspect-ratio: 1 / 1.414; object-fit: cover; border-radius: 2px;" />
         `;
         card.appendChild(cardHeader);
-
 
         // Card Body
         const cardBody = document.createElement("div");
@@ -864,7 +933,6 @@
         cardBody.appendChild(button);
         card.appendChild(cardBody);
         booksCardContainer.appendChild(card);
-        hideLoader();
 
         // Start scroll animation for both title and author if overflow
         setTimeout(() => {
@@ -887,9 +955,9 @@
           }
          };
         }
-
         booksCardContainer.appendChild(card);
        });
+       hideLoader();
       });
     }
    );
@@ -933,10 +1001,11 @@
    showLoader();
    try {
     const user = auth.currentUser;
-    if (!user) return showToast("You must be logged in!", "bg-warning");
-    hideLoader();
+    if (!user) {
+     showToast("You must be logged in!", "bg-warning");
+     return hideLoader();
+    }
 
-    // Find the request doc ID
     const reqSnap = await getDocs(query(
      collection(db, "bookRequests"),
      where("userId", "==", user.uid),
@@ -945,56 +1014,51 @@
     ));
 
     if (reqSnap.empty) {
-     return showToast("No pending request found to cancel.", "bg-warning");
-     hideLoader();
+     showToast("No pending request found to cancel.", "bg-warning");
+     return hideLoader();
     }
 
-    // Delete request and update book availability
-    const requestDoc = reqSnap.docs[0];
-    await deleteDoc(requestDoc.ref);
-
-    const bookRef = doc(db, "books", bookId);
-    await updateDoc(bookRef, {
+    await deleteDoc(reqSnap.docs[0].ref);
+    await updateDoc(doc(db, "books", bookId), {
      availability: "Available"
     });
-
     showToast("Request cancelled successfully.", "bg-success");
-    hideLoader();
+
    } catch (err) {
-    console.error("Error cancelling request:", err);
     showToast("Failed to cancel request: " + err.message, "bg-danger");
+   } finally {
     hideLoader();
    }
   }
 
   // --- Request book ---
-  
+
   async function requestBook(bookId) {
    showLoader();
    try {
     const user = auth.currentUser;
-    if (!user) return showToast("You must be logged in!", "bg-warning");
-    hideLoader();
-    
-    // Check current active requests (Pending or Approved)
+    if (!user) {
+     showToast("You must be logged in!", "bg-warning");
+     return hideLoader();
+    }
+
     const activeRequestsSnap = await getDocs(query(
      collection(db, "bookRequests"),
      where("userId", "==", user.uid),
      where("status", "in", ["Pending", "Checked Out"])
     ));
     if (activeRequestsSnap.size >= 3) {
-     return showToast("You can only have up to 3 active book requests.", "bg-warning");
-     hideLoader();
+     showToast("You can only have up to 3 active book requests.", "bg-warning");
+     return hideLoader();
     }
 
-    // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
-    if (!bookSnap.exists()) return showToast("Book not found!", "bg-danger");
-    hideLoader();
-    const book = bookSnap.data();
+    if (!bookSnap.exists()) {
+     showToast("Book not found!", "bg-danger");
+     return hideLoader();
+    }
 
-    // Check for duplicate request
     const existing = await getDocs(query(
      collection(db, "bookRequests"),
      where("userId", "==", user.uid),
@@ -1002,32 +1066,31 @@
      where("status", "in", ["Pending", "Checked Out"])
     ));
     if (!existing.empty) {
-     return showToast("You've already requested or checked out this book.", "bg-warning");
-     hideLoader();
+     showToast("You've already requested or checked out this book.", "bg-warning");
+     return hideLoader();
     }
 
-    // Save new request
+    const book = bookSnap.data();
     await addDoc(collection(db, "bookRequests"), {
      userId: user.uid,
-     bookId: bookId,
+     bookId,
      title: book.title,
      author: book.author,
      status: "Pending",
      requestedAt: new Date().toISOString()
     });
-
-    // Update book availability to "Requested"
     await updateDoc(bookRef, {
      availability: "Requested"
     });
-
     showToast("Book request sent for approval.", "bg-success");
-    hideLoader();
+
    } catch (err) {
     showToast("Error requesting book: " + err.message, "bg-danger");
+   } finally {
     hideLoader();
    }
   }
+
 
   // --- Show Admin Dashboard ---
 
@@ -1077,7 +1140,7 @@
      <button class="btn btn-sm btn-danger">Reject</button>
      </td>
      `;
-     
+
      // Approve button
      tr.querySelector(".btn-success").onclick = async () => {
       showLoader();
@@ -1090,7 +1153,7 @@
        hideLoader();
       }
      };
-     
+
      // Reject button
      tr.querySelector(".btn-danger").onclick = async () => {
       showLoader();
@@ -1198,7 +1261,7 @@
    );
   }
 
-// --- Load All Checked Out Books ---
+  // --- Load All Checked Out Books ---
 
   function loadCheckedOutBooks() {
    onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
@@ -1229,26 +1292,23 @@
         const bookRef = doc(db, "books", record.bookId);
         const requestRef = doc(db, "bookRequests", requestId);
 
-        //--- Step 1: Mark the book as Available
         await updateDoc(bookRef, {
          availability: "Available"
         });
 
-        //--- Step 2: Mark the request as Returned
         await updateDoc(requestRef, {
          status: "Returned"
         });
 
         showToast("Book marked as returned.", "bg-success");
-        hideLoader();
 
        } catch (err) {
         console.error("Error updating documents:", err);
         showToast("Error returning book: " + err.message, "bg-danger");
+       } finally {
         hideLoader();
        }
       };
-
       tbody.appendChild(tr);
      }
     });
@@ -1257,7 +1317,7 @@
   // --- Approve Signup ---
 
   async function approveSignup(docId, data) {
-   showLoader(); 
+   showLoader();
 
    try {
     // Initialize a secondary Firebase app instance
@@ -1301,7 +1361,7 @@
   }
 
   // --- Add New Book ---
-  
+
   addBookForm.addEventListener("submit", async (e) => {
    e.preventDefault();
 
@@ -1336,7 +1396,7 @@
   });
 
   // --- Load All Books (Admin) ---
-  
+
   function loadAllBooks() {
    const allBooksCardContainer = document.getElementById("allBooksCardContainer");
 
@@ -1437,6 +1497,15 @@
       deleteBtn.className = "btn btn-sm btn-danger w-100";
       deleteBtn.textContent = "Delete";
 
+
+      // Edit Button
+      const editBtn = document.createElement("button");
+      editBtn.className = "btn btn-sm btn-warning w-100";
+      editBtn.textContent = "Edit";
+      editBtn.onclick = () => openEditBookModal(book);
+      cardBody.appendChild(editBtn);
+
+
       // Toggle buttons when status changes
       availabilitySelect.addEventListener("change",
        () => {
@@ -1490,29 +1559,66 @@
 
   confirmDeleteBtn.onclick = async () => {
    if (!bookIdToDelete) return;
-   showLoader();
 
+   showLoader();
    try {
     await deleteDoc(doc(db, "books", bookIdToDelete));
     showToast(`"${bookTitleToDelete}" deleted successfully.`, "bg-success");
    } catch (err) {
     showToast("Failed to delete: " + err.message, "bg-danger");
+   } finally {
+    bookIdToDelete = null;
+    bookTitleToDelete = null;
+    deleteConfirmModal.hide();
+    hideLoader();
    }
-
-   // Reset state and hide modal
-   bookIdToDelete = null;
-   bookTitleToDelete = null;
-   deleteConfirmModal.hide();
   };
+
+  function openEditBookModal(book) {
+   document.getElementById("editBookId").value = book.id;
+   document.getElementById("editBookTitle").value = book.title || "";
+   document.getElementById("editBookAuthor").value = book.author || "";
+   document.getElementById("editBookCoverUrl").value = book.coverUrl || "";
+   document.getElementById("editBookSponsor").value = book.sponsor || "";
+   document.getElementById("editBookAvailability").value = book.availability || "Available";
+   editBookModal.show();
+  }
+
+  editBookForm.addEventListener("submit", async (e) => {
+   e.preventDefault();
+   if (!editBookForm.checkValidity()) return;
+
+   const bookId = document.getElementById("editBookId").value;
+   const updatedBook = {
+    title: document.getElementById("editBookTitle").value.trim(),
+    author: document.getElementById("editBookAuthor").value.trim(),
+    coverUrl: document.getElementById("editBookCoverUrl").value.trim(),
+    sponsor: document.getElementById("editBookSponsor").value.trim(),
+    availability: document.getElementById("editBookAvailability").value,
+   };
+
+   showLoader();
+   try {
+    await updateDoc(doc(db, "books", bookId), updatedBook);
+    showToast("Book updated successfully.", "bg-success");
+    editBookModal.hide();
+   } catch (err) {
+    showToast("Error updating book: " + err.message, "bg-danger");
+   } finally {
+    hideLoader();
+   }
+  });
+
 
   async function updateBookAvailability(bookId, newAvailability) {
    try {
     // 1. Update the book document
     await updateDoc(doc(db,
      "books",
-     bookId), {
-     availability: newAvailability
-    });
+     bookId),
+     {
+      availability: newAvailability
+     });
 
     // 2. Update all relevant bookRequests based on new availability
     const q = query(
@@ -1679,7 +1785,7 @@
   }
 
   // --- Generic Table Filter Utility ---
-  
+
   function filterTable(tableId, searchValue, columnsToCheck = [0]) {
    const filter = searchValue.toLowerCase();
    const table = document.getElementById(tableId);
@@ -1782,17 +1888,6 @@
 
    closeBtn.addEventListener("click", dismiss);
    setTimeout(dismiss, 3000);
-  }
-
-  // --- Global Loader ---
-  function showLoader() {
-   document.getElementById("loadingBackdrop").classList.remove("d-none");
-  }
-
-  function hideLoader() {
-   setTimeout(() => {
-    document.getElementById("loadingBackdrop").classList.add("d-none");
-   }, 1000); // 2-second delay
   }
 
   //--- PSR & PBR Column Adjust ---
