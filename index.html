@@ -487,6 +487,13 @@
   </div>
  </div>
 
+ <!-- Fullscreen Loader -->
+ <div id="loadingBackdrop" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center d-none" style="z-index: 2000;">
+  <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+   <span class="visually-hidden">Loading...</span>
+  </div>
+ </div>
+
 
  <!-- Conntent End-->
 
@@ -557,7 +564,9 @@
    },
     false);
   }
+
   // --- SIGNUP ---
+
   const signupForm = document.getElementById("signupForm");
   enableBootstrapValidation(signupForm);
   signupForm.addEventListener("submit", async (e) => {
@@ -569,16 +578,17 @@
    const bloodGroup = document.getElementById("bloodGroup").value.trim();
    const password = document.getElementById("password").value;
    try {
-    // Save signup request in Firestore
+    showLoader();
     await addDoc(collection(db, "signupRequests"), {
      fullname,
      email,
      dob,
      bloodGroup,
-     password, // Warning: storing password in plain text - for demo only!
+     password,
      createdAt: new Date().toISOString(),
     });
     showToast("Signup request submitted. Wait for admin approval.", "bg-warning");
+    hideLoader();
     signupForm.reset();
     signupForm.classList.remove("was-validated");
     signupModal.hide();
@@ -586,7 +596,9 @@
     showToast("Error submitting signup request: " + error.message, "bg-danger");
    }
   });
+
   // --- USER LOGIN ---
+
   const loginForm = document.getElementById("loginForm");
   enableBootstrapValidation(loginForm);
   loginForm.addEventListener("submit", async (e) => {
@@ -594,6 +606,7 @@
    if (!loginForm.checkValidity()) return;
    const email = document.getElementById("loginEmail").value.trim();
    const password = document.getElementById("loginPassword").value;
+   showLoader();
    try {
     await signInWithEmailAndPassword(auth, email, password);
     loginForm.reset();
@@ -601,10 +614,13 @@
     loginModal.hide();
    } catch (error) {
     showToast("Login failed: " + error.message, "bg-danger");
+    hideLoader();
    }
   });
+
   // --- ADMIN LOGIN ---
   // Only allow login for admin users (role: "admin")
+
   const adminLoginForm = document.getElementById("adminLoginForm");
   enableBootstrapValidation(adminLoginForm);
   adminLoginForm.addEventListener("submit", async (e) => {
@@ -612,6 +628,7 @@
    if (!adminLoginForm.checkValidity()) return;
    const email = document.getElementById("adminEmail").value.trim();
    const password = document.getElementById("adminPassword").value;
+   showLoader();
    try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
@@ -619,6 +636,7 @@
     if (!userDoc.exists() || userDoc.data().role !== "admin") {
      await signOut(auth);
      showToast("Access denied: Not an admin.", "bg-danger");
+     hideLoader();
      return;
     }
     adminLoginForm.reset();
@@ -626,12 +644,33 @@
     adminLoginModal.hide();
    } catch (error) {
     showToast("Admin login failed: " + error.message, "bg-danger");
+    hideLoader();
    }
   });
+
   // --- LOGOUT ---
-  document.getElementById("userLogoutBtn").onclick = () => signOut(auth);
-  document.getElementById("adminLogoutBtn").onclick = () => signOut(auth);
+
+  function handleLogout() {
+   showLoader();
+   setTimeout(async () => {
+    try {
+     await signOut(auth);
+     showToast("You have been logged out.", "bg-success");
+     hideLoader();
+    } catch (err) {
+     showToast("Logout failed: " + err.message, "bg-danger");
+     hideLoader();
+    }
+   },
+    1000);
+  }
+
+  document.getElementById("userLogoutBtn").onclick = handleLogout;
+  document.getElementById("adminLogoutBtn").onclick = handleLogout;
+
+
   // --- UI Elements ---
+
   const userSection = document.getElementById("userSection");
   const userFullnameSpan = document.getElementById("userFullname");
   const booksTableBody = document.querySelector("#booksTable tbody");
@@ -660,8 +699,16 @@
    }
   });
 
+  // --- Show Logged Out ---
+
+  function showLoggedOut() {
+   userSection.classList.add("d-none");
+   adminSection.classList.add("d-none");
+   document.getElementById("main-action-btn").classList.remove("d-none");
+  }
 
   // --- Show User Dashboard ---
+
   async function showUserDashboard(uid) {
    adminSection.classList.add("d-none");
    userSection.classList.remove("d-none");
@@ -803,6 +850,7 @@
         cardBody.appendChild(button);
         card.appendChild(cardBody);
         booksCardContainer.appendChild(card);
+        hideLoader();
 
         // Start scroll animation for both title and author if overflow
         setTimeout(() => {
@@ -865,12 +913,14 @@
    );
   }
 
+  // --- Cancel book request
 
-  // --- Load and Display User Book History ---// Cancel book request
   async function cancelBookRequest(bookId) {
+   showLoader();
    try {
     const user = auth.currentUser;
     if (!user) return showToast("You must be logged in!", "bg-warning");
+    hideLoader();
 
     // Find the request doc ID
     const reqSnap = await getDocs(query(
@@ -882,6 +932,7 @@
 
     if (reqSnap.empty) {
      return showToast("No pending request found to cancel.", "bg-warning");
+     hideLoader();
     }
 
     // Delete request and update book availability
@@ -894,19 +945,22 @@
     });
 
     showToast("Request cancelled successfully.", "bg-success");
+    hideLoader();
    } catch (err) {
     console.error("Error cancelling request:", err);
     showToast("Failed to cancel request: " + err.message, "bg-danger");
+    hideLoader();
    }
   }
 
 
   // Request book
   async function requestBook(bookId) {
+   showLoader();
    try {
     const user = auth.currentUser;
     if (!user) return showToast("You must be logged in!", "bg-warning");
-
+    hideLoader();
     // Check current active requests (Pending or Approved)
     const activeRequestsSnap = await getDocs(query(
      collection(db, "bookRequests"),
@@ -915,12 +969,14 @@
     ));
     if (activeRequestsSnap.size >= 3) {
      return showToast("You can only have up to 3 active book requests.", "bg-warning");
+     hideLoader();
     }
 
     // Get book details
     const bookRef = doc(db, "books", bookId);
     const bookSnap = await getDoc(bookRef);
     if (!bookSnap.exists()) return showToast("Book not found!", "bg-danger");
+    hideLoader();
     const book = bookSnap.data();
 
     // Check for duplicate request
@@ -932,6 +988,7 @@
     ));
     if (!existing.empty) {
      return showToast("You've already requested or checked out this book.", "bg-warning");
+     hideLoader();
     }
 
     // Save new request
@@ -950,13 +1007,15 @@
     });
 
     showToast("Book request sent for approval.", "bg-success");
+    hideLoader();
    } catch (err) {
     showToast("Error requesting book: " + err.message, "bg-danger");
+    hideLoader();
    }
   }
 
-
   // --- Show Admin Dashboard ---
+
   function showAdminDashboard() {
    userSection.classList.add("d-none");
    adminSection.classList.remove("d-none");
@@ -971,12 +1030,6 @@
    loadCheckedOutBooks();
    loadAllBookRequests();
    loadRejectedBookRequests();
-  }
-  // --- Show Logged Out ---
-  function showLoggedOut() {
-   userSection.classList.add("d-none");
-   adminSection.classList.add("d-none");
-   document.getElementById("main-action-btn").classList.remove("d-none");
   }
 
   // --- Load Signup Requests ---
@@ -1007,13 +1060,34 @@
      <button class="btn btn-sm btn-danger">Reject</button>
      </td>
      `;
-     tr.querySelector(".btn-success").onclick = () => approveSignup(docSnap.id, data);
-     tr.querySelector(".btn-danger").onclick = () => deleteDoc(doc(db, "signupRequests", docSnap.id));
+     // Approve button
+     tr.querySelector(".btn-success").onclick = async () => {
+      showLoader();
+      try {
+       await approveSignup(docSnap.id, data);
+       showToast(`Signup approved for ${data.fullname}`, "bg-success");
+       hideLoader();
+      } catch (err) {
+       showToast(`Error approving: ${err.message}`, "bg-danger");
+       hideLoader();
+      }
+     };
+     // Reject button
+     tr.querySelector(".btn-danger").onclick = async () => {
+      showLoader();
+      try {
+       await deleteDoc(doc(db, "signupRequests", docSnap.id));
+       showToast(`Signup request rejected for ${data.fullname}`, "bg-danger");
+       hideLoader();
+      } catch (err) {
+       showToast(`Error rejecting: ${err.message}`, "bg-danger");
+       hideLoader();
+      }
+     };
      signupRequestsTableBody.appendChild(tr);
     });
    });
   }
-
 
   // --- Load Book Requests ---
 
@@ -1116,12 +1190,12 @@
         const bookRef = doc(db, "books", record.bookId);
         const requestRef = doc(db, "bookRequests", requestId);
 
-        // Step 1: Mark the book as Available
+        // ✅ Step 1: Mark the book as Available
         await updateDoc(bookRef, {
          availability: "Available"
         });
 
-        // Step 2: Mark the request as Returned
+        // ✅ Step 2: Mark the request as Returned
         await updateDoc(requestRef, {
          status: "Returned"
         });
@@ -1322,6 +1396,7 @@
       cardBody.appendChild(availabilitySelect);
       cardBody.appendChild(saveBtn);
       cardBody.appendChild(deleteBtn);
+      hideLoader();
 
       // Animate scroll if overflowing
       setTimeout(() => {
@@ -1333,10 +1408,6 @@
        }
       },
        50);
-
-      card.appendChild(cardBody);
-      allBooksCardContainer.appendChild(card);
-
 
       card.appendChild(cardBody);
       allBooksCardContainer.appendChild(card);
@@ -1644,6 +1715,17 @@
    closeBtn.addEventListener("click", dismiss);
    setTimeout(dismiss, 3000);
   }
+
+
+  function showLoader() {
+   document.getElementById("loadingBackdrop").classList.remove("d-none");
+  }
+
+  function hideLoader() {
+   document.getElementById("loadingBackdrop").classList.add("d-none");
+  }
+
+
 
  </script>
 
