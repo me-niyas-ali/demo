@@ -1138,8 +1138,10 @@
          status: "Checked Out"
         });
         showToast("Book approved and marked as Checked Out.", "bg-success");
+        hideLoader();
        } catch (err) {
         showToast("Error approving request: " + err.message, "bg-danger");
+        hideLoader();
        }
       };
 
@@ -1154,8 +1156,10 @@
          availability: "Available"
         });
         showToast("Request rejected.", "bg-success");
+        hideLoader();
        } catch (err) {
         showToast("Error rejecting request: " + err.message, "bg-danger");
+        hideLoader();
        }
       };
 
