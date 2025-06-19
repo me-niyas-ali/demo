@@ -1318,8 +1318,6 @@
        deleteConfirmModal.show();
       };
 
-
-
       // Append controls to body
       cardBody.appendChild(availabilitySelect);
       cardBody.appendChild(saveBtn);
@@ -1328,13 +1326,17 @@
       // Animate scroll if overflowing
       setTimeout(() => {
        if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
-        titleSpan.style.animation = "scroll-text 6s linear infinite";
+        titleSpan.style.animationPlayState = 'running';
        }
        if (authorSpan.scrollWidth > authorWrapper.clientWidth) {
-        authorSpan.style.animation = "scroll-text 6s linear infinite";
+        authorSpan.style.animationPlayState = 'running';
        }
       },
        50);
+
+      card.appendChild(cardBody);
+      allBooksCardContainer.appendChild(card);
+
 
       card.appendChild(cardBody);
       allBooksCardContainer.appendChild(card);
