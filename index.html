@@ -77,7 +77,7 @@
 
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
-    <center><h2 class="mb-0 p-2">1023 PKNS LIBRARY</h2></center>
+    <center><h2 class="mb-0 p-2">1000 PKNS LIBRARY</h2></center>
    </div>
    <div class="card-body">
     <div class="d-grid gap-4">
@@ -245,8 +245,7 @@
 
     </div>
    </div>
-
-
+   
    <!-- Add New Book -->
    <div class="card mb-3">
     <div class="card-header">
@@ -278,7 +277,6 @@
      </form>
     </div>
    </div>
-
 
    <!-- All Users -->
 
@@ -470,6 +468,7 @@
  </div>
 
  <!-- Edit Book Modal -->
+ 
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
    <form id="editBookForm" class="modal-content needs-validation" novalidate>
@@ -539,7 +538,6 @@
      <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
      <button type="button" class="btn btn-sm btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
     </div>
-
    </div>
   </div>
  </div>
@@ -558,11 +556,11 @@
 
  </script>
  <!-- Test Scripts Here-->
-
-
+ 
  <script type="module">
 
   // --- Global Loader ---
+  
   let finalizeLoading = () => {};
 
   function showLoader() {
@@ -640,10 +638,8 @@
   const editBookModal = bootstrap.Modal.getOrCreateInstance(editBookModalEl);
   const editBookForm = document.getElementById("editBookForm");
 
-
   let bookIdToDelete = null;
   let bookTitleToDelete = null;
-
 
   // Validation helper
   function enableBootstrapValidation(form) {
@@ -711,7 +707,6 @@
     hideLoader();
    }
   });
-
 
   // --- ADMIN LOGIN ---
   // Only allow login for admin users (role: "admin")
@@ -1102,7 +1097,6 @@
    }
   }
 
-
   // --- Show Admin Dashboard ---
 
   function showAdminDashboard() {
@@ -1201,7 +1195,6 @@
 
      pbr.classList.remove("d-none");
      adjustColumns();
-
 
      for (const docSnap of snapshot.docs) {
       const request = docSnap.data();
@@ -1592,8 +1585,9 @@
     hideLoader();
    }
   });
-
-
+  
+  // --- Update Book Availability (Admin) ---
+  
   async function updateBookAvailability(bookId, newAvailability) {
    try {
     // 1. Update the book document
@@ -1645,6 +1639,7 @@
   }
 
   // --- Load All Users (Admin) ---
+  
   function loadAllUsers() {
    onSnapshot(collection(db, "users"), (snapshot) => {
     allUsersTableBody.innerHTML = "";
