@@ -697,6 +697,7 @@
     }
    } else {
     showLoggedOut();
+    hideLoader();
    }
   });
 
@@ -1128,6 +1129,7 @@
       `;
 
       tr.querySelector(".btn-success").onclick = async () => {
+       showLoader();
        try {
         await updateDoc(doc(db, "books", request.bookId), {
          availability: "Checked Out"
@@ -1142,6 +1144,7 @@
       };
 
       tr.querySelector(".btn-danger").onclick = async () => {
+       showLoader();
        try {
         await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Rejected",
