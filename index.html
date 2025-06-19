@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -51,6 +52,10 @@
   animation: scroll-title 10s linear infinite;
   animation-play-state: paused;
  }
+ 
+ .italic {
+  font-style: italic;
+ }
 
 @keyframes scroll-title {
   0% {
@@ -103,8 +108,8 @@
     <div class="card-header">
      <h5 class="mb-0">Available Books</h5>
     </div>
-    <div class="p-2">
-     <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+    <div class="px-2 mt-2">
+     <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control" placeholder="Search by title or author...">
     </div>
     <div class="card-body p-2">
      <div id="booksCardContainer" class="d-flex overflow-auto gap-2"></div>
@@ -117,8 +122,8 @@
     <div class="card-header">
      <h5 class="mb-0">Your Book Requests & Checkouts</h5>
     </div>
-    <div class="p-2">
-     <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
+    <div class="px-2 mt-2">
+     <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control" placeholder="Search by book title...">
     </div>
 
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
@@ -204,8 +209,8 @@
        <div class="card-header">
         <h5 class="mb-0">All Books</h5>
        </div>
-       <div class="p-2">
-        <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+       <div class="px-2 mt-2">
+        <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control" placeholder="Search by title or author...">
        </div>
        <div class="card-body p-2">
         <div id="allBooksCardContainer" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
@@ -219,8 +224,8 @@
        <div class="card-header">
         <h5 class="mb-0">Active Checked Out Books</h5>
        </div>
-       <div class="p-2">
-        <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
+       <div class="px-2 mt-2">
+        <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control" placeholder="Search by User Name or Book Title...">
        </div>
        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
         <table class="table table-sm mb-0" id="checkedOutBooksTable">
@@ -244,34 +249,37 @@
 
 
    <!-- Add New Book -->
-
-   <div class="card mb-3">
-    <div class="card-header">
-     <h5 class="mb-0">Add New Book</h5>
-    </div>
-    <div class="card-body">
-     <form id="addBookForm" class="row g-2">
-      <div class="col-md-4">
-       <input type="text" id="bookTitle" class="form-control" placeholder="Title" required />
-      </div>
-      <div class="col-md-4">
-       <input type="text" id="bookAuthor" class="form-control" placeholder="Author" required />
-      </div>
-      <div class="col-md-4">
-       <input type="url" id="bookCoverUrl" class="form-control" placeholder="Cover Image URL (GitHub)" />
-      </div>
-      <div class="col-md-2">
-       <select id="bookAvailability" class="form-select" required>
-        <option value="Available" selected>Available</option>
-        <option value="Checked Out">Checked Out</option>
-       </select>
-      </div>
-      <div class="col-md-2">
-       <button type="submit" class="btn btn-success w-100">Add Book</button>
-      </div>
-     </form>
-    </div>
+<div class="card mb-3">
+ <div class="card-header">
+  <h5 class="mb-0">Add New Book</h5>
+ </div>
+ <div class="card-body">
+  <form id="addBookForm" class="row g-2">
+   <div class="col-md-3">
+    <input type="text" id="bookTitle" autocomplete="off" class="form-control" placeholder="Title" required />
    </div>
+   <div class="col-md-3">
+    <input type="text" id="bookAuthor" autocomplete="off" class="form-control" placeholder="Author" required />
+   </div>
+   <div class="col-md-3">
+    <input type="url" id="bookCoverUrl" autocomplete="off" class="form-control" placeholder="Cover Image URL (GitHub)" />
+   </div>
+   <div class="col-md-3">
+    <input type="text" id="bookSponsor" autocomplete="off" class="form-control" placeholder="Sponsored By" />
+   </div>
+   <div class="col-md-2">
+    <select id="bookAvailability" class="form-select" required>
+     <option value="Available" selected>Available</option>
+     <option value="Checked Out">Checked Out</option>
+    </select>
+   </div>
+   <div class="col-md-2">
+    <button type="submit" class="btn btn-success w-100">Add Book</button>
+   </div>
+  </form>
+ </div>
+</div>
+
 
    <!-- All Users -->
 
@@ -279,8 +287,8 @@
     <div class="card-header">
      <h5 class="mb-0">All Users</h5>
     </div>
-    <div class="p-2">
-     <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
+    <div class="px-2 mt-2">
+     <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control" placeholder="Search by User Name...">
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allUsersTable">
@@ -304,8 +312,8 @@
     <div class="card-header">
      <h5 class="mb-0">All Book Requests History</h5>
     </div>
-    <div class="p-2">
-     <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
+    <div class="px-2 mt-2">
+     <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control" placeholder="Search by user name or book title...">
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <table class="table table-sm mb-0" id="allBookRequestsTable">
@@ -357,35 +365,35 @@
     <div class="modal-body">
      <div class="mb-3">
       <label for="fullname" class="form-label">Full Name</label>
-      <input type="text" id="fullname" class="form-control" required />
+      <input type="text" id="fullname" autocomplete="off" class="form-control" required />
       <div class="invalid-feedback">
        Please enter your full name.
       </div>
      </div>
      <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
-      <input type="email" id="email" class="form-control" required />
+      <input type="email" id="email" autocomplete="off" class="form-control" required />
       <div class="invalid-feedback">
        Please enter a valid email.
       </div>
      </div>
      <div class="mb-3">
       <label for="dob" class="form-label">Date of Birth</label>
-      <input type="date" id="dob" class="form-control" required />
+      <input type="date" id="dob" autocomplete="off" class="form-control" required />
       <div class="invalid-feedback">
        Please enter your date of birth.
       </div>
      </div>
      <div class="mb-3">
       <label for="bloodGroup" class="form-label">Blood Group</label>
-      <input type="text" id="bloodGroup" class="form-control" required />
+      <input type="text" id="bloodGroup" autocomplete="off" class="form-control" required />
       <div class="invalid-feedback">
        Please enter your blood group.
       </div>
      </div>
      <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" id="password" class="form-control" required minlength="6" />
+      <input type="password" id="password" autocomplete="off" class="form-control" required minlength="6" />
       <div class="invalid-feedback">
        Please enter a password (min 6 characters).
       </div>
@@ -494,8 +502,14 @@
   </div>
  </div>
 
-
  <!-- Conntent End-->
+ 
+ <!-- Test Scripts Here-->
+ <script>
+
+ </script>
+ <!-- Test Scripts Here-->
+ 
 
  <script type="module">
   import {
@@ -1043,11 +1057,14 @@
     signupRequestsTableBody.innerHTML = "";
 
     if (snapshot.empty) {
-     psr.classList.add("d-none");
-     return;
-    }
+ psr.classList.add("d-none");
+ adjustColumns();
+ return;
+}
 
-    psr.classList.remove("d-none");
+psr.classList.remove("d-none");
+adjustColumns();
+
 
     snapshot.forEach((docSnap) => {
      const data = docSnap.data();
@@ -1103,11 +1120,14 @@
      tbody.innerHTML = "";
 
      if (snapshot.empty) {
-      pbr.classList.add("d-none");
-      return;
-     }
+ pbr.classList.add("d-none");
+ adjustColumns();
+ return;
+}
 
-     pbr.classList.remove("d-none");
+pbr.classList.remove("d-none");
+adjustColumns();
+
 
      for (const docSnap of snapshot.docs) {
       const request = docSnap.data();
@@ -1208,21 +1228,23 @@
         const bookRef = doc(db, "books", record.bookId);
         const requestRef = doc(db, "bookRequests", requestId);
 
-        // ✅ Step 1: Mark the book as Available
+        //--- Step 1: Mark the book as Available
         await updateDoc(bookRef, {
          availability: "Available"
         });
 
-        // ✅ Step 2: Mark the request as Returned
+        //--- Step 2: Mark the request as Returned
         await updateDoc(requestRef, {
          status: "Returned"
         });
 
         showToast("Book marked as returned.", "bg-success");
+        hideLoader();
 
        } catch (err) {
         console.error("Error updating documents:", err);
         showToast("Error returning book: " + err.message, "bg-danger");
+        hideLoader();
        }
       };
 
@@ -1230,68 +1252,84 @@
      }
     });
   }
+  
   // --- Approve Signup ---
+  
   async function approveSignup(docId, data) {
-   try {
+  showLoader(); // Show loader at the beginning
+
+  try {
     // Initialize a secondary Firebase app instance
-    const secondaryApp = initializeApp(firebaseConfig,
-     "Secondary");
+    const secondaryApp = initializeApp(firebaseConfig, "Secondary");
     const secondaryAuth = getAuth(secondaryApp);
+
     // Create user with secondary app (avoids logging out the admin)
-    const userCredential = await createUserWithEmailAndPassword(secondaryAuth,
-     data.email,
-     data.password);
+    const userCredential = await createUserWithEmailAndPassword(
+      secondaryAuth,
+      data.email,
+      data.password
+    );
     const uid = userCredential.user.uid;
+
     // Store user data in Firestore
-    await setDoc(doc(db, "users", uid),
-     {
+    await setDoc(doc(db, "users", uid), {
       fullname: data.fullname,
       email: data.email,
       dob: data.dob,
       bloodGroup: data.bloodGroup,
       joinedAt: new Date().toISOString(),
       role: "user",
-     });
+    });
+
     // Delete from signupRequests collection
     await deleteDoc(doc(db, "signupRequests", docId));
+
     // Clean up the secondary app to avoid memory leaks
     await secondaryApp.delete();
-    showToast("Signup approved and user created without logging out admin.",
-     "bg-success");
-   } catch (error) {
-    showToast("Error approving signup: " + error.message,
-     "bg-danger");
-   }
+
+    showToast("Signup approved and user created without logging out admin.", "bg-success");
+  } catch (error) {
+    showToast("Error approving signup: " + error.message, "bg-danger");
+  } finally {
+    hideLoader(); // Always hide loader when operation is done or errors out
   }
+}
+
+  
+  
   // --- Add New Book ---
+addBookForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-  addBookForm.addEventListener("submit",
-   async (e) => {
-    e.preventDefault();
+  const title = document.getElementById("bookTitle").value.trim();
+  const author = document.getElementById("bookAuthor").value.trim();
+  const availability = document.getElementById("bookAvailability").value;
+  const coverUrl = document.getElementById("bookCoverUrl").value.trim();
+  const sponsor = document.getElementById("bookSponsor").value.trim();
 
-    const title = document.getElementById("bookTitle").value.trim();
-    const author = document.getElementById("bookAuthor").value.trim();
-    const availability = document.getElementById("bookAvailability").value;
-    const coverUrl = document.getElementById("bookCoverUrl").value.trim();
+  // Determine initial checkout status based on availability
+  const checkoutStatus = availability === "Checked Out" ? "Checked Out" : "Available";
 
-    // Determine initial checkout status based on availability
-    const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
+  showLoader(); // Show loader at the start
 
-    try {
-     await addDoc(collection(db, "books"), {
+  try {
+    await addDoc(collection(db, "books"), {
       title,
       author,
       availability, // e.g. "Available" / "Unavailable"
       coverUrl,
+      sponsor,
       createdAt: Date.now()
-     });
+    });
 
-     showToast("Book added successfully.", "bg-success");
-     addBookForm.reset();
-    } catch (err) {
-     showToast("Failed to add book: " + err.message, "bg-danger");
-    }
-   });
+    showToast("Book added successfully.", "bg-success");
+    addBookForm.reset();
+  } catch (err) {
+    showToast("Failed to add book: " + err.message, "bg-danger");
+  } finally {
+    hideLoader(); // Always hide loader after process completes
+  }
+});
 
 
   // --- Load All Books (Admin) ---
@@ -1331,6 +1369,7 @@
       style="aspect-ratio: 1 / 1.414; object-fit: cover; border-radius: 2px;" />
       `;
       card.appendChild(cardHeader);
+      hideLoader();
 
       // Card Body
       const cardBody = document.createElement("div");
@@ -1353,6 +1392,15 @@
       authorSpan.textContent = book.author || "Unknown";
       authorWrapper.appendChild(authorSpan);
       cardBody.appendChild(authorWrapper);
+      
+      // Sponsor
+      const sponsorWrapper = document.createElement("div");
+      sponsorWrapper.className = "book-title-wrapper overflow-hidden";
+      const sponsorSpan = document.createElement("p");
+      sponsorSpan.className = "mb-1 italic text-muted book-title";
+      sponsorSpan.textContent = book.sponsor ? `Sponsored by: ${book.sponsor}` : "No Sponsor";
+      sponsorWrapper.appendChild(sponsorSpan);
+      cardBody.appendChild(sponsorWrapper);
 
       // Badge
       const badge = document.createElement("span");
@@ -1395,6 +1443,7 @@
 
       // Save button logic
       saveBtn.onclick = () => {
+      showLoader();
        updateBookAvailability(book.id,
         availabilitySelect.value);
        originalStatus = availabilitySelect.value;
@@ -1414,7 +1463,6 @@
       cardBody.appendChild(availabilitySelect);
       cardBody.appendChild(saveBtn);
       cardBody.appendChild(deleteBtn);
-      hideLoader();
 
       // Animate scroll if overflowing
       setTimeout(() => {
@@ -1423,6 +1471,9 @@
        }
        if (authorSpan.scrollWidth > authorWrapper.clientWidth) {
         authorSpan.style.animationPlayState = 'running';
+       }
+       if (sponsorSpan.scrollWidth > sponsorWrapper.clientWidth) {
+        sponsorSpan.style.animationPlayState = 'running';
        }
       },
        50);
@@ -1433,9 +1484,9 @@
     });
   }
 
-
   confirmDeleteBtn.onclick = async () => {
    if (!bookIdToDelete) return;
+   showLoader();
 
    try {
     await deleteDoc(doc(db, "books", bookIdToDelete));
@@ -1664,9 +1715,8 @@
   });
 
 
-
-
-  // Filter card elements by text
+  // Filter card elements by text for available books
+  
   function filterCards(containerId, searchText) {
    const container = document.getElementById(containerId);
    const cards = container.querySelectorAll(".card");
@@ -1692,7 +1742,7 @@
   });
 
 
-
+  //--- Toast Notification ---
 
 
   function showToast(message, bgColor = "bg-primary") {
@@ -1733,15 +1783,44 @@
    closeBtn.addEventListener("click", dismiss);
    setTimeout(dismiss, 3000);
   }
+  
+  // --- Global Loader ---
+function showLoader() {
+  document.getElementById("loadingBackdrop").classList.remove("d-none");
+}
 
+function hideLoader() {
+  setTimeout(() => {
+    document.getElementById("loadingBackdrop").classList.add("d-none");
+  }, 1000); // 2-second delay
+}
 
-  function showLoader() {
-   document.getElementById("loadingBackdrop").classList.remove("d-none");
+  
+  //--- PSR & PBR Column Adjust ---
+  
+  function adjustColumns() {
+ const psr = document.getElementById("psr");
+ const pbr = document.getElementById("pbr");
+
+ const psrVisible = !psr.classList.contains("d-none");
+ const pbrVisible = !pbr.classList.contains("d-none");
+
+ if (psrVisible && pbrVisible) {
+  psr.classList.remove("col-12");
+  pbr.classList.remove("col-12");
+  psr.classList.add("col-lg-6");
+  pbr.classList.add("col-lg-6");
+ } else {
+  if (psrVisible) {
+   psr.classList.add("col-12");
+   psr.classList.remove("col-lg-6");
   }
-
-  function hideLoader() {
-   document.getElementById("loadingBackdrop").classList.add("d-none");
+  if (pbrVisible) {
+   pbr.classList.add("col-12");
+   pbr.classList.remove("col-lg-6");
   }
+ }
+}
 
 
 
