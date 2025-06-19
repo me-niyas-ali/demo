@@ -37,8 +37,6 @@
   animation: slideOutRight 0.4s ease forwards;
  }
 
-
-
  .book-title-wrapper {
   position: relative;
   overflow: hidden;
@@ -65,8 +63,6 @@
    transform: translateX(-100%);
   }
  }
-
-
 
 </style>
 
@@ -203,15 +199,17 @@
 
      <!-- All Books -->
 
-     <div class="card mb-3">
-      <div class="card-header">
-       <h5 class="mb-0">All Books</h5>
-      </div>
-      <div class="p-2">
-       <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
-      </div>
-      <div class="card-body p-2">
-       <div id="allBooksCardContainer" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
+     <div class="col-12">
+      <div class="card">
+       <div class="card-header">
+        <h5 class="mb-0">All Books</h5>
+       </div>
+       <div class="p-2">
+        <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+       </div>
+       <div class="card-body p-2">
+        <div id="allBooksCardContainer" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
+       </div>
       </div>
      </div>
 
