@@ -51,7 +51,7 @@
   animation: scroll-title 10s linear infinite;
   animation-play-state: paused;
  }
- 
+
  .italic {
   font-style: italic;
  }
@@ -248,36 +248,36 @@
 
 
    <!-- Add New Book -->
-<div class="card mb-3">
- <div class="card-header">
-  <h5 class="mb-0">Add New Book</h5>
- </div>
- <div class="card-body">
-  <form id="addBookForm" class="row g-2">
-   <div class="col-md-3">
-    <input type="text" id="bookTitle" autocomplete="off" class="form-control" placeholder="Title" required />
+   <div class="card mb-3">
+    <div class="card-header">
+     <h5 class="mb-0">Add New Book</h5>
+    </div>
+    <div class="card-body">
+     <form id="addBookForm" class="row g-2">
+      <div class="col-md-3">
+       <input type="text" id="bookTitle" autocomplete="off" class="form-control" placeholder="Title" required />
+      </div>
+      <div class="col-md-3">
+       <input type="text" id="bookAuthor" autocomplete="off" class="form-control" placeholder="Author" required />
+      </div>
+      <div class="col-md-3">
+       <input type="url" id="bookCoverUrl" autocomplete="off" class="form-control" placeholder="Cover Image URL (GitHub)" />
+      </div>
+      <div class="col-md-3">
+       <input type="text" id="bookSponsor" autocomplete="off" class="form-control" placeholder="Sponsored By" />
+      </div>
+      <div class="col-md-2">
+       <select id="bookAvailability" class="form-select" required>
+        <option value="Available" selected>Available</option>
+        <option value="Checked Out">Checked Out</option>
+       </select>
+      </div>
+      <div class="col-md-2">
+       <button type="submit" class="btn btn-success w-100">Add Book</button>
+      </div>
+     </form>
+    </div>
    </div>
-   <div class="col-md-3">
-    <input type="text" id="bookAuthor" autocomplete="off" class="form-control" placeholder="Author" required />
-   </div>
-   <div class="col-md-3">
-    <input type="url" id="bookCoverUrl" autocomplete="off" class="form-control" placeholder="Cover Image URL (GitHub)" />
-   </div>
-   <div class="col-md-3">
-    <input type="text" id="bookSponsor" autocomplete="off" class="form-control" placeholder="Sponsored By" />
-   </div>
-   <div class="col-md-2">
-    <select id="bookAvailability" class="form-select" required>
-     <option value="Available" selected>Available</option>
-     <option value="Checked Out">Checked Out</option>
-    </select>
-   </div>
-   <div class="col-md-2">
-    <button type="submit" class="btn btn-success w-100">Add Book</button>
-   </div>
-  </form>
- </div>
-</div>
 
 
    <!-- All Users -->
@@ -502,13 +502,13 @@
  </div>
 
  <!-- Conntent End-->
- 
+
  <!-- Test Scripts Here-->
  <script>
 
  </script>
  <!-- Test Scripts Here-->
- 
+
 
  <script type="module">
   import {
@@ -1056,13 +1056,13 @@
     signupRequestsTableBody.innerHTML = "";
 
     if (snapshot.empty) {
- psr.classList.add("d-none");
- adjustColumns();
- return;
-}
+     psr.classList.add("d-none");
+     adjustColumns();
+     return;
+    }
 
-psr.classList.remove("d-none");
-adjustColumns();
+    psr.classList.remove("d-none");
+    adjustColumns();
 
 
     snapshot.forEach((docSnap) => {
@@ -1119,13 +1119,13 @@ adjustColumns();
      tbody.innerHTML = "";
 
      if (snapshot.empty) {
- pbr.classList.add("d-none");
- adjustColumns();
- return;
-}
+      pbr.classList.add("d-none");
+      adjustColumns();
+      return;
+     }
 
-pbr.classList.remove("d-none");
-adjustColumns();
+     pbr.classList.remove("d-none");
+     adjustColumns();
 
 
      for (const docSnap of snapshot.docs) {
@@ -1251,34 +1251,36 @@ adjustColumns();
      }
     });
   }
-  
-  // --- Approve Signup ---
-  
-  async function approveSignup(docId, data) {
-  showLoader(); // Show loader at the beginning
 
-  try {
+  // --- Approve Signup ---
+
+  async function approveSignup(docId, data) {
+   showLoader(); // Show loader at the beginning
+
+   try {
     // Initialize a secondary Firebase app instance
-    const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+    const secondaryApp = initializeApp(firebaseConfig,
+     "Secondary");
     const secondaryAuth = getAuth(secondaryApp);
 
     // Create user with secondary app (avoids logging out the admin)
     const userCredential = await createUserWithEmailAndPassword(
-      secondaryAuth,
-      data.email,
-      data.password
+     secondaryAuth,
+     data.email,
+     data.password
     );
     const uid = userCredential.user.uid;
 
     // Store user data in Firestore
-    await setDoc(doc(db, "users", uid), {
+    await setDoc(doc(db, "users", uid),
+     {
       fullname: data.fullname,
       email: data.email,
       dob: data.dob,
       bloodGroup: data.bloodGroup,
       joinedAt: new Date().toISOString(),
       role: "user",
-    });
+     });
 
     // Delete from signupRequests collection
     await deleteDoc(doc(db, "signupRequests", docId));
@@ -1286,49 +1288,51 @@ adjustColumns();
     // Clean up the secondary app to avoid memory leaks
     await secondaryApp.delete();
 
-    showToast("Signup approved and user created without logging out admin.", "bg-success");
-  } catch (error) {
-    showToast("Error approving signup: " + error.message, "bg-danger");
-  } finally {
+    showToast("Signup approved and user created without logging out admin.",
+     "bg-success");
+   } catch (error) {
+    showToast("Error approving signup: " + error.message,
+     "bg-danger");
+   } finally {
     hideLoader(); // Always hide loader when operation is done or errors out
+   }
   }
-}
 
-  
-  
+
+
   // --- Add New Book ---
-addBookForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  addBookForm.addEventListener("submit", async (e) => {
+   e.preventDefault();
 
-  const title = document.getElementById("bookTitle").value.trim();
-  const author = document.getElementById("bookAuthor").value.trim();
-  const availability = document.getElementById("bookAvailability").value;
-  const coverUrl = document.getElementById("bookCoverUrl").value.trim();
-  const sponsor = document.getElementById("bookSponsor").value.trim();
+   const title = document.getElementById("bookTitle").value.trim();
+   const author = document.getElementById("bookAuthor").value.trim();
+   const availability = document.getElementById("bookAvailability").value;
+   const coverUrl = document.getElementById("bookCoverUrl").value.trim();
+   const sponsor = document.getElementById("bookSponsor").value.trim();
 
-  // Determine initial checkout status based on availability
-  const checkoutStatus = availability === "Checked Out" ? "Checked Out" : "Available";
+   // Determine initial checkout status based on availability
+   const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
 
-  showLoader(); // Show loader at the start
+   showLoader(); // Show loader at the start
 
-  try {
+   try {
     await addDoc(collection(db, "books"), {
-      title,
-      author,
-      availability, // e.g. "Available" / "Unavailable"
-      coverUrl,
-      sponsor,
-      createdAt: Date.now()
+     title,
+     author,
+     availability, // e.g. "Available" / "Unavailable"
+     coverUrl,
+     sponsor,
+     createdAt: Date.now()
     });
 
     showToast("Book added successfully.", "bg-success");
     addBookForm.reset();
-  } catch (err) {
+   } catch (err) {
     showToast("Failed to add book: " + err.message, "bg-danger");
-  } finally {
+   } finally {
     hideLoader(); // Always hide loader after process completes
-  }
-});
+   }
+  });
 
 
   // --- Load All Books (Admin) ---
@@ -1391,13 +1395,13 @@ addBookForm.addEventListener("submit", async (e) => {
       authorSpan.textContent = book.author || "Unknown";
       authorWrapper.appendChild(authorSpan);
       cardBody.appendChild(authorWrapper);
-      
+
       // Sponsor
       const sponsorWrapper = document.createElement("div");
       sponsorWrapper.className = "book-title-wrapper overflow-hidden";
       const sponsorSpan = document.createElement("p");
       sponsorSpan.className = "mb-1 italic text-muted book-title";
-      sponsorSpan.textContent = book.sponsor ? `Spon. by: ${book.sponsor}` : "No Sponsor";
+      sponsorSpan.textContent = book.sponsor ? `Spon. by: ${book.sponsor}`: "No Sponsor";
       sponsorWrapper.appendChild(sponsorSpan);
       cardBody.appendChild(sponsorWrapper);
 
@@ -1442,7 +1446,7 @@ addBookForm.addEventListener("submit", async (e) => {
 
       // Save button logic
       saveBtn.onclick = () => {
-      showLoader();
+       showLoader();
        updateBookAvailability(book.id,
         availabilitySelect.value);
        originalStatus = availabilitySelect.value;
@@ -1549,7 +1553,6 @@ addBookForm.addEventListener("submit", async (e) => {
    }
   }
 
-
   // --- Load All Users (Admin) ---
   function loadAllUsers() {
    onSnapshot(collection(db, "users"), (snapshot) => {
@@ -1558,7 +1561,6 @@ addBookForm.addEventListener("submit", async (e) => {
      const user = docSnap.data();
      const tr = document.createElement("tr");
      tr.innerHTML = `
-
 
      <td>${user.fullname}</td>
      <td>${user.email}</td>
@@ -1676,6 +1678,7 @@ addBookForm.addEventListener("submit", async (e) => {
   }
 
   // --- Generic Table Filter Utility ---
+  
   function filterTable(tableId, searchValue, columnsToCheck = [0]) {
    const filter = searchValue.toLowerCase();
    const table = document.getElementById(tableId);
@@ -1715,7 +1718,7 @@ addBookForm.addEventListener("submit", async (e) => {
 
 
   // Filter card elements by text for available books
-  
+
   function filterCards(containerId, searchText) {
    const container = document.getElementById(containerId);
    const cards = container.querySelectorAll(".card");
@@ -1729,7 +1732,6 @@ addBookForm.addEventListener("submit", async (e) => {
    });
   }
 
-
   // User dashboard: Available Books (cards)
   document.getElementById("userBookSearch")?.addEventListener("input", function () {
    filterCards("booksCardContainer", this.value);
@@ -1740,9 +1742,7 @@ addBookForm.addEventListener("submit", async (e) => {
    filterCards("allBooksCardContainer", this.value);
   });
 
-
   //--- Toast Notification ---
-
 
   function showToast(message, bgColor = "bg-primary") {
    const container = document.getElementById("toastContainer");
@@ -1782,49 +1782,45 @@ addBookForm.addEventListener("submit", async (e) => {
    closeBtn.addEventListener("click", dismiss);
    setTimeout(dismiss, 3000);
   }
-  
+
   // --- Global Loader ---
-function showLoader() {
-  document.getElementById("loadingBackdrop").classList.remove("d-none");
-}
+  function showLoader() {
+   document.getElementById("loadingBackdrop").classList.remove("d-none");
+  }
 
-function hideLoader() {
-  setTimeout(() => {
+  function hideLoader() {
+   setTimeout(() => {
     document.getElementById("loadingBackdrop").classList.add("d-none");
-  }, 1000); // 2-second delay
-}
+   }, 1000); // 2-second delay
+  }
 
-  
   //--- PSR & PBR Column Adjust ---
-  
+
   function adjustColumns() {
- const psr = document.getElementById("psr");
- const pbr = document.getElementById("pbr");
+   const psr = document.getElementById("psr");
+   const pbr = document.getElementById("pbr");
 
- const psrVisible = !psr.classList.contains("d-none");
- const pbrVisible = !pbr.classList.contains("d-none");
+   const psrVisible = !psr.classList.contains("d-none");
+   const pbrVisible = !pbr.classList.contains("d-none");
 
- if (psrVisible && pbrVisible) {
-  psr.classList.remove("col-12");
-  pbr.classList.remove("col-12");
-  psr.classList.add("col-lg-6");
-  pbr.classList.add("col-lg-6");
- } else {
-  if (psrVisible) {
-   psr.classList.add("col-12");
-   psr.classList.remove("col-lg-6");
+   if (psrVisible && pbrVisible) {
+    psr.classList.remove("col-12");
+    pbr.classList.remove("col-12");
+    psr.classList.add("col-lg-6");
+    pbr.classList.add("col-lg-6");
+   } else {
+    if (psrVisible) {
+     psr.classList.add("col-12");
+     psr.classList.remove("col-lg-6");
+    }
+    if (pbrVisible) {
+     pbr.classList.add("col-12");
+     pbr.classList.remove("col-lg-6");
+    }
+   }
   }
-  if (pbrVisible) {
-   pbr.classList.add("col-12");
-   pbr.classList.remove("col-lg-6");
-  }
- }
-}
-
-
 
  </script>
-
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
  </script>
 
