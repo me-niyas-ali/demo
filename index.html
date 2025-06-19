@@ -156,7 +156,7 @@
     <div class="row g-3 mb-3">
 
      <!-- Pending Signup Requests -->
-     <div class="col-12 col-lg-6">
+     <div class="col-12 col-lg-6" id="psr">
       <div class="card h-100">
        <div class="card-header">
         <h5 class="mb-0">Pending Signup Requests</h5>
@@ -179,7 +179,7 @@
      </div>
 
      <!-- Pending Book Requests -->
-     <div class="col-12 col-lg-6">
+     <div class="col-12 col-lg-6" id="pbr">
       <div class="card h-100">
        <div class="card-header">
         <h5 class="mb-0">Pending Book Requests</h5>
@@ -980,18 +980,26 @@
    adminSection.classList.add("d-none");
    document.getElementById("main-action-btn").classList.remove("d-none");
   }
-  
+
   // --- Load Signup Requests ---
-  
+
   function loadSignupRequests() {
+   const psr = document.getElementById("psr");
+
    onSnapshot(collection(db, "signupRequests"), (snapshot) => {
     signupRequestsTableBody.innerHTML = "";
+
+    if (snapshot.empty) {
+     psr.classList.add("d-none");
+     return;
+    }
+
+    psr.classList.remove("d-none");
+
     snapshot.forEach((docSnap) => {
      const data = docSnap.data();
      const tr = document.createElement("tr");
      tr.innerHTML = `
-
-
      <td>${data.fullname}</td>
      <td>${data.email}</td>
      <td>${data.dob}</td>
@@ -1007,21 +1015,30 @@
     });
    });
   }
-  
+
+
   // --- Load Book Requests ---
 
   function loadBookRequests() {
+   const pbr = document.getElementById("pbr");
+
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "==", "Pending")),
     async (snapshot) => {
      const tbody = document.querySelector("#bookRequestsTable tbody");
      tbody.innerHTML = "";
 
+     if (snapshot.empty) {
+      pbr.classList.add("d-none");
+      return;
+     }
+
+     pbr.classList.remove("d-none");
+
      for (const docSnap of snapshot.docs) {
       const request = docSnap.data();
       const requestId = docSnap.id;
 
-      // Get user's name
       const userSnap = await getDoc(doc(db, "users", request.userId));
       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
 
@@ -1037,15 +1054,12 @@
       </td>
       `;
 
-      // Approve book request
       tr.querySelector(".btn-success").onclick = async () => {
-       const bookRef = doc(db, "books", request.bookId);
-       const requestRef = doc(db, "bookRequests", requestId);
        try {
-        await updateDoc(bookRef, {
+        await updateDoc(doc(db, "books", request.bookId), {
          availability: "Checked Out"
         });
-        await updateDoc(requestRef, {
+        await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Checked Out"
         });
         showToast("Book approved and marked as Checked Out.", "bg-success");
@@ -1054,35 +1068,21 @@
        }
       };
 
-      // Reject book request
       tr.querySelector(".btn-danger").onclick = async () => {
-       const bookRef = doc(db, "books", request.bookId);
-       const requestRef = doc(db, "bookRequests", requestId);
        try {
-        
-        const requestSnap = await getDoc(requestRef);
-        let requestedAt = new Date().toISOString();
-        if (requestSnap.exists()) {
-         const data = requestSnap.data();
-         if (data.requestedAt) {
-          requestedAt = data.requestedAt;
-         }
-        }
-        
-        await updateDoc(requestRef, {
+        await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Rejected",
-         rejectedAt: new Date().toISOString() // ensure field is always present
+         rejectedAt: new Date().toISOString()
         });
-
-        await updateDoc(bookRef, {
+        await updateDoc(doc(db, "books", request.bookId), {
          availability: "Available"
         });
-
         showToast("Request rejected.", "bg-success");
        } catch (err) {
         showToast("Error rejecting request: " + err.message, "bg-danger");
        }
       };
+
       tbody.appendChild(tr);
      }
     }
