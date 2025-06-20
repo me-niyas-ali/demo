@@ -105,7 +105,7 @@
 
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="mb-0">Available Books</h5>
+     <h5 class="card-title m-0 d-flex justify-content-between">Available Books <span class="badge bg-secondary" id="availableBookCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control" placeholder="Search by title or author...">
@@ -119,7 +119,7 @@
 
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="mb-0">Your Book Requests & Checkouts</h5>
+     <h5 class="card-title mb-0 d-flex justify-content-between">Your Book Requests & Checkouts <span class="badge bg-secondary" id="userRequestCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control" placeholder="Search by book title...">
@@ -156,10 +156,11 @@
     <div class="row g-3 mb-3">
 
      <!-- Pending Signup Requests -->
+
      <div class="col-12 col-lg-6" id="psr">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="mb-0">Pending Signup Requests</h5>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Signup Requests <span class="badge bg-secondary" id="signupRequestCount">0</span></h5>
        </div>
        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
         <table class="table table-sm mb-0" id="signupRequestsTable">
@@ -179,10 +180,11 @@
      </div>
 
      <!-- Pending Book Requests -->
+
      <div class="col-12 col-lg-6" id="pbr">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="mb-0">Pending Book Requests</h5>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary" id="pendingBookRequestCount">0</span></h5>
        </div>
        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
         <table class="table table-sm mb-0" id="bookRequestsTable">
@@ -206,7 +208,7 @@
      <div class="col-12">
       <div class="card">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="mb-0">All Books</h5>
+        <h5 class="card-title mb-0 d-flex justify-content-between">All Books <span class="badge bg-secondary" id="allBooksCount">0</span></h5>
        </div>
        <div class="px-2 mt-2">
         <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control" placeholder="Search by title or author...">
@@ -218,10 +220,11 @@
      </div>
 
      <!-- Active Checked Out Books -->
+
      <div class="col-12">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="mb-0">Active Checked Out Books</h5>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Active Checked Out Books<span class="badge bg-secondary" id="checkedOutCount">0</span></h5>
        </div>
        <div class="px-2 mt-2">
         <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control" placeholder="Search by User Name or Book Title...">
@@ -242,7 +245,6 @@
        </div>
       </div>
      </div>
-
     </div>
    </div>
 
@@ -279,12 +281,11 @@
     </div>
    </div>
 
-
    <!-- All Users -->
 
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="mb-0">All Users</h5>
+     <h5 class="card-title mb-0 d-flex justify-content-between">All Users<span class="badge bg-secondary" id="userCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control" placeholder="Search by User Name...">
@@ -309,7 +310,7 @@
 
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="mb-0">All Book Requests History</h5>
+     <h5 class="card-title mb-0 d-flex justify-content-between">All Book Requests History<span class="badge bg-secondary" id="bookHistoryCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control" placeholder="Search by user name or book title...">
@@ -470,6 +471,7 @@
  </div>
 
  <!-- Edit Book Modal -->
+
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
    <form id="editBookForm" class="modal-content needs-validation" novalidate>
@@ -520,6 +522,7 @@
  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer" style="z-index: 1100;margin-bottom: -15px"></div>
 
  <!-- Delete Confirmation Modal -->
+
  <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
    <div class="modal-content">
@@ -539,12 +542,12 @@
      <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
      <button type="button" class="btn btn-sm btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
     </div>
-
    </div>
   </div>
  </div>
 
  <!-- Fullscreen Loader -->
+
  <div id="loadingBackdrop" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center d-none" style="z-index: 2000;">
   <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
    <span class="visually-hidden">Loading...</span>
@@ -1012,6 +1015,28 @@
      });
     }
    );
+
+   //--- Count functionality (User)---
+
+   onSnapshot(
+    query(collection(db,
+     "books"), where("availability",
+     "==",
+     "Available")),
+    (snapshot) => {
+     document.getElementById("availableBookCount").textContent = snapshot.size;
+    }
+   );
+
+   onSnapshot(
+    query(collection(db,
+     "bookRequests"), where("userId",
+     "==",
+     uid)),
+    (snapshot) => {
+     document.getElementById("userRequestCount").textContent = snapshot.size;
+    }
+   );
   }
 
   // --- Cancel book request ---
@@ -1127,6 +1152,42 @@
    loadCheckedOutBooks();
    loadAllBookRequests();
    loadRejectedBookRequests();
+
+   //--- Count functionality (Admin)---
+
+   onSnapshot(collection(db, "signupRequests"), (snapshot) => {
+    document.getElementById("signupRequestCount").textContent = snapshot.size;
+   });
+
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "==", "Pending")),
+    (snapshot) => {
+     document.getElementById("pendingBookRequestCount").textContent = snapshot.size;
+    }
+   );
+
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
+    (snapshot) => {
+     document.getElementById("checkedOutCount").textContent = snapshot.size;
+    }
+   );
+
+   onSnapshot(collection(db, "books"), (snapshot) => {
+    document.getElementById("allBooksCount").textContent = snapshot.size;
+   });
+
+   onSnapshot(collection(db, "users"), (snapshot) => {
+    document.getElementById("userCount").textContent = snapshot.size;
+   });
+
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "!=", "Pending")),
+    (snapshot) => {
+     document.getElementById("bookHistoryCount").textContent = snapshot.size;
+    }
+   );
+
   }
 
   // --- Load Signup Requests ---
@@ -1209,7 +1270,6 @@
 
      pbr.classList.remove("d-none");
      adjustColumns();
-
 
      for (const docSnap of snapshot.docs) {
       const request = docSnap.data();
