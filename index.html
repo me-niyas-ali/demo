@@ -145,12 +145,27 @@
   <div id="adminSection" class="d-none">
 
    <!-- Welcome Card -->
-   <div class="card mb-3">
-    <div class="card-body d-flex justify-content-between align-items-center p-3" style="background-color:#e6e6e6">
-     <h4 class="m-0">Admin Dashboard</h4>
-     <button id="adminLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
+   <div class="card mb-3" style="background-color:#e6e6e6">
+  <div class="card-body d-flex justify-content-between align-items-center">
+    
+    <!-- Column: h4 + badges -->
+    <div class="d-flex flex-column">
+      <h4 class="m-0">Admin Dashboard</h4>
+      <div class="d-flex gap-1 mt-2 flex-wrap">
+        <span class="badge text-bg-primary">Total Books : <span id="headerallBooksCount">0</span></span>
+        <span class="badge text-bg-primary">Total Users : <span id="headeruserCount">0</span></span>
+        <span class="badge text-bg-primary">Checked Out : <span id="headerallBooksCount">0</span></span>
+      </div>
     </div>
-   </div>
+
+    <!-- Row: Logout button -->
+    <div>
+      <button id="adminLogoutBtn" class="btn btn-outline-danger">Logout</button>
+    </div>
+    
+  </div>
+</div>
+
 
    <div class="container-fluid p-0">
     <div class="row g-3 mb-3">
@@ -1170,15 +1185,18 @@
     query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
     (snapshot) => {
      document.getElementById("checkedOutCount").textContent = snapshot.size;
+     document.getElementById("headercheckedOutCount").textContent = snapshot.size;
     }
    );
 
    onSnapshot(collection(db, "books"), (snapshot) => {
     document.getElementById("allBooksCount").textContent = snapshot.size;
+    document.getElementById("headerallBooksCount").textContent = snapshot.size;
    });
 
    onSnapshot(collection(db, "users"), (snapshot) => {
     document.getElementById("userCount").textContent = snapshot.size;
+    document.getElementById("headeruserCount").textContent = snapshot.size;
    });
 
    onSnapshot(
