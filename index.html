@@ -10,28 +10,32 @@
  * {
   font-size: 0.98em;
  }
- 
+
+ .small-t {
+  font-size: 1em;
+ }
+
 @keyframes slideInRight {
- from {
-  transform: translateX(100%);
-  opacity: 0;
+  from {
+   transform: translateX(100%);
+   opacity: 0;
+  }
+  to {
+   transform: translateX(0);
+   opacity: 1;
+  }
  }
- to {
-  transform: translateX(0);
-  opacity: 1;
- }
-}
 
 @keyframes slideOutRight {
- from {
-  transform: translateX(0);
-  opacity: 1;
+  from {
+   transform: translateX(0);
+   opacity: 1;
+  }
+  to {
+   transform: translateX(100%);
+   opacity: 0;
+  }
  }
- to {
-  transform: translateX(100%);
-  opacity: 0;
- }
-}
 
  .toast.slide-in {
   animation: slideInRight 0.4s ease forwards;
@@ -56,10 +60,6 @@
   animation-play-state: paused;
  }
 
- .italic {
-  font-style: italic;
- }
-
 @keyframes scroll-title {
   0% {
    transform: translateX(0%);
@@ -72,6 +72,32 @@
   }
  }
 
+ .italic {
+  font-style: italic;
+ }
+
+ .card-body .book-title-wrapper {
+  max-width: 100px;
+  /* prevent overflow */
+  flex-shrink: 1;
+ }
+
+ .card-body .book-title {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-title 10s linear infinite;
+  animation-play-state: paused;
+ }
+
+ .card-body > .text-end {
+  white-space: nowrap;
+  min-width: 100px;
+ }
+
+ .card-body > .d-flex.gap-2 {
+  flex-shrink: 0;
+ }
+
 </style>
 
 <body>
@@ -81,7 +107,7 @@
 
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
-    <center><h2 class="mb-0 p-2">0116 PKNS LIBRARY</h2></center>
+    <center><h2 class="mb-0 p-2">0524 PKNS LIBRARY</h2></center>
    </div>
    <div class="card-body">
     <div class="d-grid gap-4">
@@ -112,7 +138,7 @@
      <h5 class="card-title m-0 d-flex justify-content-between">Available Books <span class="badge bg-secondary" id="availableBookCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control" placeholder="Search by title or author...">
+     <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
     </div>
     <div class="card-body p-2">
      <div id="booksCardContainer" class="d-flex overflow-auto gap-2"></div>
@@ -126,7 +152,7 @@
      <h5 class="card-title mb-0 d-flex justify-content-between">Your Book Requests & Checkouts <span class="badge bg-secondary" id="userRequestCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control" placeholder="Search by book title...">
+     <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
     </div>
 
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
@@ -150,25 +176,18 @@
 
    <!-- Welcome Card -->
    <div class="card mb-3" style="background-color:#e6e6e6">
-  <div class="card-body d-flex justify-content-between align-items-center">
-    
-    <!-- Column: h4 + badges -->
-    <div class="d-flex flex-column">
-      <h4 class="m-0">Admin Dashboard</h4>
-      <div class="d-flex gap-1 mt-2 flex-wrap">
-        <span class="badge text-bg-primary">Total Books : <span id="headerallBooksCount">0</span></span>
-        <span class="badge text-bg-primary">Total Users : <span id="headeruserCount">0</span></span>
-        <span class="badge text-bg-primary">Checked Out : <span id="headerallBooksCount">0</span></span>
-      </div>
-    </div>
+    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+     <h4 class="m-0">Admin Dashboard</h4>
 
-    <!-- Row: Logout button -->
-    <div>
-      <button id="adminLogoutBtn" class="btn btn-outline-danger">Logout</button>
+     <span class="badge text-bg-success"><span id="date-time" style="font-size:0.93em">loading...</span></span>
+     <button id="adminLogoutBtn" class="btn btn-outline-danger">Logout</button>
     </div>
-    
-  </div>
-</div>
+    <div class="d-flex m-2 gap-2 p-0" style="overflow:scroll">
+     <span class="badge text-bg-primary">Total Books : <span id="headerallBooksCount">0</span></span>
+     <span class="badge text-bg-primary">Total Members : <span id="headeruserCount">0</span></span>
+     <span class="badge text-bg-primary">Checked-out Books: <span id="headercheckedOutCount">0</span></span>
+    </div>
+   </div>
 
 
    <div class="container-fluid p-0">
@@ -182,18 +201,7 @@
         <h5 class="card-title mb-0 d-flex justify-content-between">Pending Signup Requests <span class="badge bg-secondary" id="signupRequestCount">0</span></h5>
        </div>
        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-        <table class="table table-sm mb-0" id="signupRequestsTable">
-         <thead>
-          <tr>
-           <th>Full Name</th>
-           <th>Email</th>
-           <th>DOB</th>
-           <th>Blood Group</th>
-           <th>Actions</th>
-          </tr>
-         </thead>
-         <tbody></tbody>
-        </table>
+        <div id="signupRequestsCardContainer" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
      </div>
@@ -206,18 +214,7 @@
         <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary" id="pendingBookRequestCount">0</span></h5>
        </div>
        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-        <table class="table table-sm mb-0" id="bookRequestsTable">
-         <thead>
-          <tr>
-           <th>User</th>
-           <th>Title</th>
-           <th>Author</th>
-           <th>Status</th>
-           <th>Actions</th>
-          </tr>
-         </thead>
-         <tbody></tbody>
-        </table>
+        <div id="bookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
      </div>
@@ -230,7 +227,7 @@
         <h5 class="card-title mb-0 d-flex justify-content-between">All Books <span class="badge bg-secondary" id="allBooksCount">0</span></h5>
        </div>
        <div class="px-2 mt-2">
-        <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control" placeholder="Search by title or author...">
+        <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
        </div>
        <div class="card-body p-2">
         <div id="allBooksCardContainer" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
@@ -246,21 +243,10 @@
         <h5 class="card-title mb-0 d-flex justify-content-between">Active Checked Out Books<span class="badge bg-secondary" id="checkedOutCount">0</span></h5>
        </div>
        <div class="px-2 mt-2">
-        <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control" placeholder="Search by User Name or Book Title...">
+        <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
        </div>
        <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-        <table class="table table-sm mb-0" id="checkedOutBooksTable">
-         <thead>
-          <tr>
-           <th>User</th>
-           <th>Title</th>
-           <th>Author</th>
-           <th>Checked Out At</th>
-           <th>Actions</th>
-          </tr>
-         </thead>
-         <tbody></tbody>
-        </table>
+        <div id="checkedOutBooksCardContainer" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
      </div>
@@ -304,24 +290,147 @@
 
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title mb-0 d-flex justify-content-between">All Users<span class="badge bg-secondary" id="userCount">0</span></h5>
+     <h5 class="card-title mb-0 d-flex justify-content-between">
+      All Users <span class="badge bg-secondary" id="userCount">0</span>
+     </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control" placeholder="Search by User Name...">
+     <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="allUsersTable">
-      <thead>
-       <tr>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>DOB</th>
-        <th>Blood Group</th>
-        <th>Joined At</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
+     <!-- 🟢 Replace table with card container -->
+     <div id="allUsersCardContainer" class="d-flex flex-column gap-2"></div>
+    </div>
+   </div>
+
+   <!-- All Users Details Modal-->
+
+   <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+     <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title">User Profile</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+       <div class="text-center mb-3">
+        <img id="profileImg" class="rounded-circle" width="80" height="80" />
+       </div>
+       <p>
+        <strong>Name:</strong> <span id="profileName"></span>
+       </p>
+       <p>
+        <strong>Email:</strong> <span id="profileEmail"></span>
+       </p>
+       <p>
+        <strong>DOB:</strong> <span id="profileDob"></span>
+       </p>
+       <p>
+        <strong>Blood Group:</strong> <span id="profileBlood"></span>
+       </p>
+       <p>
+        <strong>Joined:</strong> <span id="profileJoined"></span>
+       </p>
+      </div>
+      <hr>
+      <div class="card">
+       <div class="card-header" style="background-color:#e6e6e6">
+        <h5 class="card-title mb-0 d-flex justify-content-between">Book Request & Checkout History<span class="badge bg-secondary" id="userRequestCount">0</span></h5>
+       </div>
+       <div class="px-2 mt-2">
+        <input type="text" id="searchUserBookHistory" class="form-control form-control-sm mb-2" placeholder="Search by book title or status...">
+       </div>
+       <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+         <table class="table table-sm table-bordered mb-0">
+          <thead>
+           <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Requested At</th>
+           </tr>
+          </thead>
+          <tbody id="userBookHistoryTable">
+           <tr><td colspan="3" class="text-center text-muted">Loading...</td></tr>
+          </tbody>
+         </table>
+        </div>
+       </div>
+      </div>
+      <div class="modal-footer">
+       <button class="btn btn-outline-primary" id="editUserBtn">Edit Profile</button>
+       <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <!-- All Users Details Edit Modal-->
+
+   <div class="modal fade" id="editUserProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+     <form id="editUserForm" class="modal-content needs-validation" novalidate>
+      <div class="modal-header">
+       <h5 class="modal-title">Edit User Profile</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+       <input type="hidden" id="editUserId" />
+
+       <div class="mb-2">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="editUserName" required />
+       </div>
+
+       <div class="mb-2">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" id="editUserEmail" required />
+       </div>
+
+       <div class="mb-2">
+        <label class="form-label">Date of Birth</label>
+        <input type="date" class="form-control" id="editUserDob" />
+       </div>
+
+       <div class="mb-2">
+        <label class="form-label">Blood Group</label>
+        <input type="text" class="form-control" id="editUserBlood" />
+       </div>
+
+       <div class="mb-2">
+        <label class="form-label">Profile Image URL</label>
+        <input type="url" class="form-control" id="editUserProfileImg" />
+       </div>
+      </div>
+      <div class="modal-footer">
+       <button type="button" class="btn btn-outline-danger me-auto" id="deleteUserBtn">Delete User</button>
+       <button type="submit" class="btn btn-primary">Save Changes</button>
+       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+     </form>
+    </div>
+   </div>
+
+   <!-- Delete User Confirmation Modal -->
+
+   <div class="modal fade" id="deleteUserConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content">
+      <div class="modal-header px-4 p-2">
+       <h5 class="modal-title">Confirm Delete</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body px-3 m-0">
+       <p id="deleteUserText" class="mb-2">
+        Are you sure you want to delete this user account?
+       </p>
+       <input type="password" class="form-control" id="adminUserDeletePassword" placeholder="Enter admin password to confirm" required />
+      </div>
+      <div class="modal-footer m-0">
+       <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+       <button type="button" class="btn btn-sm btn-danger" id="confirmDeleteUserBtn">Yes, Delete</button>
+      </div>
+     </div>
     </div>
    </div>
 
@@ -332,20 +441,10 @@
      <h5 class="card-title mb-0 d-flex justify-content-between">All Book Requests History<span class="badge bg-secondary" id="bookHistoryCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control" placeholder="Search by user name or book title...">
+     <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="allBookRequestsTable">
-      <thead>
-       <tr>
-        <th>User</th>
-        <th>Book Title</th>
-        <th>Status</th>
-        <th>Requested At</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
+     <div id="allBookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
 
@@ -356,17 +455,7 @@
      <h5 class="mb-0">Rejected Book Requests</h5>
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="rejectedRequestsTable">
-      <thead>
-       <tr>
-        <th>User</th>
-        <th>Book Title</th>
-        <th>Current Status</th>
-        <th>Rejected At</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
+     <div id="rejectedRequestsCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
   </div>
@@ -582,6 +671,13 @@
  <!-- Test Scripts Here-->
 
  <script type="module">
+  // Place these at the top of <script type="module">
+  let userProfileModal;
+  let editUserModal;
+
+
+  let serverOffset = 0;
+
 
   // --- Global Loader ---
   let finalizeLoading = () => {};
@@ -601,6 +697,62 @@
   function hideLoader() {
    finalizeLoading();
   }
+
+  //--- Server Time ---
+
+  async function syncServerTime() {
+   try {
+    const ref = doc(db, "meta", "serverTime");
+    await setDoc(ref, {
+     timestamp: serverTimestamp()
+    }); // sets server timestamp
+    const docSnap = await getDoc(ref);
+    const serverTime = docSnap.data().timestamp.toDate();
+    serverOffset = serverTime.getTime() - Date.now();
+   } catch (err) {
+    console.error("Failed to sync server time", err);
+   }
+  }
+
+  function formatDateTimeFromOffset(dateInput) {
+   if (!dateInput) return "-";
+
+   const inputDate = new Date(dateInput);
+   const serverDate = new Date(inputDate.getTime() + serverOffset);
+
+   const formattedDate = serverDate.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "2-digit"
+   }).replace(/ /g, "-");
+
+   const formattedTime = serverDate.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+   });
+
+   return `${formattedDate}, ${formattedTime}`;
+  }
+
+  await syncServerTime(); // sync offset once
+  startServerTimeClock(); // start clock for #date-time badge
+
+  function startServerTimeClock() {
+   const el = document.getElementById("date-time");
+   if (!el) return;
+
+   function update() {
+    const now = new Date();
+    const serverNow = new Date(now.getTime() + serverOffset);
+    el.innerHTML = formatDateTimeFromOffset(serverNow).replace(", ", "<br>");
+   }
+
+   update();
+   setInterval(update, 1000);
+  }
+
 
   import {
    EmailAuthProvider,
@@ -898,8 +1050,8 @@
         // Create card container
         const card = document.createElement("div");
         card.className = "card";
-        card.style.minWidth = "190px";
-        card.style.maxWidth = "190px";
+        card.style.minWidth = "170px";
+        card.style.maxWidth = "170px";
 
         // Determine badge color
         let badgeColor = "secondary";
@@ -913,8 +1065,8 @@
         cardHeader.className = "card-header text-center";
         cardHeader.innerHTML = `
         <img src="${coverImage}" alt="Book Cover"
-        class="img-fluid w-100"
-        style="aspect-ratio: 1 / 1.414; object-fit: cover; border-radius: 2px;" />
+        class="img-fluid"
+        style="aspect-ratio: 1 / 1.414;width:90%;object-fit: cover; border-radius: 2px;" />
         `;
         card.appendChild(cardHeader);
 
@@ -925,8 +1077,7 @@
         // Title scroll wrapper
         const titleWrapper = document.createElement("div");
         titleWrapper.className = "book-title-wrapper";
-
-        const titleSpan = document.createElement("h5");
+        const titleSpan = document.createElement("h6");
         titleSpan.className = "book-title";
         titleSpan.textContent = book.title || "Untitled";
         titleWrapper.appendChild(titleSpan);
@@ -935,7 +1086,6 @@
         // Author scroll wrapper
         const authorWrapper = document.createElement("div");
         authorWrapper.className = "book-title-wrapper";
-
         const authorSpan = document.createElement("h6");
         authorSpan.className = "book-title text-muted";
         authorSpan.textContent = book.author || "Unknown";
@@ -1028,12 +1178,118 @@
       tr.innerHTML = `
       <td>${req.title}</td>
       <td>${req.status}</td>
-      <td>${req.requestedAt.toLocaleString()}</td>
+      <td>${formatDateTimeFromOffset(req.requestedAt)}</td>
       `;
       historyTableBody.appendChild(tr);
      });
     }
    );
+
+   // --- Cancel book request ---
+
+   async function cancelBookRequest(bookId) {
+    showLoader();
+    try {
+     const user = auth.currentUser;
+     if (!user) {
+      showToast("You must be logged in!", "bg-warning");
+      return hideLoader();
+     }
+
+     const reqSnap = await getDocs(query(
+      collection(db, "bookRequests"),
+      where("userId", "==", user.uid),
+      where("bookId", "==", bookId),
+      where("status", "==", "Pending")
+     ));
+
+     if (reqSnap.empty) {
+      showToast("No pending request found to cancel.", "bg-warning");
+      return hideLoader();
+     }
+
+     await deleteDoc(reqSnap.docs[0].ref);
+     await updateDoc(doc(db, "books", bookId), {
+      availability: "Available"
+     });
+     showToast("Request cancelled successfully.", "bg-success");
+
+    } catch (err) {
+     showToast("Failed to cancel request: " + err.message, "bg-danger");
+    } finally {
+     hideLoader();
+    }
+   }
+
+   // --- Request book ---
+
+   async function requestBook(bookId) {
+    showLoader();
+    try {
+     const user = auth.currentUser;
+     if (!user) {
+      showToast("You must be logged in!", "bg-warning");
+      return hideLoader();
+     }
+
+     const activeRequestsSnap = await getDocs(query(
+      collection(db, "bookRequests"),
+      where("userId", "==", user.uid),
+      where("status", "in", ["Pending", "Checked Out"])
+     ));
+     if (activeRequestsSnap.size >= 3) {
+      showToast("You can only have up to 3 active book requests.", "bg-warning");
+      return hideLoader();
+     }
+
+     const bookRef = doc(db, "books", bookId);
+     const bookSnap = await getDoc(bookRef);
+     if (!bookSnap.exists()) {
+      showToast("Book not found!", "bg-danger");
+      return hideLoader();
+     }
+
+     const book = bookSnap.data();
+     const coverUrl = book.coverUrl || "";
+
+     const existing = await getDocs(query(
+      collection(db, "bookRequests"),
+      where("userId", "==", user.uid),
+      where("bookId", "==", bookId),
+      where("status", "in", ["Pending", "Checked Out"])
+     ));
+     if (!existing.empty) {
+      showToast("You've already requested or checked out this book.", "bg-warning");
+      return hideLoader();
+     }
+
+     const userSnap = await getDoc(doc(db, "users", user.uid));
+     const userData = userSnap.exists() ? userSnap.data(): {};
+
+     await addDoc(collection(db, "bookRequests"), {
+      userId: user.uid,
+      userName: userData.fullname || "",
+      userEmail: userData.email || "",
+      bookId,
+      title: book.title,
+      author: book.author,
+      coverUrl: book.coverUrl || "", // 🟢 Add this line
+      status: "Pending",
+      requestedAt: new Date().toISOString()
+     });
+
+
+     await updateDoc(bookRef, {
+      availability: "Requested"
+     });
+     showToast("Book request sent for approval.", "bg-success");
+
+    } catch (err) {
+     showToast("Error requesting book: " + err.message, "bg-danger");
+    } finally {
+     hideLoader();
+    }
+   }
 
    //--- Count functionality (User)---
 
@@ -1057,103 +1313,6 @@
     }
    );
   }
-
-  // --- Cancel book request ---
-
-  async function cancelBookRequest(bookId) {
-   showLoader();
-   try {
-    const user = auth.currentUser;
-    if (!user) {
-     showToast("You must be logged in!", "bg-warning");
-     return hideLoader();
-    }
-
-    const reqSnap = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("bookId", "==", bookId),
-     where("status", "==", "Pending")
-    ));
-
-    if (reqSnap.empty) {
-     showToast("No pending request found to cancel.", "bg-warning");
-     return hideLoader();
-    }
-
-    await deleteDoc(reqSnap.docs[0].ref);
-    await updateDoc(doc(db, "books", bookId), {
-     availability: "Available"
-    });
-    showToast("Request cancelled successfully.", "bg-success");
-
-   } catch (err) {
-    showToast("Failed to cancel request: " + err.message, "bg-danger");
-   } finally {
-    hideLoader();
-   }
-  }
-
-  // --- Request book ---
-
-  async function requestBook(bookId) {
-   showLoader();
-   try {
-    const user = auth.currentUser;
-    if (!user) {
-     showToast("You must be logged in!", "bg-warning");
-     return hideLoader();
-    }
-
-    const activeRequestsSnap = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("status", "in", ["Pending", "Checked Out"])
-    ));
-    if (activeRequestsSnap.size >= 3) {
-     showToast("You can only have up to 3 active book requests.", "bg-warning");
-     return hideLoader();
-    }
-
-    const bookRef = doc(db, "books", bookId);
-    const bookSnap = await getDoc(bookRef);
-    if (!bookSnap.exists()) {
-     showToast("Book not found!", "bg-danger");
-     return hideLoader();
-    }
-
-    const existing = await getDocs(query(
-     collection(db, "bookRequests"),
-     where("userId", "==", user.uid),
-     where("bookId", "==", bookId),
-     where("status", "in", ["Pending", "Checked Out"])
-    ));
-    if (!existing.empty) {
-     showToast("You've already requested or checked out this book.", "bg-warning");
-     return hideLoader();
-    }
-
-    const book = bookSnap.data();
-    await addDoc(collection(db, "bookRequests"), {
-     userId: user.uid,
-     bookId,
-     title: book.title,
-     author: book.author,
-     status: "Pending",
-     requestedAt: new Date().toISOString()
-    });
-    await updateDoc(bookRef, {
-     availability: "Requested"
-    });
-    showToast("Book request sent for approval.", "bg-success");
-
-   } catch (err) {
-    showToast("Error requesting book: " + err.message, "bg-danger");
-   } finally {
-    hideLoader();
-   }
-  }
-
 
   // --- Show Admin Dashboard ---
 
@@ -1218,71 +1377,100 @@
    const psr = document.getElementById("psr");
 
    onSnapshot(collection(db, "signupRequests"), (snapshot) => {
-    signupRequestsTableBody.innerHTML = "";
+    const container = document.getElementById("signupRequestsCardContainer");
+    container.innerHTML = "";
 
     if (snapshot.empty) {
      psr.classList.add("d-none");
-     adjustColumns();
      return;
     }
 
     psr.classList.remove("d-none");
-    adjustColumns();
 
     snapshot.forEach((docSnap) => {
      const data = docSnap.data();
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
-     <td>${data.fullname}</td>
-     <td>${data.email}</td>
-     <td>${data.dob}</td>
-     <td>${data.bloodGroup}</td>
-     <td>
-     <button class="btn btn-sm btn-success me-2">Approve</button>
-     <button class="btn btn-sm btn-danger">Reject</button>
-     </td>
+     const card = document.createElement("div");
+     card.className = "card mb-2 shadow-sm border-1 transaction-card";
+
+     const cardBody = document.createElement("div");
+     cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+
+     const left = document.createElement("div");
+     left.className = "d-flex align-items-center";
+
+     const avatar = document.createElement("div");
+     avatar.className = "rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3";
+     avatar.style.width = "48px";
+     avatar.style.height = "48px";
+     avatar.style.fontSize = "20px";
+     avatar.textContent = data.fullname?.charAt(0).toUpperCase() || "👤";
+
+     const info = document.createElement("div");
+     info.innerHTML = `
+     <h6 class="mb-1 fw-semibold">${data.fullname}</h6>
+     <h6 class="mb-1 small-t text-muted">E-mail Id : ${data.email}</h6>
+     <h6 class="mb-1 small-t text-muted">Blood Group : ${data.bloodGroup || "N/A"}</h6>
+     <h6 class="mb-1 small-t text-muted">D-O-B : ${data.dob || "-"}</h6>
      `;
 
-     // Approve button
-     tr.querySelector(".btn-success").onclick = async () => {
+     left.appendChild(avatar);
+     left.appendChild(info);
+
+     const actions = document.createElement("div");
+     actions.className = "text-end d-flex flex-column gap-2";
+
+     const approveBtn = document.createElement("button");
+     approveBtn.className = "btn btn-sm btn-success";
+     approveBtn.textContent = "Approve";
+     approveBtn.onclick = async () => {
       showLoader();
       try {
        await approveSignup(docSnap.id, data);
        showToast(`Signup approved for ${data.fullname}`, "bg-success");
-       hideLoader();
       } catch (err) {
        showToast(`Error approving: ${err.message}`, "bg-danger");
+      } finally {
        hideLoader();
       }
      };
 
-     // Reject button
-     tr.querySelector(".btn-danger").onclick = async () => {
+     const rejectBtn = document.createElement("button");
+     rejectBtn.className = "btn btn-sm btn-danger";
+     rejectBtn.textContent = "Reject";
+     rejectBtn.onclick = async () => {
       showLoader();
       try {
        await deleteDoc(doc(db, "signupRequests", docSnap.id));
        showToast(`Signup request rejected for ${data.fullname}`, "bg-danger");
-       hideLoader();
       } catch (err) {
        showToast(`Error rejecting: ${err.message}`, "bg-danger");
+      } finally {
        hideLoader();
       }
      };
-     signupRequestsTableBody.appendChild(tr);
+
+     actions.appendChild(approveBtn);
+     actions.appendChild(rejectBtn);
+
+     cardBody.appendChild(left);
+     cardBody.appendChild(actions);
+     card.appendChild(cardBody);
+     container.appendChild(card);
     });
    });
   }
+
 
   // --- Load Book Requests ---
 
   function loadBookRequests() {
    const pbr = document.getElementById("pbr");
+   const container = document.getElementById("bookRequestsCardContainer");
 
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "==", "Pending")),
     async (snapshot) => {
-     const tbody = document.querySelector("#bookRequestsTable tbody");
-     tbody.innerHTML = "";
+     container.innerHTML = "";
 
      if (snapshot.empty) {
       pbr.classList.add("d-none");
@@ -1300,32 +1488,51 @@
       const userSnap = await getDoc(doc(db, "users", request.userId));
       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-      <td>${userName}</td>
-      <td>${request.title}</td>
-      <td>${request.author}</td>
-      <td>${request.status}</td>
-      <td>
-      <button class="btn btn-sm btn-success me-2">Approve</button>
-      <button class="btn btn-sm btn-danger">Reject</button>
-      </td>
+      const card = document.createElement("div");
+      card.className = "card mb-2 shadow-sm border-1 transaction-card";
+
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+
+      // --- Left Section (Book cover) ---
+      const left = document.createElement("div");
+      left.className = "d-flex align-items-center";
+
+      const coverImg = document.createElement("img");
+      coverImg.src = request.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      coverImg.alt = "Book Cover";
+      coverImg.className = "rounded me-3";
+      coverImg.style.width = "48px";
+      coverImg.style.height = "64px";
+      coverImg.style.objectFit = "cover";
+
+      const info = document.createElement("div");
+      info.innerHTML = `
+      <h6 class="mb-1 fw-semibold">${request.title}</h6>
+      <small class="text-muted">${request.author || "Unknown Author"}</small>
+      <h6 class="mb-1">${request.status}</h6>
+      <small class="text-muted">${userName}</small>
       `;
 
-      // --- Approve Button ---
-      tr.querySelector(".btn-success").onclick = async () => {
-       showLoader();
-       await new Promise((resolve) => setTimeout(resolve, 800));
+      left.appendChild(coverImg);
+      left.appendChild(info);
 
+      // --- Right Buttons Section ---
+      const right = document.createElement("div");
+      right.className = "text-end d-flex flex-column gap-2";
+
+      const approveBtn = document.createElement("button");
+      approveBtn.className = "btn btn-sm btn-success";
+      approveBtn.textContent = "Approve";
+      approveBtn.onclick = async () => {
+       showLoader();
        try {
         await updateDoc(doc(db, "books", request.bookId), {
          availability: "Checked Out"
         });
-
         await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Checked Out"
         });
-
         showToast("Book approved and marked as Checked Out.", "bg-success");
        } catch (err) {
         showToast("Error approving request: " + err.message, "bg-danger");
@@ -1334,21 +1541,19 @@
        }
       };
 
-      // --- Reject Button ---
-      tr.querySelector(".btn-danger").onclick = async () => {
+      const rejectBtn = document.createElement("button");
+      rejectBtn.className = "btn btn-sm btn-danger";
+      rejectBtn.textContent = "Reject";
+      rejectBtn.onclick = async () => {
        showLoader();
-       await new Promise((resolve) => setTimeout(resolve, 800)); // wait 1 sec
-
        try {
         await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Rejected",
          rejectedAt: new Date().toISOString()
         });
-
         await updateDoc(doc(db, "books", request.bookId), {
          availability: "Available"
         });
-
         showToast("Request rejected.", "bg-success");
        } catch (err) {
         showToast("Error rejecting request: " + err.message, "bg-danger");
@@ -1356,7 +1561,14 @@
         hideLoader();
        }
       };
-      tbody.appendChild(tr);
+
+      right.appendChild(approveBtn);
+      right.appendChild(rejectBtn);
+
+      cardBody.appendChild(left);
+      cardBody.appendChild(right);
+      card.appendChild(cardBody);
+      container.appendChild(card);
      }
     }
    );
@@ -1365,55 +1577,85 @@
   // --- Load All Checked Out Books ---
 
   function loadCheckedOutBooks() {
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
+   const container = document.getElementById("checkedOutBooksCardContainer");
+
+   onSnapshot(query(collection(db, "bookRequests"),
+    where("status", "==", "Checked Out")),
     async (snapshot) => {
-     const tbody = document.querySelector("#checkedOutBooksTable tbody");
-     tbody.innerHTML = "";
+     container.innerHTML = "";
+
      for (const docSnap of snapshot.docs) {
       const record = docSnap.data();
       const requestId = docSnap.id;
-      // Get user's name
+
       const userSnap = await getDoc(doc(db, "users", record.userId));
       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
 
-      <td>${userName}</td>
-      <td>${record.title}</td>
-      <td>${record.author}</td>
-      <td>${new Date(record.requestedAt).toLocaleString()}</td>
-      <td>
-      <button class="btn btn-sm btn-warning">Return</button>
-      </td>
+      const card = document.createElement("div");
+      card.className = "card mb-0 shadow-sm border-1 user-card";
+
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+
+      const left = document.createElement("div");
+      left.className = "d-flex align-items-center";
+
+      const cover = document.createElement("img");
+      cover.src = record.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      cover.alt = "Book Cover";
+      cover.className = "rounded me-3";
+      cover.style.width = "48px";
+      cover.style.height = "64px";
+      cover.style.objectFit = "cover";
+
+      const bookInfo = document.createElement("div");
+      bookInfo.innerHTML = `
+      <h6 class="mb-1 fw-semibold">${record.title}</h6>
+      <small class="text-muted">Checked Out</small>
       `;
-      // Handle return action
-      tr.querySelector("button").onclick = async () => {
+
+      left.appendChild(cover);
+      left.appendChild(bookInfo);
+
+      const right = document.createElement("div");
+      right.className = "text-end";
+      right.innerHTML = `
+      <h6 class="mb-1 fw-bold">${userName}</h6>
+      <small class="text-muted">${formatDateTimeFromOffset(record.requestedAt)}</small>
+      `;
+
+      const returnBtn = document.createElement("button");
+      returnBtn.className = "btn btn-sm btn-warning";
+      returnBtn.textContent = "Return";
+      returnBtn.onclick = async () => {
        showLoader();
        try {
-        const bookRef = doc(db, "books", record.bookId);
-        const requestRef = doc(db, "bookRequests", requestId);
-
-        await updateDoc(bookRef, {
+        await updateDoc(doc(db, "books", record.bookId), {
          availability: "Available"
         });
 
-        await updateDoc(requestRef, {
+        await updateDoc(doc(db, "bookRequests", requestId), {
          status: "Returned"
         });
 
         showToast("Book marked as returned.", "bg-success");
-
        } catch (err) {
-        console.error("Error updating documents:", err);
         showToast("Error returning book: " + err.message, "bg-danger");
        } finally {
         hideLoader();
        }
       };
-      tbody.appendChild(tr);
+
+      cardBody.appendChild(left);
+      cardBody.appendChild(right);
+      cardBody.appendChild(returnBtn);
+      card.appendChild(cardBody);
+      container.appendChild(card);
      }
-    });
+    }
+   );
   }
+
 
   // --- Approve Signup ---
 
@@ -1442,14 +1684,12 @@
       dob: data.dob,
       bloodGroup: data.bloodGroup,
       joinedAt: new Date().toISOString(),
-      role: "user",
+      profileUrl: "https://cdn-icons-png.flaticon.com/512/10337/10337609.png",
+      role: "user"
      });
 
     // Delete from signupRequests collection
     await deleteDoc(doc(db, "signupRequests", docId));
-
-    // Clean up the secondary app to avoid memory leaks
-    await secondaryApp.delete();
 
     showToast("Signup approved and user created without logging out admin.",
      "bg-success");
@@ -1463,38 +1703,39 @@
 
   // --- Add New Book ---
 
-  addBookForm.addEventListener("submit", async (e) => {
-   e.preventDefault();
+  addBookForm.addEventListener("submit",
+   async (e) => {
+    e.preventDefault();
 
-   const title = document.getElementById("bookTitle").value.trim();
-   const author = document.getElementById("bookAuthor").value.trim();
-   const availability = document.getElementById("bookAvailability").value;
-   const coverUrl = document.getElementById("bookCoverUrl").value.trim();
-   const sponsor = document.getElementById("bookSponsor").value.trim();
+    const title = document.getElementById("bookTitle").value.trim();
+    const author = document.getElementById("bookAuthor").value.trim();
+    const availability = document.getElementById("bookAvailability").value;
+    const coverUrl = document.getElementById("bookCoverUrl").value.trim();
+    const sponsor = document.getElementById("bookSponsor").value.trim();
 
-   // Determine initial checkout status based on availability
-   const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
+    // Determine initial checkout status based on availability
+    const checkoutStatus = availability === "Checked Out" ? "Checked Out": "Available";
 
-   showLoader(); // Show loader at the start
+    showLoader(); // Show loader at the start
 
-   try {
-    await addDoc(collection(db, "books"), {
-     title,
-     author,
-     availability, // e.g. "Available" / "Unavailable"
-     coverUrl,
-     sponsor,
-     createdAt: Date.now()
-    });
+    try {
+     await addDoc(collection(db, "books"), {
+      title,
+      author,
+      availability, // e.g. "Available" / "Unavailable"
+      coverUrl,
+      sponsor,
+      createdAt: Date.now()
+     });
 
-    showToast("Book added successfully.", "bg-success");
-    addBookForm.reset();
-   } catch (err) {
-    showToast("Failed to add book: " + err.message, "bg-danger");
-   } finally {
-    hideLoader(); // Always hide loader after process completes
-   }
-  });
+     showToast("Book added successfully.", "bg-success");
+     addBookForm.reset();
+    } catch (err) {
+     showToast("Failed to add book: " + err.message, "bg-danger");
+    } finally {
+     hideLoader(); // Always hide loader after process completes
+    }
+   });
 
   // --- Load All Books (Admin) ---
 
@@ -1521,17 +1762,17 @@
       // Create card container
       const card = document.createElement("div");
       card.className = "card";
-      card.style.minWidth = "190px";
-      card.style.maxWidth = "190px";
+      card.style.minWidth = "170px";
+      card.style.maxWidth = "170px";
 
-      // Card Header with Cover
+      // Cover Image
       const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
       const cardHeader = document.createElement("div");
       cardHeader.className = "card-header text-center";
       cardHeader.innerHTML = `
       <img src="${coverImage}" alt="Book Cover"
-      class="img-fluid w-100"
-      style="aspect-ratio: 1 / 1.414; object-fit: cover; border-radius: 2px;" />
+      class="img-fluid"
+      style="aspect-ratio: 1 / 1.414;width:80%;object-fit: cover; border-radius: 2px;" />
       `;
       card.appendChild(cardHeader);
       hideLoader();
@@ -1673,11 +1914,28 @@
 
    showLoader();
    try {
+    // 1. Update the book document
     await updateDoc(doc(db, "books", bookId), updatedBook);
-    showToast("Book updated successfully.", "bg-success");
+
+    // 2. Fetch all bookRequests for this book
+    const reqQuery = query(collection(db, "bookRequests"), where("bookId", "==", bookId));
+    const reqSnapshot = await getDocs(reqQuery);
+
+    // 3. Update each bookRequest to match the updated book data
+    for (const reqDoc of reqSnapshot.docs) {
+     await updateDoc(reqDoc.ref, {
+      title: updatedBook.title,
+      author: updatedBook.author,
+      coverUrl: updatedBook.coverUrl,
+      sponsor: updatedBook.sponsor,
+      availability: updatedBook.availability
+     });
+    }
+
+    showToast("Book and all related requests updated.", "bg-success");
     editBookModal.hide();
    } catch (err) {
-    showToast("Error updating book: " + err.message, "bg-danger");
+    showToast("Error updating: " + err.message, "bg-danger");
    } finally {
     hideLoader();
    }
@@ -1735,128 +1993,377 @@
   }
 
   // --- Load All Users (Admin) ---
-  function loadAllUsers() {
-   onSnapshot(collection(db, "users"), (snapshot) => {
-    allUsersTableBody.innerHTML = "";
-    snapshot.forEach((docSnap) => {
-     const user = docSnap.data();
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
 
-     <td>${user.fullname}</td>
-     <td>${user.email}</td>
-     <td>${user.dob}</td>
-     <td>${user.bloodGroup}</td>
-     <td>${new Date(user.joinedAt).toLocaleString()}</td>
+  function loadAllUsers() {
+   const container = document.getElementById("allUsersCardContainer");
+
+   onSnapshot(collection(db, "users"), (snapshot) => {
+    container.innerHTML = "";
+    snapshot.forEach((docSnap) => {
+     const user = {
+      id: docSnap.id, ...docSnap.data()
+     };
+
+     const card = document.createElement("div");
+     card.className = "card mb-0 shadow-sm border-1 user-card";
+
+     const cardBody = document.createElement("div");
+     cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+
+     // Left Section
+     const left = document.createElement("div");
+     left.className = "d-flex align-items-center";
+
+     // Profile circle
+     const profileImg = document.createElement("img");
+     profileImg.src = user.profileUrl || "https://via.placeholder.com/48?text=👤";
+     profileImg.alt = "Profile";
+     profileImg.className = "rounded-circle me-3";
+     profileImg.style.width = "48px";
+     profileImg.style.height = "48px";
+     profileImg.style.objectFit = "cover";
+
+
+     // Name & Email
+     const nameEmail = document.createElement("div");
+     nameEmail.innerHTML = `<h6 class="mb-1 fw-semibold">${user.fullname}</h6><small class="text-muted">${user.email}</small>`;
+     left.appendChild(profileImg);
+     left.appendChild(nameEmail);
+
+     // Right Section
+     const right = document.createElement("div");
+     right.className = "text-end";
+     right.innerHTML = `
+     <h6 class="mb-1 fw-bold">${user.bloodGroup || "N/A"}</h6>
+     <small class="text-muted">${formatDateTimeFromOffset(user.joinedAt)}</small>
      `;
-     allUsersTableBody.appendChild(tr);
+
+     // View/Edit button
+     const actionBtn = document.createElement("div");
+     actionBtn.className = "justify-content-center gap-2";
+     const viewBtn = document.createElement("button");
+     viewBtn.className = "btn btn-secondary btn-sm";
+     viewBtn.textContent = "Edit";
+     viewBtn.onclick = () => openUserProfileModal(user);
+     actionBtn.appendChild(viewBtn);
+
+     // Combine
+     cardBody.appendChild(left);
+     cardBody.appendChild(right);
+     cardBody.appendChild(actionBtn);
+     card.appendChild(cardBody);
+     container.appendChild(card);
+
     });
    });
   }
 
+  // -- Open User Detail Modal---
+
+  document.addEventListener("DOMContentLoaded", () => {
+   userProfileModal = new bootstrap.Modal(document.getElementById("userProfileModal"));
+   editUserModal = new bootstrap.Modal(document.getElementById("editUserProfileModal"));
+
+   window.openUserProfileModal = function (user) {
+    window.currentUserForEdit = user;
+
+    document.getElementById("editUserId").value = user.id;
+    document.getElementById("profileImg").src = user.profileUrl || "https://via.placeholder.com/80?text=👤";
+    document.getElementById("profileName").textContent = user.fullname;
+    document.getElementById("profileEmail").textContent = user.email;
+    document.getElementById("profileDob").textContent = user.dob;
+    document.getElementById("profileBlood").textContent = user.bloodGroup;
+    document.getElementById("profileJoined").textContent = user.joinedAt;
+
+    // Hide edit button for admin accounts
+    document.getElementById("editUserBtn").classList.toggle("d-none", user.role === "admin");
+
+    // Book history logic
+    const tableBody = document.getElementById("userBookHistoryTable");
+    const searchInput = document.getElementById("searchUserBookHistory");
+
+    tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Loading...</td></tr>`;
+    searchInput.value = ""; // reset search
+
+    const q = query(collection(db, "bookRequests"), where("userId", "==", user.id));
+
+    getDocs(q).then((snapshot) => {
+     if (snapshot.empty) {
+      tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">No history found.</td></tr>`;
+      return;
+     }
+
+     const sorted = snapshot.docs
+     .map(doc => {
+      const data = doc.data();
+      return {
+       title: data.title,
+       status: data.status,
+       requestedAt: new Date(data.requestedAt),
+       html: `
+       <tr>
+       <td>${data.title}</td>
+       <td>${data.status}</td>
+       <td>${new Date(data.requestedAt).toLocaleString()}</td>
+       </tr>
+       `
+      };
+     })
+     .sort((a, b) => b.requestedAt - a.requestedAt);
+
+     function renderRows(filteredRows) {
+      tableBody.innerHTML = "";
+      if (filteredRows.length === 0) {
+       tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">No matches found.</td></tr>`;
+       return;
+      }
+      filteredRows.forEach(row => {
+       tableBody.insertAdjacentHTML("beforeend", row.html);
+      });
+     }
+
+     renderRows(sorted);
+
+     searchInput.oninput = function () {
+      const keyword = this.value.trim().toLowerCase();
+      const filtered = sorted.filter(row =>
+       row.title.toLowerCase().includes(keyword) ||
+       row.status.toLowerCase().includes(keyword)
+      );
+      renderRows(filtered);
+     };
+    }).catch(() => {
+     tableBody.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Error loading history.</td></tr>`;
+    });
+
+    userProfileModal.show();
+   };
+
+   // --- Open User Edit Modal
+
+   document.getElementById("editUserBtn").onclick = () => {
+    const user = window.currentUserForEdit;
+    document.getElementById("editUserId").value = user.id;
+    document.getElementById("editUserName").value = user.fullname;
+    document.getElementById("editUserEmail").value = user.email;
+    document.getElementById("editUserDob").value = user.dob;
+    document.getElementById("editUserBlood").value = user.bloodGroup;
+    document.getElementById("editUserProfileImg").value = user.profileUrl || "";
+    userProfileModal.hide();
+    editUserModal.show();
+   };
+  });
+
+  // -- Update User Detail ---
+
+  document.getElementById("editUserForm").addEventListener("submit", async (e) => {
+   e.preventDefault();
+   if (!editUserForm.checkValidity()) return;
+
+   const userId = document.getElementById("editUserId").value;
+   const updatedUser = {
+    fullname: document.getElementById("editUserName").value.trim(),
+    email: document.getElementById("editUserEmail").value.trim(),
+    dob: document.getElementById("editUserDob").value,
+    bloodGroup: document.getElementById("editUserBlood").value.trim(),
+    profileUrl: document.getElementById("editUserProfileImg").value.trim(),
+   };
+
+   showLoader();
+   try {
+    // Update users collection
+    await updateDoc(doc(db, "users", userId), updatedUser);
+
+    // Update related bookRequests (if you want to sync fullname/email into requests too)
+    const reqQuery = query(collection(db, "bookRequests"), where("userId", "==", userId));
+    const reqSnap = await getDocs(reqQuery);
+
+    for (const docSnap of reqSnap.docs) {
+     await updateDoc(docSnap.ref, {
+      userName: updatedUser.fullname,
+      userEmail: updatedUser.email
+     });
+    }
+
+    showToast("User profile and related data updated.", "bg-success");
+    editUserModal.hide();
+   } catch (err) {
+    showToast("Failed to update user: " + err.message, "bg-danger");
+   } finally {
+    hideLoader();
+   }
+  });
+
+  // -- Delete User ---
+
+  const deleteUserModal = new bootstrap.Modal(document.getElementById("deleteUserConfirmModal"));
+  const confirmDeleteUserBtn = document.getElementById("confirmDeleteUserBtn");
+  const deleteUserBtn = document.getElementById("deleteUserBtn");
+
+  deleteUserBtn.onclick = () => {
+   const user = window.currentUserForEdit;
+   if (user.role === "admin") {
+    showToast("Cannot delete admin accounts.", "bg-warning");
+    return;
+   }
+
+   document.getElementById("deleteUserText").innerHTML =
+   `Are you sure you want to delete <span class="fw-bold text-danger">"${user.fullname}"</span>?`;
+
+   editUserModal.hide();
+   deleteUserModal.show();
+  };
+
+  confirmDeleteUserBtn.onclick = async () => {
+   const password = document.getElementById("adminUserDeletePassword").value.trim();
+   const userToDelete = window.currentUserForEdit;
+
+   if (!password) {
+    showToast("Please enter admin password to confirm.", "bg-warning");
+    return;
+   }
+
+   const adminUser = auth.currentUser;
+   const credential = EmailAuthProvider.credential(adminUser.email, password);
+
+   showLoader();
+   try {
+    await reauthenticateWithCredential(adminUser, credential);
+    await deleteDoc(doc(db, "users", userToDelete.id));
+
+    deleteUserModal.hide();
+    showToast("User deleted successfully.", "bg-success");
+   } catch (err) {
+    showToast("Error deleting user: " + err.message, "bg-danger");
+   } finally {
+    document.getElementById("adminUserDeletePassword").value = "";
+    hideLoader();
+   }
+  };
+
+
   // --- Load All Book Request History (Admin) ---
 
   function loadAllBookRequests() {
-   const tbody = document.querySelector("#allBookRequestsTable tbody");
+   const container = document.getElementById("allBookRequestsCardContainer");
 
-   onSnapshot(collection(db, "bookRequests"), async (snapshot) => {
-    tbody.innerHTML = "";
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "!=", "Pending")),
+    (snapshot) => {
+     container.innerHTML = "";
 
-    // Convert docs to array and sort manually
-    const sortedDocs = snapshot.docs
-    .map(docSnap => {
-     const data = docSnap.data();
-     return {
-      ...data,
-      id: docSnap.id,
-      requestedAt: new Date(data.requestedAt || 0), // fallback to epoch if missing
-     };
-    })
-    .sort((a, b) => b.requestedAt - a.requestedAt); // newest first
+     const sortedDocs = snapshot.docs
+     .map(doc => ({
+      id: doc.id, ...doc.data()
+     }))
+     .sort((a, b) => new Date(b.requestedAt || b.rejectedAt) - new Date(a.requestedAt || a.rejectedAt));
 
-    for (const request of sortedDocs) {
-     // Get user name
-     let userName = "Unknown";
-     try {
-      const userSnap = await getDoc(doc(db, "users", request.userId));
-      if (userSnap.exists()) {
-       userName = userSnap.data().fullname || "Unnamed";
-      }
-     } catch (err) {
-      console.error("Error fetching user info", err);
-     }
+     sortedDocs.forEach(req => {
+      const card = document.createElement("div");
+      card.className = "card mb-0 shadow-sm border-1 user-card";
 
-     const tr = document.createElement("tr");
-     tr.innerHTML = `
-     <td>${userName}</td>
-     <td>${request.title || "Untitled"}</td>
-     <td>${request.status}</td>
-     <td>${request.requestedAt.toLocaleString()}</td>
-     `;
-     tbody.appendChild(tr);
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+
+      // Left: Book Cover + Title + Status
+      const left = document.createElement("div");
+      left.className = "d-flex align-items-center";
+
+      const cover = document.createElement("img");
+      cover.src = req.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      cover.alt = "Book Cover";
+      cover.className = "rounded me-3";
+      cover.style.width = "48px";
+      cover.style.height = "64px";
+      cover.style.objectFit = "cover";
+
+      const bookInfo = document.createElement("div");
+      bookInfo.innerHTML = `
+      <h6 class="mb-1 fw-semibold">${req.title}</h6>
+      <small class="text-muted">${req.status}</small>
+      `;
+
+      left.appendChild(cover);
+      left.appendChild(bookInfo);
+
+      // Right: User & Timestamp
+      const right = document.createElement("div");
+      right.className = "text-end";
+      const date = req.rejectedAt || req.requestedAt;
+      right.innerHTML = `
+      <h6 class="mb-1 fw-bold">${req.userName || "Unknown"}</h6>
+      <small class="text-muted">${formatDateTimeFromOffset(date)}</small>
+      `;
+
+      cardBody.appendChild(left);
+      cardBody.appendChild(right);
+      card.appendChild(cardBody);
+      container.appendChild(card);
+     });
     }
-   });
+   );
   }
+
 
   // --- Load All Rejected Book Request History (Admin) ---
 
   function loadRejectedBookRequests() {
-   const tbody = document.querySelector("#rejectedRequestsTable tbody");
+   const container = document.getElementById("rejectedRequestsCardContainer");
 
-   // Listen to all "Rejected" bookRequests
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
-    async (snapshot) => {
-     tbody.innerHTML = "";
+    (snapshot) => {
+     container.innerHTML = "";
 
-     const requests = snapshot.docs
-     .map((docSnap) => {
-      const data = docSnap.data();
-      return {
-       ...data,
-       id: docSnap.id,
-       rejectedAt: new Date(data.rejectedAt || 0),
-      };
-     })
-     .sort((a, b) => b.rejectedAt - a.rejectedAt); // newest first
+     const sorted = snapshot.docs
+     .map(doc => ({
+      id: doc.id, ...doc.data()
+     }))
+     .sort((a, b) => new Date(b.rejectedAt) - new Date(a.rejectedAt));
 
-     for (const req of requests) {
-      // --- Fetch User Name ---
-      let userName = "Unknown";
-      try {
-       const userSnap = await getDoc(doc(db, "users", req.userId));
-       if (userSnap.exists()) {
-        userName = userSnap.data().fullname || "Unnamed";
-       }
-      } catch (err) {
-       console.error("Error fetching user info:", err);
-      }
+     sorted.forEach(req => {
+      const card = document.createElement("div");
+      card.className = "card mb-0 shadow-sm border-1 user-card";
 
-      // --- Create table row with placeholder first ---
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-      <td>${userName}</td>
-      <td>${req.title || "Untitled"}</td>
-      <td><span class="book-status">Loading...</span></td>
-      <td>${req.rejectedAt.toLocaleString()}</td>
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+
+      const left = document.createElement("div");
+      left.className = "d-flex align-items-center";
+
+      const cover = document.createElement("img");
+      cover.src = req.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      cover.alt = "Book Cover";
+      cover.className = "rounded me-3";
+      cover.style.width = "48px";
+      cover.style.height = "64px";
+      cover.style.objectFit = "cover";
+
+      const bookInfo = document.createElement("div");
+      bookInfo.innerHTML = `
+      <h6 class="mb-1 fw-semibold">${req.title}</h6>
+      <small class="text-muted text-danger">Rejected</small>
       `;
-      tbody.appendChild(tr);
 
-      // --- Real-time listener for book availability ---
-      const bookRef = doc(db, "books", req.bookId);
-      onSnapshot(bookRef, (bookSnap) => {
-       const statusCell = tr.querySelector(".book-status");
-       if (bookSnap.exists()) {
-        const availability = bookSnap.data().availability || "Unavailable";
-        statusCell.textContent = availability;
-       } else {
-        statusCell.textContent = "Deleted";
-       }
-      });
-     }
+      left.appendChild(cover);
+      left.appendChild(bookInfo);
+
+      const right = document.createElement("div");
+      right.className = "text-end";
+      right.innerHTML = `
+      <h6 class="mb-1 fw-bold">${req.userName || "Unknown"}</h6>
+      <small class="text-muted">${formatDateTimeFromOffset(req.rejectedAt)}</small>
+      `;
+
+      cardBody.appendChild(left);
+      cardBody.appendChild(right);
+      card.appendChild(cardBody);
+      container.appendChild(card);
+     });
     }
    );
   }
+
 
   // --- Generic Table Filter Utility ---
 
@@ -1907,7 +2414,7 @@
 
    cards.forEach(card => {
     const title = card.querySelector("h5")?.textContent.toLowerCase() || "";
-    const author = card.querySelector("h6")?.textContent.toLowerCase() || "";
+    const author = card.querySelector("p")?.textContent.toLowerCase() || "";
     const matches = title.includes(query) || author.includes(query);
     card.style.display = matches ? "": "none";
    });
