@@ -7,12 +7,13 @@
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <style>
- * {
-  font-size: 0.98em;
+
+ .toast.slide-in {
+  animation: slideInRight 0.4s ease forwards;
  }
 
- .small-t {
-  font-size: 1em;
+ .toast.slide-out {
+  animation: slideOutRight 0.4s ease forwards;
  }
 
 @keyframes slideInRight {
@@ -35,14 +36,6 @@
    transform: translateX(100%);
    opacity: 0;
   }
- }
-
- .toast.slide-in {
-  animation: slideInRight 0.4s ease forwards;
- }
-
- .toast.slide-out {
-  animation: slideOutRight 0.4s ease forwards;
  }
 
  .book-title-wrapper {
@@ -72,32 +65,6 @@
   }
  }
 
- .italic {
-  font-style: italic;
- }
-
- .card-body .book-title-wrapper {
-  max-width: 100px;
-  /* prevent overflow */
-  flex-shrink: 1;
- }
-
- .card-body .book-title {
-  display: inline-block;
-  white-space: nowrap;
-  animation: scroll-title 10s linear infinite;
-  animation-play-state: paused;
- }
-
- .card-body > .text-end {
-  white-space: nowrap;
-  min-width: 100px;
- }
-
- .card-body > .d-flex.gap-2 {
-  flex-shrink: 0;
- }
-
 </style>
 
 <body>
@@ -107,7 +74,7 @@
 
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
-    <center><h2 class="mb-0 p-2">0524 PKNS LIBRARY</h2></center>
+    <center><h2 class="mb-0 p-2">1000 PKNS LIBRARY</h2></center>
    </div>
    <div class="card-body">
     <div class="d-grid gap-4">
@@ -156,16 +123,7 @@
     </div>
 
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <table class="table table-sm mb-0" id="userHistoryTable">
-      <thead>
-       <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Requested At</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
+     <div id="userHistoryCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
   </div>
@@ -180,7 +138,7 @@
      <h4 class="m-0">Admin Dashboard</h4>
 
      <span class="badge text-bg-success"><span id="date-time" style="font-size:0.93em">loading...</span></span>
-     <button id="adminLogoutBtn" class="btn btn-outline-danger">Logout</button>
+     <button id="adminLogoutBtn" class="btn btn-sm btn-outline-danger">Logout</button>
     </div>
     <div class="d-flex m-2 gap-2 p-0" style="overflow:scroll">
      <span class="badge text-bg-primary">Total Books : <span id="headerallBooksCount">0</span></span>
@@ -200,7 +158,7 @@
        <div class="card-header" style="background-color:#e6e6e6">
         <h5 class="card-title mb-0 d-flex justify-content-between">Pending Signup Requests <span class="badge bg-secondary" id="signupRequestCount">0</span></h5>
        </div>
-       <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+       <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
         <div id="signupRequestsCardContainer" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
@@ -213,7 +171,7 @@
        <div class="card-header" style="background-color:#e6e6e6">
         <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary" id="pendingBookRequestCount">0</span></h5>
        </div>
-       <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+       <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
         <div id="bookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
@@ -245,7 +203,7 @@
        <div class="px-2 mt-2">
         <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
        </div>
-       <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+       <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
         <div id="checkedOutBooksCardContainer" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
@@ -280,7 +238,7 @@
        </select>
       </div>
       <div class="col-md-2">
-       <button type="submit" class="btn btn-success w-100">Add Book</button>
+       <button type="submit" class="btn btn-sm btn-success w-100">Add Book</button>
       </div>
      </form>
     </div>
@@ -297,8 +255,7 @@
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
     </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <!-- 🟢 Replace table with card container -->
+    <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="allUsersCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
@@ -337,29 +294,17 @@
        <div class="card-header" style="background-color:#e6e6e6">
         <h5 class="card-title mb-0 d-flex justify-content-between">Book Request & Checkout History<span class="badge bg-secondary" id="userRequestCount">0</span></h5>
        </div>
-       <div class="px-2 mt-2">
-        <input type="text" id="searchUserBookHistory" class="form-control form-control-sm mb-2" placeholder="Search by book title or status...">
+       <div class="mt-1">
+        <input type="text" id="searchUserBookHistory" class="form-control form-control-sm" placeholder="Search by book title or status...">
        </div>
-       <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
-         <table class="table table-sm table-bordered mb-0">
-          <thead>
-           <tr>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Requested At</th>
-           </tr>
-          </thead>
-          <tbody id="userBookHistoryTable">
-           <tr><td colspan="3" class="text-center text-muted">Loading...</td></tr>
-          </tbody>
-         </table>
+       <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
+          <div id="userBookHistoryTable" class="d-flex flex-column gap-2">
         </div>
        </div>
       </div>
       <div class="modal-footer">
-       <button class="btn btn-outline-primary" id="editUserBtn">Edit Profile</button>
-       <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       <button class="btn btn-sm btn-outline-primary" id="editUserBtn">Edit Profile</button>
+       <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
      </div>
     </div>
@@ -403,9 +348,9 @@
        </div>
       </div>
       <div class="modal-footer">
-       <button type="button" class="btn btn-outline-danger me-auto" id="deleteUserBtn">Delete User</button>
-       <button type="submit" class="btn btn-primary">Save Changes</button>
-       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+       <button type="button" class="btn btn-sm btn-outline-danger me-auto" id="deleteUserBtn">Delete User</button>
+       <button type="submit" class="btn btn-sm btn-primary">Save Changes</button>
+       <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
       </div>
      </form>
     </div>
@@ -443,7 +388,7 @@
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
     </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+    <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="allBookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
@@ -454,7 +399,7 @@
     <div class="card-header" style="background-color:#e6e6e6">
      <h5 class="mb-0">Rejected Book Requests</h5>
     </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
+    <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="rejectedRequestsCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
@@ -473,42 +418,42 @@
     <div class="modal-body">
      <div class="mb-3">
       <label for="fullname" class="form-label">Full Name</label>
-      <input type="text" id="fullname" autocomplete="off" class="form-control" required />
+      <input type="text" id="fullname" autocomplete="off" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter your full name.
       </div>
      </div>
      <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
-      <input type="email" id="email" autocomplete="off" class="form-control" required />
+      <input type="email" id="email" autocomplete="off" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter a valid email.
       </div>
      </div>
      <div class="mb-3">
       <label for="dob" class="form-label">Date of Birth</label>
-      <input type="date" id="dob" autocomplete="off" class="form-control" required />
+      <input type="date" id="dob" autocomplete="off" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter your date of birth.
       </div>
      </div>
      <div class="mb-3">
       <label for="bloodGroup" class="form-label">Blood Group</label>
-      <input type="text" id="bloodGroup" autocomplete="off" class="form-control" required />
+      <input type="text" id="bloodGroup" autocomplete="off" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter your blood group.
       </div>
      </div>
      <div class="mb-3">
       <label for="password" class="form-label">Password</label>
-      <input type="password" id="password" autocomplete="off" class="form-control" required minlength="6" />
+      <input type="password" id="password" autocomplete="off" class="form-control form-control-sm" required minlength="6" />
       <div class="invalid-feedback">
        Please enter a password (min 6 characters).
       </div>
      </div>
     </div>
     <div class="modal-footer">
-     <button type="submit" class="btn btn-primary">Sign Up</button>
+     <button type="submit" class="btn btn-sm btn-primary">Sign Up</button>
     </div>
    </form>
   </div>
@@ -526,21 +471,21 @@
     <div class="modal-body">
      <div class="mb-3">
       <label for="loginEmail" class="form-label">Email address</label>
-      <input type="email" id="loginEmail" class="form-control" required />
+      <input type="email" id="loginEmail" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter your email.
       </div>
      </div>
      <div class="mb-3">
       <label for="loginPassword" class="form-label">Password</label>
-      <input type="password" id="loginPassword" class="form-control" required minlength="6" />
+      <input type="password" id="loginPassword" class="form-control form-control-sm" required minlength="6" />
       <div class="invalid-feedback">
        Please enter your password.
       </div>
      </div>
     </div>
     <div class="modal-footer">
-     <button type="submit" class="btn btn-primary">Login</button>
+     <button type="submit" class="btn btn-sm btn-primary">Login</button>
     </div>
    </form>
   </div>
@@ -558,21 +503,21 @@
     <div class="modal-body">
      <div class="mb-3">
       <label for="adminEmail" class="form-label">Email address</label>
-      <input type="email" id="adminEmail" class="form-control" required />
+      <input type="email" id="adminEmail" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter your email.
       </div>
      </div>
      <div class="mb-3">
       <label for="adminPassword" class="form-label">Password</label>
-      <input type="password" id="adminPassword" class="form-control" required minlength="6" />
+      <input type="password" id="adminPassword" class="form-control form-control-sm" required minlength="6" />
       <div class="invalid-feedback">
        Please enter your password.
       </div>
      </div>
     </div>
     <div class="modal-footer">
-     <button type="submit" class="btn btn-danger">Login as Admin</button>
+     <button type="submit" class="btn btn-sm btn-danger">Login as Admin</button>
     </div>
    </form>
   </div>
@@ -591,19 +536,19 @@
      <input type="hidden" id="editBookId" />
      <div class="mb-2">
       <label class="form-label">Title</label>
-      <input type="text" id="editBookTitle" class="form-control" required />
+      <input type="text" id="editBookTitle" class="form-control form-control-sm" required />
      </div>
      <div class="mb-2">
       <label class="form-label">Author</label>
-      <input type="text" id="editBookAuthor" class="form-control" required />
+      <input type="text" id="editBookAuthor" class="form-control form-control-sm" required />
      </div>
      <div class="mb-2">
       <label class="form-label">Cover Image URL</label>
-      <input type="url" id="editBookCoverUrl" class="form-control" />
+      <input type="url" id="editBookCoverUrl" class="form-control form-control-sm" />
      </div>
      <div class="mb-2">
       <label class="form-label">Sponsor</label>
-      <input type="text" id="editBookSponsor" class="form-control" />
+      <input type="text" id="editBookSponsor" class="form-control form-control-sm" />
      </div>
      <div class="mb-2">
       <label class="form-label">Availability</label>
@@ -615,10 +560,10 @@
      </div>
     </div>
     <div class="modal-footer justify-content-between">
-     <button id="deleteFromEditBtn" type="button" class="btn btn-outline-danger">Delete</button>
+     <button id="deleteFromEditBtn" type="button" class="btn btn-sm btn-outline-danger">Delete</button>
      <div>
-      <button type="submit" class="btn btn-primary">Update</button>
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      <button type="submit" class="btn btn-sm btn-primary">Update</button>
+      <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
      </div>
     </div>
    </form>
@@ -643,7 +588,7 @@
       Are you sure you want to delete this book?
      </p>
      <div class="mb-2">
-      <input type="password" class="form-control" id="adminDeletePassword" placeholder="Enter admin password to confirm" required />
+      <input type="password" class="form-control form-control-sm" id="adminDeletePassword" placeholder="Enter admin password to confirm" required />
      </div>
     </div>
     <div class="modal-footer m-0">
@@ -1154,14 +1099,16 @@
    );
 
    // --- Book History Table ---
+
    onSnapshot(
     query(collection(db,
      "bookRequests"), where("userId",
      "==",
      uid)),
     (snapshot) => {
-     const historyTableBody = document.querySelector("#userHistoryTable tbody");
-     historyTableBody.innerHTML = "";
+     const container = document.getElementById("userHistoryCardContainer");
+     container.innerHTML = "";
+
      const sortedDocs = snapshot.docs
      .map(docSnap => {
       const data = docSnap.data();
@@ -1174,13 +1121,45 @@
       b) => b.requestedAt - a.requestedAt);
 
      sortedDocs.forEach(req => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-      <td>${req.title}</td>
-      <td>${req.status}</td>
-      <td>${formatDateTimeFromOffset(req.requestedAt)}</td>
+      const card = document.createElement("div");
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
+
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
+
+      // --- Book Cover ---
+      const cover = document.createElement("img");
+      cover.src = req.coverUrl || "https://via.placeholder.com/120x168?text=Book";
+      cover.alt = "Book Cover";
+      cover.style.width = "110px";
+      cover.style.aspectRatio = "1 / 1.4";
+      cover.style.objectFit = "cover";
+      cover.style.borderRadius = "5px";
+
+      // --- Info ---
+      const info = document.createElement("div");
+      info.className = "flex-grow-1 px-3";
+
+      let badgeClass = "bg-secondary";
+      if (req.status === "Checked Out") badgeClass = "bg-primary";
+      else if (req.status === "Returned") badgeClass = "bg-success";
+      else if (req.status === "Rejected") badgeClass = "bg-danger";
+
+      info.innerHTML = `
+      <div class="card-body p-0">
+      <h6 class="card-title mb-2">${req.title}</h6>
+      <p class="card-text mb-1">
+      <strong>Status:</strong>
+      <span class="badge ${badgeClass}">${req.status}</span>
+      </p>
+      <p class="card-text"><strong>Requested On:</strong>${formatDateTimeFromOffset(req.requestedAt)}</p>
+      </div>
       `;
-      historyTableBody.appendChild(tr);
+      row.appendChild(cover);
+      row.appendChild(info);
+      card.appendChild(row);
+      container.appendChild(card);
      });
     }
    );
@@ -1389,38 +1368,45 @@
 
     snapshot.forEach((docSnap) => {
      const data = docSnap.data();
+
      const card = document.createElement("div");
-     card.className = "card mb-2 shadow-sm border-1 transaction-card";
+     card.className = "card mb-2 d-flex flex-column";
+     card.style.maxWidth = "100%";
 
-     const cardBody = document.createElement("div");
-     cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+     const row = document.createElement("div");
+     row.className = "d-flex flex-row align-items-center p-2";
 
-     const left = document.createElement("div");
-     left.className = "d-flex align-items-center";
+     // Avatar (Circle with Initial)
+     const avatarDiv = document.createElement("div");
+     avatarDiv.className = "d-flex align-items-center justify-content-center bg-primary text-white";
+     avatarDiv.style.width = "100px";
+     avatarDiv.style.height = "140px";
+     avatarDiv.style.borderRadius = "5px";
+     avatarDiv.style.fontSize = "42px";
+     avatarDiv.textContent = data.fullname?.charAt(0).toUpperCase() || "👤";
 
-     const avatar = document.createElement("div");
-     avatar.className = "rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3";
-     avatar.style.width = "48px";
-     avatar.style.height = "48px";
-     avatar.style.fontSize = "20px";
-     avatar.textContent = data.fullname?.charAt(0).toUpperCase() || "👤";
-
-     const info = document.createElement("div");
-     info.innerHTML = `
-     <h6 class="mb-1 fw-semibold">${data.fullname}</h6>
-     <h6 class="mb-1 small-t text-muted">E-mail Id : ${data.email}</h6>
-     <h6 class="mb-1 small-t text-muted">Blood Group : ${data.bloodGroup || "N/A"}</h6>
-     <h6 class="mb-1 small-t text-muted">D-O-B : ${data.dob || "-"}</h6>
+     // User Details
+     const details = document.createElement("div");
+     details.className = "flex-grow-1 px-3";
+     details.innerHTML = `
+     <div class="card-body p-0">
+     <h6 class="card-title mb-2">${data.fullname}</h6>
+     <p class="card-text mb-1"><strong>Email:</strong> ${data.email}</p>
+     <p class="card-text mb-1"><strong>Blood Group:</strong> ${data.bloodGroup || "N/A"}</p>
+     <p class="card-text mb-1"><strong>DOB:</strong> ${data.dob || "-"}</p>
+     <p class="card-text">
+     <strong>Status:</strong>
+     <span class="badge bg-warning text-dark">Pending</span>
+     </p>
+     </div>
      `;
 
-     left.appendChild(avatar);
-     left.appendChild(info);
-
-     const actions = document.createElement("div");
-     actions.className = "text-end d-flex flex-column gap-2";
+     // Action Buttons
+     const actionButtons = document.createElement("div");
+     actionButtons.className = "d-flex justify-content-end gap-2 px-2 pb-2";
 
      const approveBtn = document.createElement("button");
-     approveBtn.className = "btn btn-sm btn-success";
+     approveBtn.className = "btn btn-success btn-sm flex-fill";
      approveBtn.textContent = "Approve";
      approveBtn.onclick = async () => {
       showLoader();
@@ -1435,7 +1421,7 @@
      };
 
      const rejectBtn = document.createElement("button");
-     rejectBtn.className = "btn btn-sm btn-danger";
+     rejectBtn.className = "btn btn-danger btn-sm flex-fill";
      rejectBtn.textContent = "Reject";
      rejectBtn.onclick = async () => {
       showLoader();
@@ -1449,17 +1435,18 @@
       }
      };
 
-     actions.appendChild(approveBtn);
-     actions.appendChild(rejectBtn);
+     actionButtons.appendChild(approveBtn);
+     actionButtons.appendChild(rejectBtn);
 
-     cardBody.appendChild(left);
-     cardBody.appendChild(actions);
-     card.appendChild(cardBody);
+     // Assemble Card
+     row.appendChild(avatarDiv);
+     row.appendChild(details);
+     card.appendChild(row);
+     card.appendChild(actionButtons);
      container.appendChild(card);
     });
    });
   }
-
 
   // --- Load Book Requests ---
 
@@ -1489,40 +1476,42 @@
       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
 
       const card = document.createElement("div");
-      card.className = "card mb-2 shadow-sm border-1 transaction-card";
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
 
-      const cardBody = document.createElement("div");
-      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
 
-      // --- Left Section (Book cover) ---
-      const left = document.createElement("div");
-      left.className = "d-flex align-items-center";
-
+      // --- Book Cover ---
       const coverImg = document.createElement("img");
-      coverImg.src = request.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      coverImg.src = request.coverUrl || "https://via.placeholder.com/120x168?text=Book";
       coverImg.alt = "Book Cover";
-      coverImg.className = "rounded me-3";
-      coverImg.style.width = "48px";
-      coverImg.style.height = "64px";
+      coverImg.style.width = "120px";
+      coverImg.style.aspectRatio = "1 / 1.4";
       coverImg.style.objectFit = "cover";
+      coverImg.style.borderRadius = "5px";
 
+      // --- Book Info ---
       const info = document.createElement("div");
+      info.className = "flex-grow-1 px-3";
       info.innerHTML = `
-      <h6 class="mb-1 fw-semibold">${request.title}</h6>
-      <small class="text-muted">${request.author || "Unknown Author"}</small>
-      <h6 class="mb-1">${request.status}</h6>
-      <small class="text-muted">${userName}</small>
+      <div class="card-body p-0">
+      <h6 class="card-title mb-2">${request.title}</h6>
+      <p class="card-text mb-1"><strong>Author:</strong> ${request.author || "Unknown Author"}</p>
+      <p class="card-text mb-1">
+      <strong>Status:</strong>
+      <span class="badge bg-warning text-dark">${request.status}</span>
+      </p>
+      <p class="card-text"><strong>Requested By:</strong> ${userName}</p>
+      </div>
       `;
 
-      left.appendChild(coverImg);
-      left.appendChild(info);
-
-      // --- Right Buttons Section ---
-      const right = document.createElement("div");
-      right.className = "text-end d-flex flex-column gap-2";
+      // --- Action Buttons ---
+      const actionButtons = document.createElement("div");
+      actionButtons.className = "d-flex justify-content-end gap-2 px-2 pb-2";
 
       const approveBtn = document.createElement("button");
-      approveBtn.className = "btn btn-sm btn-success";
+      approveBtn.className = "btn btn-sm btn-success flex-fill";
       approveBtn.textContent = "Approve";
       approveBtn.onclick = async () => {
        showLoader();
@@ -1542,7 +1531,7 @@
       };
 
       const rejectBtn = document.createElement("button");
-      rejectBtn.className = "btn btn-sm btn-danger";
+      rejectBtn.className = "btn btn-sm btn-danger flex-fill";
       rejectBtn.textContent = "Reject";
       rejectBtn.onclick = async () => {
        showLoader();
@@ -1562,12 +1551,14 @@
        }
       };
 
-      right.appendChild(approveBtn);
-      right.appendChild(rejectBtn);
+      actionButtons.appendChild(approveBtn);
+      actionButtons.appendChild(rejectBtn);
 
-      cardBody.appendChild(left);
-      cardBody.appendChild(right);
-      card.appendChild(cardBody);
+      // Assemble Card
+      row.appendChild(coverImg);
+      row.appendChild(info);
+      card.appendChild(row);
+      card.appendChild(actionButtons);
       container.appendChild(card);
      }
     }
@@ -1579,8 +1570,8 @@
   function loadCheckedOutBooks() {
    const container = document.getElementById("checkedOutBooksCardContainer");
 
-   onSnapshot(query(collection(db, "bookRequests"),
-    where("status", "==", "Checked Out")),
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
     async (snapshot) => {
      container.innerHTML = "";
 
@@ -1592,40 +1583,39 @@
       const userName = userSnap.exists() ? userSnap.data().fullname: "Unknown User";
 
       const card = document.createElement("div");
-      card.className = "card mb-0 shadow-sm border-1 user-card";
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
 
-      const cardBody = document.createElement("div");
-      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
 
-      const left = document.createElement("div");
-      left.className = "d-flex align-items-center";
-
+      // --- Book Cover Image ---
       const cover = document.createElement("img");
-      cover.src = record.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      cover.src = record.coverUrl || "https://via.placeholder.com/120x168?text=Book";
       cover.alt = "Book Cover";
-      cover.className = "rounded me-3";
-      cover.style.width = "48px";
-      cover.style.height = "64px";
+      cover.style.width = "110px";
+      cover.style.aspectRatio = "1 / 1.4";
       cover.style.objectFit = "cover";
+      cover.style.borderRadius = "5px";
 
-      const bookInfo = document.createElement("div");
-      bookInfo.innerHTML = `
-      <h6 class="mb-1 fw-semibold">${record.title}</h6>
-      <small class="text-muted">Checked Out</small>
+      // --- Book Info & Status ---
+      const info = document.createElement("div");
+      info.className = "flex-grow-1 px-3";
+      info.innerHTML = `
+      <div class="card-body p-0">
+      <h6 class="card-title mb-2">${record.title}</h6>
+      <p class="card-text mb-1"><strong>Status:</strong> <span class="badge bg-primary">Checked Out</span></p>
+      <p class="card-text mb-1"><strong>User:</strong> ${userName}</p>
+      <p class="card-text"><strong>Requested On:</strong> ${formatDateTimeFromOffset(record.requestedAt)}</p>
+      </div>
       `;
 
-      left.appendChild(cover);
-      left.appendChild(bookInfo);
-
-      const right = document.createElement("div");
-      right.className = "text-end";
-      right.innerHTML = `
-      <h6 class="mb-1 fw-bold">${userName}</h6>
-      <small class="text-muted">${formatDateTimeFromOffset(record.requestedAt)}</small>
-      `;
+      // --- Return Button Section ---
+      const actions = document.createElement("div");
+      actions.className = "d-flex justify-content-end gap-2 px-2 pb-2";
 
       const returnBtn = document.createElement("button");
-      returnBtn.className = "btn btn-sm btn-warning";
+      returnBtn.className = "btn btn-sm btn-warning flex-fill";
       returnBtn.textContent = "Return";
       returnBtn.onclick = async () => {
        showLoader();
@@ -1646,16 +1636,18 @@
        }
       };
 
-      cardBody.appendChild(left);
-      cardBody.appendChild(right);
-      cardBody.appendChild(returnBtn);
-      card.appendChild(cardBody);
+      actions.appendChild(returnBtn);
+
+      // Final card assembly
+      row.appendChild(cover);
+      row.appendChild(info);
+      card.appendChild(row);
+      card.appendChild(actions);
       container.appendChild(card);
      }
     }
    );
   }
-
 
   // --- Approve Signup ---
 
@@ -1691,8 +1683,6 @@
     // Delete from signupRequests collection
     await deleteDoc(doc(db, "signupRequests", docId));
 
-    showToast("Signup approved and user created without logging out admin.",
-     "bg-success");
    } catch (error) {
     showToast("Error approving signup: " + error.message,
      "bg-danger");
@@ -1762,8 +1752,8 @@
       // Create card container
       const card = document.createElement("div");
       card.className = "card";
-      card.style.minWidth = "170px";
-      card.style.maxWidth = "170px";
+      card.style.minWidth = "190px";
+      card.style.maxWidth = "190px";
 
       // Cover Image
       const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
@@ -1772,7 +1762,7 @@
       cardHeader.innerHTML = `
       <img src="${coverImage}" alt="Book Cover"
       class="img-fluid"
-      style="aspect-ratio: 1 / 1.414;width:80%;object-fit: cover; border-radius: 2px;" />
+      style="aspect-ratio: 1 / 1.414;width:100%;object-fit: cover; border-radius: 2px;" />
       `;
       card.appendChild(cardHeader);
       hideLoader();
@@ -1999,64 +1989,63 @@
 
    onSnapshot(collection(db, "users"), (snapshot) => {
     container.innerHTML = "";
+
     snapshot.forEach((docSnap) => {
      const user = {
       id: docSnap.id, ...docSnap.data()
      };
 
      const card = document.createElement("div");
-     card.className = "card mb-0 shadow-sm border-1 user-card";
+     card.className = "card mb-2 d-flex flex-column";
+     card.style.maxWidth = "100%";
 
-     const cardBody = document.createElement("div");
-     cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+     const row = document.createElement("div");
+     row.className = "d-flex flex-row align-items-center p-2";
 
-     // Left Section
-     const left = document.createElement("div");
-     left.className = "d-flex align-items-center";
-
-     // Profile circle
+     // --- Profile Picture ---
      const profileImg = document.createElement("img");
-     profileImg.src = user.profileUrl || "https://via.placeholder.com/48?text=👤";
+     profileImg.src = user.profileUrl || "https://via.placeholder.com/120x140?text=👤";
      profileImg.alt = "Profile";
-     profileImg.className = "rounded-circle me-3";
-     profileImg.style.width = "48px";
-     profileImg.style.height = "48px";
+     profileImg.style.width = "75px";
+     profileImg.style.height = "75px";
      profileImg.style.objectFit = "cover";
+     profileImg.style.borderRadius = "50px";
 
-
-     // Name & Email
-     const nameEmail = document.createElement("div");
-     nameEmail.innerHTML = `<h6 class="mb-1 fw-semibold">${user.fullname}</h6><small class="text-muted">${user.email}</small>`;
-     left.appendChild(profileImg);
-     left.appendChild(nameEmail);
-
-     // Right Section
-     const right = document.createElement("div");
-     right.className = "text-end";
-     right.innerHTML = `
-     <h6 class="mb-1 fw-bold">${user.bloodGroup || "N/A"}</h6>
-     <small class="text-muted">${formatDateTimeFromOffset(user.joinedAt)}</small>
+     // --- User Info ---
+     const info = document.createElement("div");
+     info.className = "flex-grow-1 px-3";
+     info.innerHTML = `
+     <div class="card-body p-0">
+     <h6 class="card-title mb-2">${user.fullname}</h6>
+     <p class="card-text mb-1"><strong>Email:</strong> ${user.email}</p>
+     <p class="card-text mb-1"><strong>Blood Group:</strong> ${user.bloodGroup || "N/A"}</p>
+     <p class="card-text">
+     <strong>Joined:</strong> ${formatDateTimeFromOffset(user.joinedAt)}
+     </p>
+     </div>
      `;
 
-     // View/Edit button
-     const actionBtn = document.createElement("div");
-     actionBtn.className = "justify-content-center gap-2";
-     const viewBtn = document.createElement("button");
-     viewBtn.className = "btn btn-secondary btn-sm";
-     viewBtn.textContent = "Edit";
-     viewBtn.onclick = () => openUserProfileModal(user);
-     actionBtn.appendChild(viewBtn);
+     // --- Action Buttons ---
+     const actions = document.createElement("div");
+     actions.className = "d-flex justify-content-end gap-2 px-2 pb-2";
 
-     // Combine
-     cardBody.appendChild(left);
-     cardBody.appendChild(right);
-     cardBody.appendChild(actionBtn);
-     card.appendChild(cardBody);
+     const editBtn = document.createElement("button");
+     editBtn.className = "btn btn-sm btn-secondary flex-fill";
+     editBtn.textContent = "Edit";
+     editBtn.onclick = () => openUserProfileModal(user);
+
+     actions.appendChild(editBtn);
+
+     // Assemble card
+     row.appendChild(profileImg);
+     row.appendChild(info);
+     card.appendChild(row);
+     card.appendChild(actions);
      container.appendChild(card);
-
     });
    });
   }
+
 
   // -- Open User Detail Modal---
 
@@ -2078,51 +2067,72 @@
     // Hide edit button for admin accounts
     document.getElementById("editUserBtn").classList.toggle("d-none", user.role === "admin");
 
-    // Book history logic
-    const tableBody = document.getElementById("userBookHistoryTable");
+    const cardContainer = document.getElementById("userBookHistoryTable"); // Now acts as a card container
     const searchInput = document.getElementById("searchUserBookHistory");
 
-    tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Loading...</td></tr>`;
+    cardContainer.innerHTML = `<div class="text-center text-muted">Loading...</div>`;
     searchInput.value = ""; // reset search
 
     const q = query(collection(db, "bookRequests"), where("userId", "==", user.id));
 
     getDocs(q).then((snapshot) => {
      if (snapshot.empty) {
-      tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">No history found.</td></tr>`;
+      cardContainer.innerHTML = `<div class="text-center text-muted">No history found.</div>`;
       return;
      }
 
      const sorted = snapshot.docs
-     .map(doc => {
+     .map((doc) => {
       const data = doc.data();
+      const dateStr = formatDateTimeFromOffset(data.requestedAt);
+      let badgeClass = "bg-secondary";
+
+      // Badge styling based on status
+      switch (data.status) {
+       case "Pending": badgeClass = "bg-warning text-dark"; break;
+       case "Checked Out": badgeClass = "bg-primary"; break;
+       case "Returned": badgeClass = "bg-success"; break;
+       case "Rejected": badgeClass = "bg-danger"; break;
+      }
+
       return {
        title: data.title,
        status: data.status,
        requestedAt: new Date(data.requestedAt),
        html: `
-       <tr>
-       <td>${data.title}</td>
-       <td>${data.status}</td>
-       <td>${new Date(data.requestedAt).toLocaleString()}</td>
-       </tr>
+       <div class="card mb-2 d-flex flex-column" style="max-width: 100%;">
+       <div class="d-flex flex-row align-items-center p-2">
+       <img src="${data.coverUrl || "https://via.placeholder.com/120x168?text=Book"}"
+       alt="Book Cover"
+       style="width: 120px; aspect-ratio: 1 / 1.4; object-fit: cover; border-radius: 5px;">
+       <div class="flex-grow-1 px-3">
+       <div class="card-body p-0">
+       <h6 class="card-title mb-2">${data.title}</h6>
+       <p class="card-text mb-1">
+       <strong>Status:</strong> <span class="badge ${badgeClass}">${data.status}</span>
+       </p>
+       <p class="card-text"><strong>Requested On:</strong> ${dateStr}</p>
+       </div>
+       </div>
+       </div>
+       </div>
        `
       };
      })
      .sort((a, b) => b.requestedAt - a.requestedAt);
 
-     function renderRows(filteredRows) {
-      tableBody.innerHTML = "";
+     function renderCards(filteredRows) {
+      cardContainer.innerHTML = "";
       if (filteredRows.length === 0) {
-       tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">No matches found.</td></tr>`;
+       cardContainer.innerHTML = `<div class="text-center text-muted">No matches found.</div>`;
        return;
       }
-      filteredRows.forEach(row => {
-       tableBody.insertAdjacentHTML("beforeend", row.html);
+      filteredRows.forEach((row) => {
+       cardContainer.insertAdjacentHTML("beforeend", row.html);
       });
      }
 
-     renderRows(sorted);
+     renderCards(sorted);
 
      searchInput.oninput = function () {
       const keyword = this.value.trim().toLowerCase();
@@ -2130,11 +2140,12 @@
        row.title.toLowerCase().includes(keyword) ||
        row.status.toLowerCase().includes(keyword)
       );
-      renderRows(filtered);
+      renderCards(filtered);
      };
     }).catch(() => {
-     tableBody.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Error loading history.</td></tr>`;
+     cardContainer.innerHTML = `<div class="text-danger text-center">Error loading history.</div>`;
     });
+
 
     userProfileModal.show();
    };
@@ -2249,7 +2260,7 @@
 
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "!=", "Pending")),
-    (snapshot) => {
+    async (snapshot) => {
      container.innerHTML = "";
 
      const sortedDocs = snapshot.docs
@@ -2258,48 +2269,56 @@
      }))
      .sort((a, b) => new Date(b.requestedAt || b.rejectedAt) - new Date(a.requestedAt || a.rejectedAt));
 
-     sortedDocs.forEach(req => {
+     for (const req of sortedDocs) {
+      // Fetch user name if not cached in document
+      let userName = req.userName || "Unknown";
+      if (!req.userName && req.userId) {
+       const userSnap = await getDoc(doc(db, "users", req.userId));
+       if (userSnap.exists()) {
+        userName = userSnap.data().fullname || "Unknown";
+       }
+      }
+
       const card = document.createElement("div");
-      card.className = "card mb-0 shadow-sm border-1 user-card";
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
 
-      const cardBody = document.createElement("div");
-      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
 
-      // Left: Book Cover + Title + Status
-      const left = document.createElement("div");
-      left.className = "d-flex align-items-center";
-
+      // --- Book Cover ---
       const cover = document.createElement("img");
-      cover.src = req.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      cover.src = req.coverUrl || "https://via.placeholder.com/120x168?text=Book";
       cover.alt = "Book Cover";
-      cover.className = "rounded me-3";
-      cover.style.width = "48px";
-      cover.style.height = "64px";
+      cover.style.width = "110px";
+      cover.style.aspectRatio = "1 / 1.4";
       cover.style.objectFit = "cover";
+      cover.style.borderRadius = "5px";
 
-      const bookInfo = document.createElement("div");
-      bookInfo.innerHTML = `
-      <h6 class="mb-1 fw-semibold">${req.title}</h6>
-      <small class="text-muted">${req.status}</small>
+      // --- Book Info ---
+      const info = document.createElement("div");
+      info.className = "flex-grow-1 px-3";
+
+      // Badge Color Based on Status
+      let badgeClass = "bg-secondary";
+      if (req.status === "Checked Out") badgeClass = "bg-primary";
+      else if (req.status === "Returned") badgeClass = "bg-success";
+      else if (req.status === "Rejected") badgeClass = "bg-danger";
+
+      info.innerHTML = `
+      <div class="card-body p-0">
+      <h6 class="card-title mb-2">${req.title}</h6>
+      <p class="card-text mb-1"><strong>Status:</strong> <span class="badge ${badgeClass}">${req.status}</span></p>
+      <p class="card-text mb-1"><strong>Requested By:</strong> ${userName}</p>
+      <p class="card-text"><strong>Date:</strong> ${formatDateTimeFromOffset(req.rejectedAt || req.requestedAt)}</p>
+      </div>
       `;
 
-      left.appendChild(cover);
-      left.appendChild(bookInfo);
-
-      // Right: User & Timestamp
-      const right = document.createElement("div");
-      right.className = "text-end";
-      const date = req.rejectedAt || req.requestedAt;
-      right.innerHTML = `
-      <h6 class="mb-1 fw-bold">${req.userName || "Unknown"}</h6>
-      <small class="text-muted">${formatDateTimeFromOffset(date)}</small>
-      `;
-
-      cardBody.appendChild(left);
-      cardBody.appendChild(right);
-      card.appendChild(cardBody);
+      row.appendChild(cover);
+      row.appendChild(info);
+      card.appendChild(row);
       container.appendChild(card);
-     });
+     }
     }
    );
   }
@@ -2312,7 +2331,7 @@
 
    onSnapshot(
     query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
-    (snapshot) => {
+    async (snapshot) => {
      container.innerHTML = "";
 
      const sorted = snapshot.docs
@@ -2321,48 +2340,55 @@
      }))
      .sort((a, b) => new Date(b.rejectedAt) - new Date(a.rejectedAt));
 
-     sorted.forEach(req => {
+     for (const req of sorted) {
+      let userName = req.userName || "Unknown";
+      if (!req.userName && req.userId) {
+       const userSnap = await getDoc(doc(db, "users", req.userId));
+       if (userSnap.exists()) {
+        userName = userSnap.data().fullname || "Unknown";
+       }
+      }
+
       const card = document.createElement("div");
-      card.className = "card mb-0 shadow-sm border-1 user-card";
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
 
-      const cardBody = document.createElement("div");
-      cardBody.className = "card-body d-flex justify-content-between align-items-center p-3";
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
 
-      const left = document.createElement("div");
-      left.className = "d-flex align-items-center";
-
+      // --- Book Cover Image ---
       const cover = document.createElement("img");
-      cover.src = req.coverUrl || "https://via.placeholder.com/48x64?text=Book";
+      cover.src = req.coverUrl || "https://via.placeholder.com/120x168?text=Book";
       cover.alt = "Book Cover";
-      cover.className = "rounded me-3";
-      cover.style.width = "48px";
-      cover.style.height = "64px";
+      cover.style.width = "110px";
+      cover.style.aspectRatio = "1 / 1.4";
       cover.style.objectFit = "cover";
+      cover.style.borderRadius = "5px";
 
-      const bookInfo = document.createElement("div");
-      bookInfo.innerHTML = `
-      <h6 class="mb-1 fw-semibold">${req.title}</h6>
-      <small class="text-muted text-danger">Rejected</small>
+      // --- Book Info ---
+      const info = document.createElement("div");
+      info.className = "flex-grow-1 px-3";
+      info.innerHTML = `
+      <div class="card-body p-0">
+      <h6 class="card-title mb-2">${req.title}</h6>
+      <p class="card-text mb-1">
+      <strong>Status:</strong>
+      <span class="badge bg-danger">Rejected</span>
+      </p>
+      <p class="card-text mb-1"><strong>Requested By:</strong> ${userName}</p>
+      <p class="card-text"><strong>Rejected On:</strong> ${formatDateTimeFromOffset(req.rejectedAt)}</p>
+      </div>
       `;
 
-      left.appendChild(cover);
-      left.appendChild(bookInfo);
-
-      const right = document.createElement("div");
-      right.className = "text-end";
-      right.innerHTML = `
-      <h6 class="mb-1 fw-bold">${req.userName || "Unknown"}</h6>
-      <small class="text-muted">${formatDateTimeFromOffset(req.rejectedAt)}</small>
-      `;
-
-      cardBody.appendChild(left);
-      cardBody.appendChild(right);
-      card.appendChild(cardBody);
+      row.appendChild(cover);
+      row.appendChild(info);
+      card.appendChild(row);
       container.appendChild(card);
-     });
+     }
     }
    );
   }
+
 
 
   // --- Generic Table Filter Utility ---
