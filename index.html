@@ -68,14 +68,29 @@
    transform: translateX(-100%);
   }
  }
+
+ svg {
+  width: 35px;
+  height: 35px;
+ }
+
+
+@keyframes scroll-left {
+  0% {
+   left: 100%;
+  }
+  100% {
+   left: -100%;
+  }
+ }
 </style>
 <body>
- <div class="container py-4">
+ <div class="container py-2">
   <!-- Main action Buttons -->
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
     <center>
-     <h2 class="mb-0 p-2">0536 PKNS LIBRARY</h2>
+     <h2 class="mb-0 p-2">0311 PKNS LIBRARY</h2>
     </center>
    </div>
    <div class="card-body">
@@ -121,10 +136,10 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="userBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+     <input type="text" autocomplete="off" id="userAvailableBooks" class="form-control form-control-sm" placeholder="Search by title or author...">
     </div>
     <div class="card-body p-2">
-     <div id="booksCardContainer" class="d-flex overflow-auto gap-2"></div>
+     <div id="userAvailableBooksCard" class="d-flex overflow-auto gap-2"></div>
     </div>
    </div>
    <!-- User History Card -->
@@ -134,40 +149,182 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
+     <input type="text" autocomplete="off" id="userBooksHistory" class="form-control form-control-sm" placeholder="Search by book title...">
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <div id="userHistoryCardContainer" class="d-flex flex-column gap-2"></div>
+     <div id="userBooksHistoryCard" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
   </div>
+
   <!-- Admin dashboard -->
   <div id="adminSection" class="d-none">
+
    <!-- Welcome Card -->
+
    <div class="card mb-3" style="background-color:#e6e6e6">
     <div class="card-header py-2 d-flex justify-content-between align-items-center">
-     <h4 class="m-0">Admin Dashboard</h4>
-     <span class="badge text-bg-success">
-      <span id="date-time" style="font-size:0.95em">loading...</span>
+     <h4 class="m-0 flex-grow-1">Admin Dashboard</h4>
+     <span class="badge text-bg-success" style="margin-right:12px">
+      <span id="date-time" style="font-size:1em">loading...</span>
      </span>
      <button id="adminLogoutBtn" class="btn btn-sm btn-outline-danger">Logout</button>
     </div>
-    <div class="d-flex m-2 gap-2 p-0" style="overflow:scroll">
-     <span class="badge text-bg-primary">Total Books : <span id="headerallBooksCount">0</span>
-     </span>
-     <span class="badge text-bg-primary">Total Members : <span id="headeruserCount">0</span>
-     </span>
-     <span class="badge text-bg-primary">Checked-out Books: <span id="headercheckedOutCount">0</span>
+
+    <!-- Marquee Wrapper -->
+
+    <div class="d-flex m-2 gap-2 p-0" style="overflow:hidden">
+     <span class="w-100 position-relative p-0 m-0" style="height:1.3em; overflow: hidden;">
+      <div class="marquee-text" style="white-space: nowrap; position: absolute; animation: scroll-left 20s linear infinite;">
+       📢 Welcome to the Admin Dashboard! Stay updated with requests and user activity in real time.
+      </div>
      </span>
     </div>
    </div>
+
+   <!-- Tile Cards -->
+
+   <div class="row">
+    <div class="col-6">
+     <div class="card bg-danger text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="signupRequestCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+         <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4" />
+         <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+        </svg>
+
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Pending Signup Requests
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+       <a class="small text-white stretched-link" href="#">View Details</a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6">
+     <div class="card bg-danger text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="pendingBookRequestCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-plus" viewBox="0 0 16 16">
+         <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5" />
+         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+         <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Pending Books Requests
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+       <a class="small text-white stretched-link" href="#">View Details</a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6">
+     <div class="card bg-primary text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="allBooksCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journals" viewBox="0 0 16 16">
+         <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2" />
+         <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Total Books
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+       <a class="small text-white stretched-link" href="#">View Details</a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6">
+     <div class="card bg-info text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="userCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+         <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Total Users
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+       <a class="small text-white stretched-link" href="#">View Details</a>
+      </div>
+     </div>
+    </div>
+
+    <div class="col-6">
+     <div class="card bg-warning text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="checkedOutCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journal-arrow-down" viewBox="0 0 16 16">
+         <path fill-rule="evenodd" d="M8 5a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5A.5.5 0 0 1 8 5" />
+         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+         <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Books Checked Out
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+       <a class="small text-white stretched-link" href="#">View Details</a>
+      </div>
+     </div>
+    </div>
+    <div class="col-6">
+     <div class="card bg-warning text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="rejectedBookCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-x" viewBox="0 0 16 16">
+         <path fill-rule="evenodd" d="M6.146 6.146a.5.5 0 0 1 .708 0L8 7.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 8l1.147 1.146a.5.5 0 0 1-.708.708L8 8.707 6.854 9.854a.5.5 0 0 1-.708-.708L7.293 8 6.146 6.854a.5.5 0 0 1 0-.708" />
+         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+         <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Rejected Book Requests
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between">
+       <a class="small text-white stretched-link" href="#">View Details</a>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <!-- Dashboard Contents -->
    <div class="container-fluid p-0">
     <div class="row g-3 mb-3">
      <!-- Pending Signup Requests -->
      <div class="col-12 col-lg-6" id="psr">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Signup Requests <span class="badge bg-secondary" id="signupRequestCount">0</span>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Signup Requests <span class="badge bg-secondary count-target" data-count="signupRequestCount">0</span>
         </h5>
        </div>
        <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
@@ -179,7 +336,7 @@
      <div class="col-12 col-lg-6" id="pbr">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary" id="pendingBookRequestCount">0</span>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary count-target" id="pendingBookRequestCount">0</span>
         </h5>
        </div>
        <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
@@ -191,14 +348,14 @@
      <div class="col-12">
       <div class="card">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">All Books <span class="badge bg-secondary" id="allBooksCount">0</span>
+        <h5 class="card-title mb-0 d-flex justify-content-between">All Books <span class="badge bg-secondary count-target fw-bold" data-count="allBooksCount">0</span>
         </h5>
        </div>
        <div class="px-2 mt-2">
-        <input type="text" autocomplete="off" id="adminBookSearch" class="form-control form-control-sm" placeholder="Search by title or author...">
+        <input type="text" autocomplete="off" id="adminAllBooks" class="form-control form-control-sm" placeholder="Search by book title, author or sponsor...">
        </div>
        <div class="card-body p-2">
-        <div id="allBooksCardContainer" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
+        <div id="adminAllBooksCard" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
        </div>
       </div>
      </div>
@@ -206,14 +363,14 @@
      <div class="col-12">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">Active Checked Out Books <span class="badge bg-secondary" id="checkedOutCount">0</span>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Active Checked Out Books <span class="badge bg-secondary count-target fw-bold" data-count="checkedOutCount">0</span>
         </h5>
        </div>
        <div class="px-2 mt-2">
-        <input type="text" autocomplete="off" id="searchCheckedOutBooks" class="form-control form-control-sm" placeholder="Search by User Name or Book Title...">
+        <input type="text" autocomplete="off" id="checkedOutBooks" class="form-control form-control-sm" placeholder="Search by username or book title...">
        </div>
        <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
-        <div id="checkedOutBooksCardContainer" class="d-flex flex-column gap-2"></div>
+        <div id="checkedOutBooksCard" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
      </div>
@@ -253,14 +410,14 @@
    <!-- All Users -->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title mb-0 d-flex justify-content-between"> All Users <span class="badge bg-secondary" id="userCount">0</span>
+     <h5 class="card-title mb-0 d-flex justify-content-between"> All Users <span class="badge bg-secondary count-target" data-count="userCount">0</span>
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="adminUserSearch" class="form-control form-control-sm" placeholder="Search by User Name...">
+     <input type="text" autocomplete="off" id="adminAllUsers" class="form-control form-control-sm" placeholder="Search by full name, email, blood group...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
-     <div id="allUsersCardContainer" class="d-flex flex-column gap-2"></div>
+     <div id="adminAllUsersCard" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
    <!-- All Users Details Modal-->
@@ -268,45 +425,52 @@
     <div class="modal-dialog">
      <div class="modal-content">
       <div class="modal-header">
-       <h5 class="modal-title">User Profile</h5>
+       <h6 class="modal-title text-center">User Profile : <span class="user-field fw-bold fs-5" data-field="fullname"></span></h6>
        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-       <div class="text-center mb-3">
-        <img id="profileImg" class="rounded-circle" width="80" height="80" />
+       <div class="card mb-0 d-flex flex-column" style="max-width: 100%;">
+        <div class="d-flex flex-row align-items-center p-2">
+         <!-- User Profile Image -->
+         <div>
+          <img class="user-field" data-field="profileUrl" id="profileImg" alt="Book Cover"
+          style="width: 80px; object-fit: cover; border-radius: 50px;">
+         </div>
+         <!-- User Details -->
+         <div class="flex-grow-1 px-3">
+          <div class="card-body p-0">
+           <!-- Text Fields -->
+           <p class="card-text small mb-1">
+            <strong>Email:</strong>
+            <span class="user-field" data-field="email"></span>
+           </p>
+           <p class="card-text small mb-1">
+            <strong>DOB:</strong>
+            <span class="user-field" data-field="dob"></span>
+           </p>
+           <p class="card-text small mb-1">
+            <strong>Blood Group:</strong>
+            <span class="user-field" data-field="bloodGroup"></span>
+           </p>
+           <p class="card-text small mb-1">
+            <strong>Joined:</strong>
+            <span class="user-field" data-field="joinedAt"></span>
+           </p>
+          </div>
+         </div>
+        </div>
        </div>
-       <p>
-        <strong>Name:</strong>
-        <span id="profileName"></span>
-       </p>
-       <p>
-        <strong>Email:</strong>
-        <span id="profileEmail"></span>
-       </p>
-       <p>
-        <strong>DOB:</strong>
-        <span id="profileDob"></span>
-       </p>
-       <p>
-        <strong>Blood Group:</strong>
-        <span id="profileBlood"></span>
-       </p>
-       <p>
-        <strong>Joined:</strong>
-        <span id="profileJoined"></span>
-       </p>
       </div>
-      <hr>
       <div class="card">
        <div class="card-header" style="background-color:#e6e6e6">
         <h5 class="card-title mb-0 d-flex justify-content-between">Book Request & Checkout History <span class="badge bg-secondary" id="userRequestCount">0</span>
         </h5>
        </div>
        <div class="mt-1">
-        <input type="text" id="searchUserBookHistory" class="form-control form-control-sm" placeholder="Search by book title or status...">
+        <input type="text" id="searchuserBooksHistory" class="form-control form-control-sm" placeholder="Search by book title or status...">
        </div>
-       <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
-        <div id="userBookHistoryTable" class="d-flex flex-column gap-2"></div>
+       <div class="card-body p-2" style="max-height: 50vh; overflow-y: auto;">
+        <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
        </div>
       </div>
       <div class="modal-footer">
@@ -318,7 +482,7 @@
    </div>
    <!-- All Users Details Edit Modal-->
    <div class="modal fade" id="editUserProfileModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-fullscreen">
      <form id="editUserForm" class="modal-content needs-validation" novalidate>
       <div class="modal-header">
        <h5 class="modal-title">Edit User Profile</h5>
@@ -379,28 +543,43 @@
    <!-- All Book Requests History -->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title mb-0 d-flex justify-content-between">All Book Requests History <span class="badge bg-secondary" id="bookHistoryCount">0</span>
+     <h5 class="card-title mb-0 d-flex justify-content-between">All Book Requests History <span class="badge bg-secondary count-target" data-count="bookHistoryCount">0</span>
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="allBookHistorySearch" class="form-control form-control-sm" placeholder="Search by user name or book title...">
+     <input type="text" autocomplete="off" id="allBookRequestHistory" class="form-control form-control-sm" placeholder="Search by user name, book title or status...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
-     <div id="allBookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
+     <div id="allBookRequestsHistoryCard" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
    <!-- Rejected Book Requests -->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="mb-0">Rejected Book Requests</h5>
+     <h5 class="card-title mb-0 d-flex justify-content-between">All Rejected Book Requests <span class="badge bg-secondary count-target" data-count="rejectedBookCount">0</span>
+     </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="rejectedBookSearch" class="form-control form-control-sm" placeholder="Search by user name or book title...">
+     <input type="text" autocomplete="off" id="allRejectedBooks" class="form-control form-control-sm" placeholder="Search by full name or book title...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
-     <div id="rejectedRequestsCardContainer" class="d-flex flex-column gap-2"></div>
+     <div id="allRejectedRequestsCard" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
+   <footer class="py-4 bg-light bor mt-auto" style="border-top:3px solid #e6e6e6;border-radius:10px">
+    <div class="container-fluid px-3">
+     <div class="d-flex align-items-center justify-content-between small">
+      <div class="text-muted">
+       PKNS library & Young Star Club
+      </div>
+      <div>
+       <div class="text-muted">
+        &copy; Copyright 2015
+       </div>
+      </div>
+     </div>
+    </div>
+   </footer>
   </div>
  </div>
  <!-- Signup Modal -->
@@ -516,7 +695,8 @@
  </div>
  <!-- Edit Book Modal -->
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+   ">
    <form id="editBookForm" class="modal-content needs-validation" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">Edit Book</h5>
@@ -590,6 +770,8 @@
    <span class="visually-hidden">Loading...</span>
   </div>
  </div>
+
+
  <!-- Conntent End-->
  <!-- Test Scripts Here-->
  <script></script>
@@ -895,8 +1077,8 @@
     });
     onSnapshot(collection(db, "books"),
      (bookSnap) => {
-      const booksCardContainer = document.getElementById("booksCardContainer");
-      booksCardContainer.innerHTML = "";
+      const userAvailableBooksCard = document.getElementById("userAvailableBooksCard");
+      userAvailableBooksCard.innerHTML = "";
       const books = [];
       bookSnap.forEach((docSnap) => {
        books.push({
@@ -993,7 +1175,7 @@
        };
        cardBody.appendChild(button);
        card.appendChild(cardBody);
-       booksCardContainer.appendChild(card);
+       userAvailableBooksCard.appendChild(card);
        // Start scroll animation for both title and author if overflow
        setTimeout(() => {
         if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
@@ -1014,7 +1196,7 @@
          }
         };
        }
-       booksCardContainer.appendChild(card);
+       userAvailableBooksCard.appendChild(card);
       });
       hideLoader();
      });
@@ -1025,7 +1207,7 @@
     "==",
     uid)),
     (snapshot) => {
-     const container = document.getElementById("userHistoryCardContainer");
+     const container = document.getElementById("userBooksHistoryCard");
      container.innerHTML = "";
      const sortedDocs = snapshot.docs.map(docSnap => {
       const data = docSnap.data();
@@ -1173,121 +1355,151 @@
    loadCheckedOutBooks();
    loadAllBookRequests();
    loadRejectedBookRequests();
+
    //--- Count functionality (Admin)---
    onSnapshot(collection(db, "signupRequests"), (snapshot) => {
-    document.getElementById("signupRequestCount").textContent = snapshot.size;
+    updateCountTargets({
+     signupRequestCount: snapshot.size
+    });
    });
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Pending")),
-    (snapshot) => {
-     document.getElementById("pendingBookRequestCount").textContent = snapshot.size;
+
+   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Pending")), (snapshot) => {
+    updateCountTargets({
+     pendingBookRequestCount: snapshot.size
     });
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
-    (snapshot) => {
-     document.getElementById("checkedOutCount").textContent = snapshot.size;
-     document.getElementById("headercheckedOutCount").textContent = snapshot.size;
+   });
+
+   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")), (snapshot) => {
+    updateCountTargets({
+     checkedOutCount: snapshot.size
     });
+   });
+
    onSnapshot(collection(db, "books"), (snapshot) => {
-    document.getElementById("allBooksCount").textContent = snapshot.size;
-    document.getElementById("headerallBooksCount").textContent = snapshot.size;
-   });
-   onSnapshot(collection(db, "users"), (snapshot) => {
-    document.getElementById("userCount").textContent = snapshot.size;
-    document.getElementById("headeruserCount").textContent = snapshot.size;
-   });
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "!=", "Pending")),
-    (snapshot) => {
-     document.getElementById("bookHistoryCount").textContent = snapshot.size;
+    updateCountTargets({
+     allBooksCount: snapshot.size
     });
+   });
+
+   onSnapshot(collection(db, "users"), (snapshot) => {
+    updateCountTargets({
+     userCount: snapshot.size
+    });
+   });
+
+   onSnapshot(query(collection(db, "bookRequests"), where("status", "!=", "Pending")), (snapshot) => {
+    updateCountTargets({
+     bookHistoryCount: snapshot.size
+    });
+   });
+
+   onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Rejected")), (snapshot) => {
+    updateCountTargets({
+     rejectedBookCount: snapshot.size
+    });
+   });
+
   }
+
+  function updateCountTargets(countMap) {
+   document.querySelectorAll(".count-target").forEach(el => {
+    const key = el.dataset.count;
+    if (countMap[key] !== undefined) {
+     el.textContent = countMap[key];
+    }
+   });
+  }
+
   // --- Load Signup Requests ---
   function loadSignupRequests() {
    const psr = document.getElementById("psr");
-   onSnapshot(collection(db, "signupRequests"), (snapshot) => {
-    const container = document.getElementById("signupRequestsCardContainer");
-    container.innerHTML = "";
-    if (snapshot.empty) {
-     psr.classList.add("d-none");
-     return;
-    }
-    psr.classList.remove("d-none");
-    snapshot.forEach((docSnap) => {
-     const data = docSnap.data();
-     const card = document.createElement("div");
-     card.className = "card mb-2 d-flex flex-column";
-     card.style.maxWidth = "100%";
-     const row = document.createElement("div");
-     row.className = "d-flex flex-row align-items-center p-2";
-     // Avatar (Circle with Initial)
-     const avatarDiv = document.createElement("div");
-     avatarDiv.className = "d-flex align-items-center justify-content-center bg-primary text-white";
-     avatarDiv.style.width = "100px";
-     avatarDiv.style.height = "140px";
-     avatarDiv.style.borderRadius = "5px";
-     avatarDiv.style.fontSize = "42px";
-     avatarDiv.textContent = data.fullname?.charAt(0).toUpperCase() || "👤";
-     // User Details
-     const details = document.createElement("div");
-     details.className = "flex-grow-1 px-3";
-     details.innerHTML = `
+   onSnapshot(collection(db, "signupRequests"),
+    (snapshot) => {
+     const container = document.getElementById("signupRequestsCardContainer");
+     container.innerHTML = "";
+     if (snapshot.empty) {
+      psr.classList.add("d-none");
+      return;
+     }
+     psr.classList.remove("d-none");
+     snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const card = document.createElement("div");
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
+      // Avatar (Circle with Initial)
+      const avatarDiv = document.createElement("div");
+      avatarDiv.className = "d-flex align-items-center justify-content-center bg-primary text-white";
+      avatarDiv.style.width = "100px";
+      avatarDiv.style.height = "140px";
+      avatarDiv.style.borderRadius = "5px";
+      avatarDiv.style.fontSize = "42px";
+      avatarDiv.textContent = data.fullname?.charAt(0).toUpperCase() || "👤";
+      // User Details
+      const details = document.createElement("div");
+      details.className = "flex-grow-1 px-3";
+      details.innerHTML = `
 
-     <div class="card-body p-0">
-     <h6 class="card-title h5 mb-1"><strong>${data.fullname}</strong></h6>
-     <p class="card-text small mb-1">
-     <strong>Email:</strong> ${data.email}
-     </p>
-     <p class="card-text small mb-1">
-     <strong>Blood Group:</strong> ${data.bloodGroup || "N/A"}
-     </p>
-     <p class="card-text small mb-1">
-     <strong>DOB:</strong> ${data.dob || "-"}
-     </p>
-     <p class="card-text">
-     <strong>Status:</strong>
-     <span class="badge bg-warning text-dark">Pending</span>
-     </p>
-     </div>
-     `;
-     // Action Buttons
-     const actionButtons = document.createElement("div");
-     actionButtons.className = "d-flex justify-content-end gap-2 px-2 pb-2";
-     const approveBtn = document.createElement("button");
-     approveBtn.className = "btn btn-success btn-sm flex-fill";
-     approveBtn.textContent = "Approve";
-     approveBtn.onclick = async () => {
-      showLoader();
-      try {
-       await approveSignup(docSnap.id, data);
-       showToast(`Signup approved for ${data.fullname}`, "bg-success");
-      } catch (err) {
-       showToast(`Error approving: ${err.message}`, "bg-danger");
-      } finally {
-       hideLoader();
-      }
-     };
-     const rejectBtn = document.createElement("button");
-     rejectBtn.className = "btn btn-danger btn-sm flex-fill";
-     rejectBtn.textContent = "Reject";
-     rejectBtn.onclick = async () => {
-      showLoader();
-      try {
-       await deleteDoc(doc(db, "signupRequests", docSnap.id));
-       showToast(`Signup request rejected for ${data.fullname}`, "bg-danger");
-      } catch (err) {
-       showToast(`Error rejecting: ${err.message}`, "bg-danger");
-      } finally {
-       hideLoader();
-      }
-     };
-     actionButtons.appendChild(approveBtn);
-     actionButtons.appendChild(rejectBtn);
-     // Assemble Card
-     row.appendChild(avatarDiv);
-     row.appendChild(details);
-     card.appendChild(row);
-     card.appendChild(actionButtons);
-     container.appendChild(card);
+      <div class="card-body p-0">
+      <h6 class="card-title h5 mb-1"><strong>${data.fullname}</strong></h6>
+      <p class="card-text small mb-1">
+      <strong>Email:</strong> ${data.email}
+      </p>
+      <p class="card-text small mb-1">
+      <strong>Blood Group:</strong> ${data.bloodGroup || "N/A"}
+      </p>
+      <p class="card-text small mb-1">
+      <strong>DOB:</strong> ${data.dob || "-"}
+      </p>
+      <p class="card-text">
+      <strong>Status:</strong>
+      <span class="badge bg-warning text-dark">Pending</span>
+      </p>
+      </div>
+      `;
+      // Action Buttons
+      const actionButtons = document.createElement("div");
+      actionButtons.className = "d-flex justify-content-end gap-2 px-2 pb-2";
+      const approveBtn = document.createElement("button");
+      approveBtn.className = "btn btn-success btn-sm flex-fill";
+      approveBtn.textContent = "Approve";
+      approveBtn.onclick = async () => {
+       showLoader();
+       try {
+        await approveSignup(docSnap.id, data);
+        showToast(`Signup approved for ${data.fullname}`, "bg-success");
+       } catch (err) {
+        showToast(`Error approving: ${err.message}`, "bg-danger");
+       } finally {
+        hideLoader();
+       }
+      };
+      const rejectBtn = document.createElement("button");
+      rejectBtn.className = "btn btn-danger btn-sm flex-fill";
+      rejectBtn.textContent = "Reject";
+      rejectBtn.onclick = async () => {
+       showLoader();
+       try {
+        await deleteDoc(doc(db, "signupRequests", docSnap.id));
+        showToast(`Signup request rejected for ${data.fullname}`, "bg-danger");
+       } catch (err) {
+        showToast(`Error rejecting: ${err.message}`, "bg-danger");
+       } finally {
+        hideLoader();
+       }
+      };
+      actionButtons.appendChild(approveBtn);
+      actionButtons.appendChild(rejectBtn);
+      // Assemble Card
+      row.appendChild(avatarDiv);
+      row.appendChild(details);
+      card.appendChild(row);
+      card.appendChild(actionButtons);
+      container.appendChild(card);
+     });
     });
-   });
   }
   // --- Load Book Requests ---
   function loadBookRequests() {
@@ -1396,10 +1608,10 @@
 
   // --- Load All Books (Admin) ---
   function loadAllBooks() {
-   const allBooksCardContainer = document.getElementById("allBooksCardContainer");
+   const adminAllBooksCard = document.getElementById("adminAllBooksCard");
    onSnapshot(collection(db, "books"),
     (snapshot) => {
-     allBooksCardContainer.innerHTML = "";
+     adminAllBooksCard.innerHTML = "";
      const books = [];
      snapshot.forEach((docSnap) => {
       books.push({
@@ -1480,7 +1692,7 @@
       },
        50);
       card.appendChild(cardBody);
-      allBooksCardContainer.appendChild(card);
+      adminAllBooksCard.appendChild(card);
      });
     });
   }
@@ -1603,7 +1815,7 @@
   }
   // --- Load All Checked Out Books ---
   function loadCheckedOutBooks() {
-   const container = document.getElementById("checkedOutBooksCardContainer");
+   const container = document.getElementById("checkedOutBooksCard");
    onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Checked Out")),
     async (snapshot) => {
      container.innerHTML = "";
@@ -1740,7 +1952,7 @@
 
   // --- Load All Users (Admin) ---
   function loadAllUsers() {
-   const container = document.getElementById("allUsersCardContainer");
+   const container = document.getElementById("adminAllUsersCard");
    onSnapshot(collection(db, "users"),
     (snapshot) => {
      container.innerHTML = "";
@@ -1801,34 +2013,36 @@
   document.addEventListener("DOMContentLoaded", () => {
    userProfileModal = new bootstrap.Modal(document.getElementById("userProfileModal"));
    editUserModal = new bootstrap.Modal(document.getElementById("editUserProfileModal"));
-   window.openUserProfileModal = function(user) {
+   window.openUserProfileModal = function (user) {
     window.currentUserForEdit = user;
+
+    // For edit form (keep as ID)
     document.getElementById("editUserId").value = user.id;
-    document.getElementById("profileImg").src = user.profileUrl || "https://via.placeholder.com/80?text=👤";
-    document.getElementById("profileName").textContent = user.fullname;
-    document.getElementById("profileEmail").textContent = user.email;
-    document.getElementById("profileDob").textContent = user.dob;
-    document.getElementById("profileBlood").textContent = user.bloodGroup;
-    document.getElementById("profileJoined").textContent = user.joinedAt;
-    // Hide edit button for admin accounts
+
+    // Use class-based profile population
+    populateUserProfile(user);
+
+    // Hide edit button for admins
     document.getElementById("editUserBtn").classList.toggle("d-none", user.role === "admin");
-    const cardContainer = document.getElementById("userBookHistoryTable"); // Now acts as a card container
-    const searchInput = document.getElementById("searchUserBookHistory");
-    cardContainer.innerHTML = `
-    <div class="text-center text-muted">Loading...</div>`;
-    searchInput.value = ""; // reset search
+
+    // Load user's book request history
+    const cardContainer = document.getElementById("userBooksHistoryTable");
+    const searchInput = document.getElementById("searchuserBooksHistory");
+    cardContainer.innerHTML = `<div class="text-center text-muted">Loading...</div>`;
+    searchInput.value = "";
+
     const q = query(collection(db, "bookRequests"), where("userId", "==", user.id));
     getDocs(q).then((snapshot) => {
      if (snapshot.empty) {
-      cardContainer.innerHTML = `
-      <div class="text-center text-muted">No history found.</div>`;
+      cardContainer.innerHTML = `<div class="text-center text-muted">No history found.</div>`;
       return;
      }
+
      const sorted = snapshot.docs.map((doc) => {
       const data = doc.data();
       const dateStr = formatDateTimeFromOffset(data.requestedAt);
       let badgeClass = "bg-secondary";
-      // Badge styling based on status
+
       switch (data.status) {
        case "Pending":
         badgeClass = "bg-warning text-dark";
@@ -1843,6 +2057,7 @@
         badgeClass = "bg-danger";
         break;
       }
+
       return {
        title: data.title,
        status: data.status,
@@ -1866,34 +2081,54 @@
        </div>
        </div>
        </div>
-       </div>
-       `
+       </div>`
       };
      }).sort((a, b) => b.requestedAt - a.requestedAt);
 
      function renderCards(filteredRows) {
       cardContainer.innerHTML = "";
       if (filteredRows.length === 0) {
-       cardContainer.innerHTML = `
-       <div class="text-center text-muted">No matches found.</div>`;
+       cardContainer.innerHTML = `<div class="text-center text-muted">No matches found.</div>`;
        return;
       }
       filteredRows.forEach((row) => {
        cardContainer.insertAdjacentHTML("beforeend", row.html);
       });
      }
+
      renderCards(sorted);
-     searchInput.oninput = function() {
+
+     searchInput.oninput = function () {
       const keyword = this.value.trim().toLowerCase();
-      const filtered = sorted.filter(row => row.title.toLowerCase().includes(keyword) || row.status.toLowerCase().includes(keyword));
+      const filtered = sorted.filter(row =>
+       row.title.toLowerCase().includes(keyword) || row.status.toLowerCase().includes(keyword)
+      );
       renderCards(filtered);
      };
     }).catch(() => {
-     cardContainer.innerHTML = `
-     <div class="text-danger text-center">Error loading history.</div>`;
+     cardContainer.innerHTML = `<div class="text-danger text-center">Error loading history.</div>`;
     });
+
     userProfileModal.show();
    };
+
+   function populateUserProfile(user) {
+    document.querySelectorAll(".user-field").forEach(el => {
+     const field = el.dataset.field;
+     let value = user[field] || "-";
+
+     if (field === "profileUrl") {
+      el.src = value || "https://via.placeholder.com/80?text=👤";
+     } else if (field === "dob") {
+      el.textContent = value ? `DOB: ${value}`: "DOB: -";
+     } else if (field === "joinedAt") {
+      el.textContent = value ? formatDateTimeFromOffset(value): "-";
+     } else {
+      el.textContent = value;
+     }
+    });
+   }
+
    // --- Open User Edit Modal
    document.getElementById("editUserBtn").onclick = () => {
     const user = window.currentUserForEdit;
@@ -1979,7 +2214,7 @@
   };
   // --- Load All Book Request History (Admin) ---
   function loadAllBookRequests() {
-   const container = document.getElementById("allBookRequestsCardContainer");
+   const container = document.getElementById("allBookRequestsHistoryCard");
    onSnapshot(query(collection(db, "bookRequests"), where("status", "!=", "Pending")), async (snapshot) => {
     container.innerHTML = "";
     const sortedDocs = snapshot.docs.map(doc => ({
@@ -2041,7 +2276,7 @@
   }
   // --- Load All Rejected Book Request History (Admin) ---
   function loadRejectedBookRequests() {
-   const container = document.getElementById("rejectedRequestsCardContainer");
+   const container = document.getElementById("allRejectedRequestsCard");
    onSnapshot(query(collection(db, "bookRequests"), where("status", "==", "Rejected")),
     async (snapshot) => {
      container.innerHTML = "";
@@ -2081,7 +2316,7 @@
       <strong>Status:</strong>
       <span class="badge bg-danger">Rejected</span>
       </p>
-      <p class="card-text small search-user mb-1">
+      <p class="card-text small search-name mb-1">
       <strong>Requested By:</strong> ${userName}
       </p>
       <p class="card-text small">
@@ -2160,10 +2395,10 @@
    const cards = container.querySelectorAll(".card");
    const query = searchText.toLowerCase();
    cards.forEach(card => {
-    const titleEl = card.querySelector(".search-title fw-bold");
+    const titleEl = card.querySelector(".search-title");
     const authorEl = card.querySelector(".search-author");
     const sponsorEl = card.querySelector(".search-sponsor");
-    const nameEl = card.querySelector(".search-name fw-bold");
+    const nameEl = card.querySelector(".search-name");
     const emailEl = card.querySelector(".search-email");
     const bloodgroupEl = card.querySelector(".search-bloodgroup");
     const title = titleEl?.textContent.toLowerCase() || "";
@@ -2181,32 +2416,32 @@
    });
   }
   // 🟢 User Dashboard: Available Books
-  document.getElementById("userBookSearch")?.addEventListener("input", function() {
-   filterCards("booksCardContainer", this.value);
+  document.getElementById("userAvailableBooks")?.addEventListener("input", function() {
+   filterCards("userAvailableBooksCard", this.value);
   });
   // 🟢 User Dashboard: Your Book Requests & Checkouts
-  document.getElementById("searchUserHistory")?.addEventListener("input", function() {
-   filterCards("userHistoryCardContainer", this.value);
+  document.getElementById("userBooksHistory")?.addEventListener("input", function() {
+   filterCards("userBooksHistoryCard", this.value);
   });
   // 🔵 Admin Dashboard: All Books
-  document.getElementById("adminBookSearch")?.addEventListener("input", function() {
-   filterCards("allBooksCardContainer", this.value);
+  document.getElementById("adminAllBooks")?.addEventListener("input", function() {
+   filterCards("adminAllBooksCard", this.value);
   });
   // 🔵 Admin Dashboard: Active Checked Out Books
-  document.getElementById("searchCheckedOutBooks")?.addEventListener("input", function() {
-   filterCards("checkedOutBooksCardContainer", this.value);
+  document.getElementById("checkedOutBooks")?.addEventListener("input", function() {
+   filterCards("checkedOutBooksCard", this.value);
   });
   // 🔵 Admin Dashboard: All Users
-  document.getElementById("adminUserSearch")?.addEventListener("input", function() {
-   filterCards("allUsersCardContainer", this.value);
+  document.getElementById("adminAllUsers")?.addEventListener("input", function() {
+   filterCards("adminAllUsersCard", this.value);
   });
   // 🔵 Admin Dashboard: All Book Requests History
-  document.getElementById("allBookHistorySearch")?.addEventListener("input", function() {
-   filterCards("allBookRequestsCardContainer", this.value);
+  document.getElementById("allBookRequestHistory")?.addEventListener("input", function() {
+   filterCards("allBookRequestsHistoryCard", this.value);
   });
   // 🔵 Admin Dashboard: Rejected Book Requests
-  document.getElementById("rejectedBookSearch")?.addEventListener("input", function() {
-   filterCards("rejectedRequestsCardContainer", this.value);
+  document.getElementById("allRejectedBooks")?.addEventListener("input", function() {
+   filterCards("allRejectedRequestsCard", this.value);
   });
  </script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
