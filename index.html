@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -121,7 +122,6 @@
     <div class="px-2 mt-2">
      <input type="text" autocomplete="off" id="searchUserHistory" class="form-control form-control-sm" placeholder="Search by book title...">
     </div>
-
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <div id="userHistoryCardContainer" class="d-flex flex-column gap-2"></div>
     </div>
@@ -253,7 +253,7 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="searchAllUsers" class="form-control form-control-sm" placeholder="Search by User Name...">
+     <input type="text" autocomplete="off" id="adminUserSearch" class="form-control form-control-sm" placeholder="Search by User Name...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="allUsersCardContainer" class="d-flex flex-column gap-2"></div>
@@ -386,7 +386,7 @@
      <h5 class="card-title mb-0 d-flex justify-content-between">All Book Requests History<span class="badge bg-secondary" id="bookHistoryCount">0</span></h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="searchAllBookRequests" class="form-control form-control-sm" placeholder="Search by user name or book title...">
+     <input type="text" autocomplete="off" id="allBookHistorySearch" class="form-control form-control-sm" placeholder="Search by user name or book title...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="allBookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
@@ -398,6 +398,9 @@
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
      <h5 class="mb-0">Rejected Book Requests</h5>
+    </div>
+    <div class="px-2 mt-2">
+     <input type="text" autocomplete="off" id="rejectedBookSearch" class="form-control form-control-sm" placeholder="Search by user name or book title...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="rejectedRequestsCardContainer" class="d-flex flex-column gap-2"></div>
@@ -1023,7 +1026,7 @@
         const titleWrapper = document.createElement("div");
         titleWrapper.className = "book-title-wrapper";
         const titleSpan = document.createElement("h6");
-        titleSpan.className = "book-title";
+        titleSpan.className = "book-title search-title";
         titleSpan.textContent = book.title || "Untitled";
         titleWrapper.appendChild(titleSpan);
         cardBody.appendChild(titleWrapper);
@@ -1032,7 +1035,7 @@
         const authorWrapper = document.createElement("div");
         authorWrapper.className = "book-title-wrapper";
         const authorSpan = document.createElement("h6");
-        authorSpan.className = "book-title text-muted";
+        authorSpan.className = "book-title text-muted search-author";
         authorSpan.textContent = book.author || "Unknown";
         authorWrapper.appendChild(authorSpan);
         cardBody.appendChild(authorWrapper);
@@ -1148,8 +1151,8 @@
 
       info.innerHTML = `
       <div class="card-body p-0">
-      <h6 class="card-title mb-2">${req.title}</h6>
-      <p class="card-text mb-1">
+      <h6 class="card-title search-title mb-2">${req.title}</h6>
+      <p class="card-text search-sponsor mb-1">
       <strong>Status:</strong>
       <span class="badge ${badgeClass}">${req.status}</span>
       </p>
@@ -1603,10 +1606,10 @@
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
       <div class="card-body p-0">
-      <h6 class="card-title mb-2">${record.title}</h6>
-      <p class="card-text mb-1"><strong>Status:</strong> <span class="badge bg-primary">Checked Out</span></p>
-      <p class="card-text mb-1"><strong>User:</strong> ${userName}</p>
-      <p class="card-text"><strong>Requested On:</strong> ${formatDateTimeFromOffset(record.requestedAt)}</p>
+      <h6 class="card-title search-title mb-2">${record.title}</h6>
+      <p class="card-text mb-1"><strong>Status:</strong><span class="badge bg-primary">Checked Out</span></p>
+      <p class="card-text search-author  mb-1"><strong>User:</strong>${userName}</p>
+      <p class="card-text"><strong>Requested On:</strong>${formatDateTimeFromOffset(record.requestedAt)}</p>
       </div>
       `;
 
@@ -1775,7 +1778,7 @@
       const titleWrapper = document.createElement("div");
       titleWrapper.className = "book-title-wrapper overflow-hidden";
       const titleSpan = document.createElement("h6");
-      titleSpan.className = "card-title book-title m-0";
+      titleSpan.className = "card-title book-title search-title m-0";
       titleSpan.textContent = book.title || "Untitled";
       titleWrapper.appendChild(titleSpan);
       cardBody.appendChild(titleWrapper);
@@ -1784,7 +1787,7 @@
       const authorWrapper = document.createElement("div");
       authorWrapper.className = "book-title-wrapper overflow-hidden";
       const authorSpan = document.createElement("p");
-      authorSpan.className = "mb-1 text-muted book-title";
+      authorSpan.className = "mb-1 text-muted search-author book-title";
       authorSpan.textContent = book.author || "Unknown";
       authorWrapper.appendChild(authorSpan);
       cardBody.appendChild(authorWrapper);
@@ -2016,9 +2019,9 @@
      info.className = "flex-grow-1 px-3";
      info.innerHTML = `
      <div class="card-body p-0">
-     <h6 class="card-title mb-2">${user.fullname}</h6>
-     <p class="card-text mb-1"><strong>Email:</strong> ${user.email}</p>
-     <p class="card-text mb-1"><strong>Blood Group:</strong> ${user.bloodGroup || "N/A"}</p>
+     <h6 class="card-title search-name mb-2">${user.fullname}</h6>
+     <p class="card-text search-email mb-1"><strong>Email:</strong> ${user.email}</p>
+     <p class="card-text search-bloodgroup mb-1"><strong>Blood Group:</strong> ${user.bloodGroup || "N/A"}</p>
      <p class="card-text">
      <strong>Joined:</strong> ${formatDateTimeFromOffset(user.joinedAt)}
      </p>
@@ -2307,9 +2310,9 @@
 
       info.innerHTML = `
       <div class="card-body p-0">
-      <h6 class="card-title mb-2">${req.title}</h6>
-      <p class="card-text mb-1"><strong>Status:</strong> <span class="badge ${badgeClass}">${req.status}</span></p>
-      <p class="card-text mb-1"><strong>Requested By:</strong> ${userName}</p>
+      <h6 class="card-title search-title mb-2">${req.title}</h6>
+      <p class="card-text search-status mb-1"><strong>Status:</strong> <span class="badge ${badgeClass}">${req.status}</span></p>
+      <p class="card-text search-name mb-1"><strong>Requested By:</strong> ${userName}</p>
       <p class="card-text"><strong>Date:</strong> ${formatDateTimeFromOffset(req.rejectedAt || req.requestedAt)}</p>
       </div>
       `;
@@ -2370,12 +2373,12 @@
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
       <div class="card-body p-0">
-      <h6 class="card-title mb-2">${req.title}</h6>
+      <h6 class="card-title search-title mb-2">${req.title}</h6>
       <p class="card-text mb-1">
       <strong>Status:</strong>
       <span class="badge bg-danger">Rejected</span>
       </p>
-      <p class="card-text mb-1"><strong>Requested By:</strong> ${userName}</p>
+      <p class="card-text search-user mb-1"><strong>Requested By:</strong> ${userName}</p>
       <p class="card-text"><strong>Rejected On:</strong> ${formatDateTimeFromOffset(req.rejectedAt)}</p>
       </div>
       `;
@@ -2388,73 +2391,6 @@
     }
    );
   }
-
-
-
-  // --- Generic Table Filter Utility ---
-
-  function filterTable(tableId, searchValue, columnsToCheck = [0]) {
-   const filter = searchValue.toLowerCase();
-   const table = document.getElementById(tableId);
-   const rows = table?.getElementsByTagName("tr") || [];
-
-   for (let i = 1; i < rows.length; i++) {
-    // skip header row
-    const cells = rows[i].getElementsByTagName("td");
-    const matchFound = columnsToCheck.some(colIdx =>
-     cells[colIdx]?.textContent.toLowerCase().includes(filter)
-    );
-    rows[i].style.display = matchFound ? "": "none";
-   }
-  }
-
-  // --- Search Filters ---
-
-  // Admin dashboard: Active Checked Out Books
-  document.getElementById("searchCheckedOutBooks")?.addEventListener("input", function () {
-   filterTable("checkedOutBooksTable", this.value, [0, 1]); // user name, book title
-  });
-
-  // Admin dashboard: All Users
-  document.getElementById("searchAllUsers")?.addEventListener("input", function () {
-   filterTable("allUsersTable", this.value, [0, 1, 2, 3]); // full name, email, DOB, blood group
-  });
-
-  // Admin dashboard: All Book Requests
-  document.getElementById("searchAllBookRequests")?.addEventListener("input", function () {
-   filterTable("allBookRequestsTable", this.value, [0, 1]); // user name, book title
-  });
-
-  // User dashboard: Book Request History
-  document.getElementById("searchUserHistory")?.addEventListener("input", function () {
-   filterTable("userHistoryTable", this.value, [0]); // book title only
-  });
-
-
-  // Filter card elements by text for available books
-
-  function filterCards(containerId, searchText) {
-   const container = document.getElementById(containerId);
-   const cards = container.querySelectorAll(".card");
-   const query = searchText.toLowerCase();
-
-   cards.forEach(card => {
-    const title = card.querySelector("h5")?.textContent.toLowerCase() || "";
-    const author = card.querySelector("p")?.textContent.toLowerCase() || "";
-    const matches = title.includes(query) || author.includes(query);
-    card.style.display = matches ? "": "none";
-   });
-  }
-
-  // User dashboard: Available Books (cards)
-  document.getElementById("userBookSearch")?.addEventListener("input", function () {
-   filterCards("booksCardContainer", this.value);
-  });
-
-  // Admin dashboard: All Books (cards)
-  document.getElementById("adminBookSearch")?.addEventListener("input", function () {
-   filterCards("allBooksCardContainer", this.value);
-  });
 
   //--- Toast Notification ---
 
@@ -2522,6 +2458,74 @@
     }
    }
   }
+  
+  // --- Search Filters ---
+  
+function filterCards(containerId, searchText) {
+ const container = document.getElementById(containerId);
+ const cards = container.querySelectorAll(".card");
+ const query = searchText.toLowerCase();
+
+ cards.forEach(card => {
+  const titleEl = card.querySelector(".search-title");
+  const authorEl = card.querySelector(".search-author");
+  const nameEl = card.querySelector(".search-name");
+  const emailEl = card.querySelector(".search-email");
+  const bloodgroupEl = card.querySelector(".search-bloodgroup");
+
+  const title = titleEl?.textContent.toLowerCase() || "";
+  const author = authorEl?.textContent.toLowerCase() || "";
+  const name = nameEl?.textContent.toLowerCase() || "";
+  const email = emailEl?.textContent.toLowerCase() || "";
+  const bloodgroup = bloodgroupEl?.textContent.toLowerCase() || "";
+  
+
+  const matches = title.includes(query) || author.includes(query) || name.includes(query) || email.includes(query)|| bloodgroup.includes(query) ;
+
+  if (matches) {
+   card.classList.remove("d-none");
+  } else {
+   card.classList.add("d-none");
+  }
+ });
+}
+
+// 🟢 User Dashboard: Available Books
+document.getElementById("userBookSearch")?.addEventListener("input", function () {
+ filterCards("booksCardContainer", this.value);
+});
+
+// 🟢 User Dashboard: Your Book Requests & Checkouts
+document.getElementById("searchUserHistory")?.addEventListener("input", function () {
+ filterCards("userHistoryCardContainer", this.value);
+});
+
+// 🔵 Admin Dashboard: All Books
+document.getElementById("adminBookSearch")?.addEventListener("input", function () {
+ filterCards("allBooksCardContainer", this.value);
+});
+
+// 🔵 Admin Dashboard: Active Checked Out Books
+document.getElementById("searchCheckedOutBooks")?.addEventListener("input", function () {
+ filterCards("checkedOutBooksCardContainer", this.value);
+});
+
+// 🔵 Admin Dashboard: All Users
+document.getElementById("adminUserSearch")?.addEventListener("input", function () {
+ filterCards("allUsersCardContainer", this.value);
+});
+
+// 🔵 Admin Dashboard: All Book Requests History
+document.getElementById("allBookHistorySearch")?.addEventListener("input", function () {
+ filterCards("allBookRequestsCardContainer", this.value);
+});
+
+// 🔵 Admin Dashboard: Rejected Book Requests
+document.getElementById("rejectedBookSearch")?.addEventListener("input", function () {
+ filterCards("rejectedRequestsCardContainer", this.value);
+});
+
+  
 
  </script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
