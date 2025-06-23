@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -421,14 +422,13 @@
    </div>
    <!-- All Users Details Modal-->
    <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-fullscreen-sm-down">
      <div class="modal-content">
       <div class="modal-header">
        <h6 class="modal-title text-center">User Profile : <span class="user-field fw-bold fs-5" data-field="fullname"></span></h6>
        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
-       <div class="card mb-0 d-flex flex-column" style="max-width: 100%;">
+       <div class="card mb-0 d-flex flex-column rounded-0" style="max-width: 100%;">
         <div class="d-flex flex-row align-items-center p-2">
          <!-- User Profile Image -->
          <div>
@@ -440,28 +440,27 @@
           <div class="card-body p-0">
            <!-- Text Fields -->
            <p class="card-text small mb-1">
-            <strong>Email:</strong>
+            <strong>Email</strong> :
             <span class="user-field" data-field="email"></span>
            </p>
            <p class="card-text small mb-1">
-            <strong>DOB:</strong>
+            <strong>DOB</strong> :
             <span class="user-field" data-field="dob"></span>
            </p>
            <p class="card-text small mb-1">
-            <strong>Blood Group:</strong>
+            <strong>Blood Group</strong> :
             <span class="user-field" data-field="bloodGroup"></span>
            </p>
            <p class="card-text small mb-1">
-            <strong>Joined:</strong>
+            <strong>Joined</strong> :
             <span class="user-field" data-field="joinedAt"></span>
            </p>
-          </div>
          </div>
         </div>
        </div>
       </div>
-      <div class="card">
-       <div class="card-header" style="background-color:#e6e6e6">
+      <div class="card rounded-0">
+       <div class="card-header rounded-0" style="background-color:#e6e6e6">
         <h5 class="card-title mb-0 d-flex justify-content-between">Book Request & Checkout History <span class="badge bg-secondary" id="userRequestCount">0</span>
         </h5>
        </div>
@@ -1444,17 +1443,16 @@
       <div class="card-body p-0">
       <h6 class="card-title h5 mb-1"><strong>${data.fullname}</strong></h6>
       <p class="card-text small mb-1">
-      <strong>Email:</strong> ${data.email}
+      <strong>Email</strong> : ${data.email}
       </p>
       <p class="card-text small mb-1">
-      <strong>Blood Group:</strong> ${data.bloodGroup || "N/A"}
+      <strong>Blood Group</strong> : ${data.bloodGroup || "N/A"}
       </p>
       <p class="card-text small mb-1">
-      <strong>DOB:</strong> ${data.dob || "-"}
+      <strong>DOB</strong> : ${data.dob || "-"}
       </p>
-      <p class="card-text">
-      <strong>Status:</strong>
-      <span class="badge bg-warning text-dark">Pending</span>
+      <p class="card-text small">
+      <strong>Status</strong> : <span class="badge bg-warning text-dark">Pending</span>
       </p>
       </div>
       `;
@@ -1538,16 +1536,13 @@
       info.innerHTML = `
 
       <div class="card-body p-0">
-      <h6 class="card-title mb-2"><strong>${request.title}</strong></h6>
+      <h6 class="card-title"><strong>${request.title}</strong></h6>
       <p class="card-text small mb-1">
-      Author:${request.author || "Unknown Author"}
+      <strong>Req. By</strong> :<strong> ${userName}</strong>
       </p>
       <p class="card-text small mb-1">
-      Status:
-      <span class="badge bg-warning text-dark">${request.status}</span>
-      </p>
-      <p class="card-text small">
-      Requested By:<br><strong class"small">${userName}</strong>
+      <strong>Status</strong> :
+      <span class="badge bg-warning text-dark"> ${request.status}</span>
       </p>
       </div>
       `;
@@ -1850,7 +1845,7 @@
       <strong>User : </strong>${userName}
       </p>
       <p class="card-text small">
-      <strong>Requested On :</strong><br>${formatDateTimeFromOffset(record.requestedAt)}
+      <strong>Req. On :</strong><br>${formatDateTimeFromOffset(record.requestedAt)}
       </p>
       </div>
       `;
@@ -1981,13 +1976,13 @@
       <div class="card-body p-0">
       <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
       <p class="card-text small search-email mb-1">
-      <strong>Email:</strong> ${user.email}
+      <strong>Email</strong> : ${user.email}
       </p>
       <p class="card-text search-bloodgroup small mb-1">
-      <strong>Blood Group:</strong> ${user.bloodGroup || "N/A"}
+      <strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}
       </p>
       <p class="card-text small">
-      <strong>Joined:</strong> ${formatDateTimeFromOffset(user.joinedAt)}
+      <strong>Joined On</strong> : <br>${formatDateTimeFromOffset(user.joinedAt)}
       </p>
       </div>
       `;
@@ -2032,10 +2027,6 @@
 
     const q = query(collection(db, "bookRequests"), where("userId", "==", user.id));
     getDocs(q).then((snapshot) => {
-     if (snapshot.empty) {
-      cardContainer.innerHTML = `<div class="text-center text-muted">No history found.</div>`;
-      return;
-     }
 
      const sorted = snapshot.docs.map((doc) => {
       const data = doc.data();
@@ -2069,13 +2060,13 @@
        style="width: 120px; aspect-ratio: 1 / 1.4; object-fit: cover; border-radius: 5px;">
        <div class="flex-grow-1 px-3">
        <div class="card-body p-0">
-       <h6 class="card-title mb-2">${data.title}</h6>
+       <h6 class="card-title mb-2"> ${data.title}</h6>
        <p class="card-text small mb-1">
-       <strong>Status:</strong>
+       <strong>Status :</strong>
        <span class="badge ${badgeClass}">${data.status}</span>
        </p>
        <p class="card-text small">
-       <strong>Requested On:</strong><br>${dateStr}
+       <strong>Req. On :</strong><br>${dateStr}
        </p>
        </div>
        </div>
@@ -2259,10 +2250,10 @@
      <span class="badge ${badgeClass}">${req.status}</span>
      </p>
      <p class="card-text search-name small mb-1">
-     <strong>Requested By:</strong> ${userName}
+     <strong>Req. By :</strong> ${userName}
      </p>
      <p class="card-text small">
-     <strong>Date:</strong> ${formatDateTimeFromOffset(req.rejectedAt || req.requestedAt)}
+     <strong>Date :</strong> ${formatDateTimeFromOffset(req.rejectedAt || req.requestedAt)}
      </p>
      </div>
      `;
@@ -2312,14 +2303,14 @@
       <div class="card-body p-0">
       <h6 class="card-title search-title fw-bold mb-2">${req.title}</h6>
       <p class="card-text small mb-1">
-      <strong>Status:</strong>
+      <strong>Status :</strong>
       <span class="badge bg-danger">Rejected</span>
       </p>
       <p class="card-text small search-name mb-1">
-      <strong>Requested By:</strong> ${userName}
+      <strong>Requested By :</strong> ${userName}
       </p>
       <p class="card-text small">
-      <strong>Rejected On:</strong><br>${formatDateTimeFromOffset(req.rejectedAt)}
+      <strong>Rejected On :</strong> ${formatDateTimeFromOffset(req.rejectedAt)}
       </p>
       </div>
       `;
@@ -2389,31 +2380,55 @@
    }
   }
   // --- Search Filters ---
-  function filterCards(containerId, searchText) {
-   const container = document.getElementById(containerId);
-   const cards = container.querySelectorAll(".card");
-   const query = searchText.toLowerCase();
-   cards.forEach(card => {
+function filterCards(containerId, searchText) {
+  const container = document.getElementById(containerId);
+  const cards = container.querySelectorAll(".card");
+  const query = searchText.toLowerCase();
+
+  let matchCount = 0;
+
+  cards.forEach(card => {
     const titleEl = card.querySelector(".search-title");
     const authorEl = card.querySelector(".search-author");
     const sponsorEl = card.querySelector(".search-sponsor");
     const nameEl = card.querySelector(".search-name");
     const emailEl = card.querySelector(".search-email");
     const bloodgroupEl = card.querySelector(".search-bloodgroup");
+
     const title = titleEl?.textContent.toLowerCase() || "";
     const author = authorEl?.textContent.toLowerCase() || "";
     const sponsor = sponsorEl?.textContent.toLowerCase() || "";
     const name = nameEl?.textContent.toLowerCase() || "";
     const email = emailEl?.textContent.toLowerCase() || "";
     const bloodgroup = bloodgroupEl?.textContent.toLowerCase() || "";
-    const matches = title.includes(query) || author.includes(query) || name.includes(query) || email.includes(query) || bloodgroup.includes(query) || sponsor.includes(query);
+
+    const matches = title.includes(query) || author.includes(query) || name.includes(query) ||
+                    email.includes(query) || bloodgroup.includes(query) || sponsor.includes(query);
+
     if (matches) {
-     card.classList.remove("d-none");
+      card.classList.remove("d-none");
+      matchCount++;
     } else {
-     card.classList.add("d-none");
+      card.classList.add("d-none");
     }
-   });
+  });
+
+  // Handle "No matches" message
+  let noMatchEl = container.querySelector(".no-matches-msg");
+  if (!noMatchEl) {
+    noMatchEl = document.createElement("div");
+    noMatchEl.className = "no-matches-msg text-center text-muted py-2";
+    noMatchEl.textContent = "No matches found.";
+    container.appendChild(noMatchEl);
   }
+
+  if (matchCount === 0) {
+    noMatchEl.classList.remove("d-none");
+  } else {
+    noMatchEl.classList.add("d-none");
+  }
+}
+
   // 🟢 User Dashboard: Available Books
   document.getElementById("userAvailableBooks")?.addEventListener("input", function() {
    filterCards("userAvailableBooksCard", this.value);
