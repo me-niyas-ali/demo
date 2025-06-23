@@ -347,7 +347,7 @@
      <div class="col-12">
       <div class="card">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">All Books <span class="badge bg-secondary count-target fw-bold" data-count="allBooksCount">0</span>
+        <h5 class="card-title mb-0 d-flex justify-content-between">All Books <span class="badge bg-secondary fw-bold" id="bookCount">0</span>
         </h5>
        </div>
        <div class="px-2 mt-2">
@@ -409,7 +409,7 @@
    <!-- All Users -->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title mb-0 d-flex justify-content-between"> All Users <span class="badge bg-secondary count-target" id="userCount">0</span>
+     <h5 class="card-title mb-0 d-flex justify-content-between"> All Users <span class="badge bg-secondary" id="userCount">0</span>
      </h5>
     </div>
     <div class="px-2 mt-2">
@@ -427,33 +427,33 @@
        <h6 class="modal-title text-center">User Profile : <span class="user-field fw-bold fs-5" data-field="fullname"></span></h6>
        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-       <div class="card mb-0 d-flex flex-column rounded-0" style="max-width: 100%;">
-        <div class="d-flex flex-row align-items-center p-2">
-         <!-- User Profile Image -->
-         <div>
-          <img class="user-field" data-field="profileUrl" id="profileImg" alt="Book Cover"
-          style="width: 80px; object-fit: cover; border-radius: 50px;">
-         </div>
-         <!-- User Details -->
-         <div class="flex-grow-1 px-3">
-          <div class="card-body p-0">
-           <!-- Text Fields -->
-           <p class="card-text small mb-1">
-            <strong>Email</strong> :
-            <span class="user-field" data-field="email"></span>
-           </p>
-           <p class="card-text small mb-1">
-            <strong>DOB</strong> :
-            <span class="user-field" data-field="dob"></span>
-           </p>
-           <p class="card-text small mb-1">
-            <strong>Blood Group</strong> :
-            <span class="user-field" data-field="bloodGroup"></span>
-           </p>
-           <p class="card-text small mb-1">
-            <strong>Joined</strong> :
-            <span class="user-field" data-field="joinedAt"></span>
-           </p>
+      <div class="card mb-0 d-flex flex-column rounded-0" style="max-width: 100%;">
+       <div class="d-flex flex-row align-items-center p-2">
+        <!-- User Profile Image -->
+        <div>
+         <img class="user-field" data-field="profileUrl" id="profileImg" alt="Book Cover"
+         style="width: 80px; object-fit: cover; border-radius: 50px;">
+        </div>
+        <!-- User Details -->
+        <div class="flex-grow-1 px-3">
+         <div class="card-body p-0">
+          <!-- Text Fields -->
+          <p class="card-text small mb-1">
+           <strong>Email</strong> :
+           <span class="user-field" data-field="email"></span>
+          </p>
+          <p class="card-text small mb-1">
+           <strong>DOB</strong> :
+           <span class="user-field" data-field="dob"></span>
+          </p>
+          <p class="card-text small mb-1">
+           <strong>Blood Group</strong> :
+           <span class="user-field" data-field="bloodGroup"></span>
+          </p>
+          <p class="card-text small mb-1">
+           <strong>Joined</strong> :
+           <span class="user-field" data-field="joinedAt"></span>
+          </p>
          </div>
         </div>
        </div>
@@ -1602,40 +1602,48 @@
   // --- Load All Books (Admin) ---
   function loadAllBooks() {
    const adminAllBooksCard = document.getElementById("adminAllBooksCard");
+   const bookCountEl = document.getElementById("bookCount");
+
    onSnapshot(collection(db, "books"),
     (snapshot) => {
      adminAllBooksCard.innerHTML = "";
      const books = [];
+
      snapshot.forEach((docSnap) => {
       books.push({
        ...docSnap.data(),
        id: docSnap.id
       });
      });
+
+     // Save original total for restoring after search
+     adminAllBooksCard.setAttribute("data-total-count", books.length);
+     bookCountEl.textContent = books.length;
+
      books.sort((a, b) => (a.title || "").localeCompare(b.title || "")).forEach((book) => {
       const status = book.availability || "Unavailable";
       const badgeColor = status === "Available" ? "success": (status === "Checked Out" ? "warning": "secondary");
-      // Create card container
+
       const card = document.createElement("div");
       card.className = "card";
       card.style.minWidth = "190px";
       card.style.maxWidth = "190px";
-      // Cover Image
+
       const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
       const cardHeader = document.createElement("div");
       cardHeader.className = "card-header text-center";
       cardHeader.innerHTML = `
-
       <img src="${coverImage}" alt="Book Cover"
       class="img-fluid"
       style="aspect-ratio: 1 / 1.414;width:100%;object-fit: cover; border-radius: 2px;" />
       `;
       card.appendChild(cardHeader);
+
       hideLoader();
-      // Card Body
+
       const cardBody = document.createElement("div");
       cardBody.className = "card-body p-2";
-      // Title
+
       const titleWrapper = document.createElement("div");
       titleWrapper.className = "book-title-wrapper overflow-hidden";
       const titleSpan = document.createElement("h6");
@@ -1643,7 +1651,7 @@
       titleSpan.textContent = book.title || "Untitled";
       titleWrapper.appendChild(titleSpan);
       cardBody.appendChild(titleWrapper);
-      // Author
+
       const authorWrapper = document.createElement("div");
       authorWrapper.className = "book-title-wrapper overflow-hidden";
       const authorSpan = document.createElement("p");
@@ -1651,7 +1659,7 @@
       authorSpan.textContent = book.author || "Unknown";
       authorWrapper.appendChild(authorSpan);
       cardBody.appendChild(authorWrapper);
-      // Sponsor
+
       const sponsorWrapper = document.createElement("div");
       sponsorWrapper.className = "book-title-wrapper overflow-hidden";
       const sponsorSpan = document.createElement("p");
@@ -1659,19 +1667,18 @@
       sponsorSpan.textContent = book.sponsor ? `Spon. by: ${book.sponsor}`: "No Sponsor";
       sponsorWrapper.appendChild(sponsorSpan);
       cardBody.appendChild(sponsorWrapper);
-      // Badge
+
       const badge = document.createElement("span");
       badge.className = `badge w-100 mb-2 bg-${badgeColor}`;
       badge.textContent = status;
       cardBody.appendChild(badge);
-      // Edit Button
+
       const editBtn = document.createElement("button");
       editBtn.className = "btn btn-sm btn-warning w-100";
       editBtn.textContent = "Edit";
       editBtn.onclick = () => openEditBookModal(book);
-      // Append controls to body
       cardBody.appendChild(editBtn);
-      // Animate scroll if overflowing
+
       setTimeout(() => {
        if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
         titleSpan.style.animationPlayState = 'running';
@@ -1684,11 +1691,13 @@
        }
       },
        50);
+
       card.appendChild(cardBody);
       adminAllBooksCard.appendChild(card);
      });
     });
   }
+
   document.getElementById("deleteFromEditBtn").onclick = () => {
    const bookId = document.getElementById("editBookId").value;
    const bookTitle = document.getElementById("editBookTitle").value || "Untitled";
@@ -1943,19 +1952,20 @@
    }
   });
 
-// --- Load All Users (Admin) ---
-function loadAllUsers() {
-  const container = document.getElementById("adminAllUsersCard");
-  const countEl = document.getElementById("userCount");
+  // --- Load All Users (Admin) ---
+  function loadAllUsers() {
+   const container = document.getElementById("adminAllUsersCard");
+   const countEl = document.getElementById("userCount");
 
-  onSnapshot(collection(db, "users"), (snapshot) => {
-    container.innerHTML = "";
-    let total = 0;
+   onSnapshot(collection(db, "users"),
+    (snapshot) => {
+     container.innerHTML = "";
+     let total = 0;
 
-    snapshot.forEach((docSnap) => {
+     snapshot.forEach((docSnap) => {
       const user = {
-        id: docSnap.id,
-        ...docSnap.data()
+       id: docSnap.id,
+       ...docSnap.data()
       };
       total++;
 
@@ -1978,18 +1988,18 @@ function loadAllUsers() {
       const info = document.createElement("div");
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
-        <div class="card-body p-0">
-          <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
-          <p class="card-text small search-email mb-1">
-            <strong>Email</strong> : ${user.email}
-          </p>
-          <p class="card-text search-bloodgroup small mb-1">
-            <strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}
-          </p>
-          <p class="card-text small">
-            <strong>Joined On</strong> : <br>${formatDateTimeFromOffset(user.joinedAt)}
-          </p>
-        </div>
+      <div class="card-body p-0">
+      <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
+      <p class="card-text small search-email mb-1">
+      <strong>Email</strong> : ${user.email}
+      </p>
+      <p class="card-text search-bloodgroup small mb-1">
+      <strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}
+      </p>
+      <p class="card-text small">
+      <strong>Joined On</strong> : <br>${formatDateTimeFromOffset(user.joinedAt)}
+      </p>
+      </div>
       `;
 
       // --- Action Buttons ---
@@ -2006,12 +2016,12 @@ function loadAllUsers() {
       card.appendChild(row);
       card.appendChild(actions);
       container.appendChild(card);
-    });
+     });
 
-    countEl.textContent = total;
-    container.setAttribute("data-total-count", total); // Save original total for later use
-  });
-}
+     countEl.textContent = total;
+     container.setAttribute("data-total-count", total); // Save original total for later use
+    });
+  }
 
 
   // -- Open User Detail Modal---
@@ -2391,14 +2401,14 @@ function loadAllUsers() {
    }
   }
   // --- Search Filters ---
-function filterCards(containerId, searchText, countBadgeId = null) {
-  const container = document.getElementById(containerId);
-  const cards = container.querySelectorAll(".card");
-  const query = searchText.toLowerCase();
+  function filterCards(containerId, searchText, countBadgeId = null) {
+   const container = document.getElementById(containerId);
+   const cards = container.querySelectorAll(".card");
+   const query = searchText.toLowerCase();
 
-  let matchCount = 0;
+   let matchCount = 0;
 
-  cards.forEach(card => {
+   cards.forEach(card => {
     const titleEl = card.querySelector(".search-title");
     const authorEl = card.querySelector(".search-author");
     const sponsorEl = card.querySelector(".search-sponsor");
@@ -2414,42 +2424,42 @@ function filterCards(containerId, searchText, countBadgeId = null) {
     const bloodgroup = bloodgroupEl?.textContent.toLowerCase() || "";
 
     const matches = title.includes(query) || author.includes(query) || name.includes(query) ||
-                    email.includes(query) || bloodgroup.includes(query) || sponsor.includes(query);
+    email.includes(query) || bloodgroup.includes(query) || sponsor.includes(query);
 
     if (matches) {
-      card.classList.remove("d-none");
-      matchCount++;
+     card.classList.remove("d-none");
+     matchCount++;
     } else {
-      card.classList.add("d-none");
+     card.classList.add("d-none");
     }
-  });
+   });
 
-  // Handle "No matches" message
-  let noMatchEl = container.querySelector(".no-matches-msg");
-  if (!noMatchEl) {
+   // Handle "No matches" message
+   let noMatchEl = container.querySelector(".no-matches-msg");
+   if (!noMatchEl) {
     noMatchEl = document.createElement("div");
     noMatchEl.className = "no-matches-msg text-center text-muted py-2";
     noMatchEl.textContent = "No matches found.";
     container.appendChild(noMatchEl);
-  }
+   }
 
-  if (matchCount === 0) {
+   if (matchCount === 0) {
     noMatchEl.classList.remove("d-none");
-  } else {
+   } else {
     noMatchEl.classList.add("d-none");
-  }
+   }
 
-  // Update count badge
-  if (countBadgeId) {
+   // Update count badge
+   if (countBadgeId) {
     const badge = document.getElementById(countBadgeId);
     const originalCount = container.getAttribute("data-total-count");
     if (query === "" && originalCount !== null) {
-      badge.textContent = originalCount;
+     badge.textContent = originalCount;
     } else {
-      badge.textContent = matchCount;
+     badge.textContent = matchCount;
     }
+   }
   }
-}
 
   // 🟢 User Dashboard: Available Books
   document.getElementById("userAvailableBooks")?.addEventListener("input", function() {
@@ -2461,7 +2471,7 @@ function filterCards(containerId, searchText, countBadgeId = null) {
   });
   // 🔵 Admin Dashboard: All Books
   document.getElementById("adminAllBooks")?.addEventListener("input", function() {
-   filterCards("adminAllBooksCard", this.value);
+   filterCards("adminAllBooksCard", this.value, "bookCount");
   });
   // 🔵 Admin Dashboard: Active Checked Out Books
   document.getElementById("checkedOutBooks")?.addEventListener("input", function() {
@@ -2469,8 +2479,8 @@ function filterCards(containerId, searchText, countBadgeId = null) {
   });
   // 🔵 Admin Dashboard: All Users
   document.getElementById("adminAllUsers")?.addEventListener("input", function () {
-  filterCards("adminAllUsersCard", this.value, "userCount");
-});
+   filterCards("adminAllUsersCard", this.value, "userCount");
+  });
   // 🔵 Admin Dashboard: All Book Requests History
   document.getElementById("allBookRequestHistory")?.addEventListener("input", function() {
    filterCards("allBookRequestsHistoryCard", this.value);
