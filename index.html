@@ -113,6 +113,28 @@
  .bg-grey {
   background-color: #C0C0C0 !important
  }
+
+@media (max-width: 576px) {
+  .modal.fade .custom-mobile-slide {
+    transform: translateX(100%);
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .modal.fade.show .custom-mobile-slide {
+    transform: translateX(0);
+  }
+
+  .custom-mobile-slide {
+    margin: 0;
+    height: 100%;
+    max-width: 100%;
+  }
+
+  .custom-mobile-slide .modal-content {
+    height: 100%;
+    border-radius: 0;
+  }
+}
 </style>
 <body>
  <div class="container py-2">
@@ -452,57 +474,101 @@
      <div id="adminAllUsersCard" class="d-flex flex-column gap-2"></div>
     </div>
    </div>
-   <!-- All Users Details Modal-->
-   <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen-sm-down">
-     <div class="modal-content">
+      
+      
+      
+      
+      
+<!-- Trigger Button -->
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#responsiveModal">
+  Open Modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="responsiveModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+    <div class="modal-content">
       <div class="modal-header">
-       <h6 class="modal-title text-center">User Profile : <span class="user-field fw-bold fs-5" data-field="fullname"></span></h6>
-       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title">Responsive Slide Modal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="card mb-0 d-flex flex-column rounded-0" style="max-width: 100%;">
-       <div class="d-flex flex-row align-items-center p-2">
-        <!-- User Profile Image -->
-        <div>
-         <img class="user-field" data-field="profileUrl" id="profileImg" alt="Book Cover"
-         style="width: 80px; object-fit: cover; border-radius: 50px;">
-        </div>
-        <!-- User Details -->
-        <div class="flex-grow-1 px-3">
-         <div class="card-body p-0">
-          <!-- Text Fields -->
-          <p class="card-text small mb-1">
-           <strong>Email</strong> :
-           <span class="user-field" data-field="email"></span>
-          </p>
-          <p class="card-text small mb-1">
-           <strong>DOB</strong> :
-           <span class="user-field" data-field="dob"></span>
-          </p>
-          <p class="card-text small mb-1">
-           <strong>Blood Group</strong> :
-           <span class="user-field" data-field="bloodGroup"></span>
-          </p>
-          <p class="card-text small mb-1">
-           <strong>Joined</strong> :
-           <span class="user-field" data-field="joinedAt"></span>
-          </p>
+      <div class="modal-body">
+        <p>This modal slides in from the right on small screens and appears centered on larger screens.</p>
+      </div>
+    </div>
+  </div>
+</div>
+      
+      
+      
+      
+      
+   <!-- All Users Details Modal -->
+   <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+     <div class="modal-content d-flex flex-column" style="height: 100vh;">
+      <!-- Header -->
+      <div class="modal-header">
+       <h6 class="modal-title text-center w-100">
+        User Profile :
+        <span class="user-field fw-bold fs-6" data-field="fullname"></span>
+       </h6>
+       <button type="button" class="btn-close position-absolute start me-2" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Body: Fill Remaining Space -->
+      <div class="modal-body flex-grow-1 overflow-auto p-0">
+       <!-- User Info Card -->
+       <div class="card mb-0 rounded-0 border-0">
+        <div class="d-flex flex-row align-items-center p-3">
+         <!-- Profile Image -->
+         <div>
+          <img class="user-field" data-field="profileUrl" id="profileImg" alt="User"
+          style="width: 80px; height: 80px; object-fit: cover; border-radius: 50px;">
+         </div>
+
+         <!-- User Details -->
+         <div class="flex-grow-1 px-3">
+          <div class="card-body p-0">
+           <p class="card-text small mb-1">
+            <strong>Email</strong> : <span class="user-field" data-field="email"></span>
+           </p>
+           <p class="card-text small mb-1">
+            <strong>DOB</strong> : <span class="user-field" data-field="dob"></span>
+           </p>
+           <p class="card-text small mb-1">
+            <strong>Blood Group</strong> : <span class="user-field" data-field="bloodGroup"></span>
+           </p>
+           <p class="card-text small mb-1">
+            <strong>Joined Date</strong> : <span class="user-field" data-field="joinedAt"></span>
+           </p>
+          </div>
          </div>
         </div>
        </div>
+
+       <!-- History Section -->
+       <div class="card rounded-0">
+        <div class="card-header bg-light rounded-0">
+         <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
+          Book Request & Checkout History
+          <span class="badge bg-secondary" id="userRequestCount">0</span>
+         </h5>
+        </div>
+
+        <div class="p-2">
+         <input type="text" name="searchuserBooksHistory" id="searchuserBooksHistory"
+         class="form-control form-control-sm"
+         placeholder="Search by book title or status...">
+        </div>
+
+        <div class="card-body h-100 p-2" style="max-height: 60vh; overflow-y: auto;">
+         <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
+        </div>
+       </div>
       </div>
-      <div class="card rounded-0">
-       <div class="card-header rounded-0" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">Book Request & Checkout History <span class="badge bg-secondary" id="userRequestCount">0</span>
-        </h5>
-       </div>
-       <div class="mt-1">
-        <input type="text" name="searchuserBooksHistory" id="searchuserBooksHistory" class="form-control form-control-sm" placeholder="Search by book title or status...">
-       </div>
-       <div class="card-body p-2" style="max-height: 60vh; overflow-y: auto;">
-        <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
-       </div>
-      </div>
+
+      <!-- Footer -->
       <div class="modal-footer">
        <button class="btn btn-sm btn-outline-primary" id="editUserBtn">Edit Profile</button>
        <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -510,9 +576,11 @@
      </div>
     </div>
    </div>
+
+
    <!-- All Users Details Edit Modal-->
    <div class="modal fade" id="editUserProfileModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
+    <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
      <form id="editUserForm" class="modal-content needs-validation" novalidate>
       <div class="modal-header">
        <h5 class="modal-title">Edit User Profile</h5>
@@ -725,8 +793,7 @@
  </div>
  <!-- Edit Book Modal -->
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-   ">
+  <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
    <form id="editBookForm" class="modal-content needs-validation" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">Edit Book</h5>
