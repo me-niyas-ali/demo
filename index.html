@@ -90,7 +90,7 @@
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
     <center>
-     <h2 class="mb-0 p-2">0311 PKNS LIBRARY</h2>
+     <h2 class="mb-0 p-2">1041 PKNS LIBRARY</h2>
     </center>
    </div>
    <div class="card-body">
@@ -203,7 +203,7 @@
        Pending Signup Requests
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-       <a class="small text-white stretched-link" href="#">View Details</a>
+       <a class="small text-white" href="#">View Details</a>
       </div>
      </div>
     </div>
@@ -225,7 +225,7 @@
        Pending Books Requests
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-       <a class="small text-white stretched-link" href="#">View Details</a>
+       <a class="small text-white" href="#">View Details</a>
       </div>
      </div>
     </div>
@@ -246,7 +246,7 @@
        Total Books
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-       <a class="small text-white stretched-link" href="#">View Details</a>
+       <a class="small text-white" href="#">View Details</a>
       </div>
      </div>
     </div>
@@ -266,7 +266,7 @@
        Total Users
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-       <a class="small text-white stretched-link" href="#">View Details</a>
+       <a class="small text-white" href="#">View Details</a>
       </div>
      </div>
     </div>
@@ -289,7 +289,7 @@
        Books Checked Out
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-       <a class="small text-white stretched-link" href="#">View Details</a>
+       <a class="small text-white" href="#">View Details</a>
       </div>
      </div>
     </div>
@@ -311,7 +311,7 @@
        Rejected Book Requests
       </div>
       <div class="card-footer d-flex align-items-center justify-content-between">
-       <a class="small text-white stretched-link" href="#">View Details</a>
+       <a class="small text-white" href="#">View Details</a>
       </div>
      </div>
     </div>
@@ -352,7 +352,7 @@
         </h5>
        </div>
        <div class="px-2 mt-2">
-        <input type="text" autocomplete="off" id="adminAllBooks" class="form-control form-control-sm" placeholder="Search by book title, author or sponsor...">
+        <input type="text" autocomplete="off" name="adminAllBooks" id="adminAllBooks" class="form-control form-control-sm" placeholder="Search by book title, author or sponsor...">
        </div>
        <div class="card-body p-2">
         <div id="adminAllBooksCard" class="d-flex overflow-auto gap-2 flex-nowrap"></div>
@@ -367,7 +367,7 @@
         </h5>
        </div>
        <div class="px-2 mt-2">
-        <input type="text" autocomplete="off" id="checkedOutBooks" class="form-control form-control-sm" placeholder="Search by username or book title...">
+        <input type="text" autocomplete="off" name="checkedOutBooks" id="checkedOutBooks" class="form-control form-control-sm" placeholder="Search by username or book title...">
        </div>
        <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
         <div id="checkedOutBooksCard" class="d-flex flex-column gap-2"></div>
@@ -410,11 +410,11 @@
    <!-- All Users -->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title mb-0 d-flex justify-content-between"> All Users <span class="badge bg-secondary count-target" data-count="userCount">0</span>
+     <h5 class="card-title mb-0 d-flex justify-content-between"> All Users <span class="badge bg-secondary count-target" id="userCount">0</span>
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="adminAllUsers" class="form-control form-control-sm" placeholder="Search by full name, email, blood group...">
+     <input type="text" autocomplete="off" name="adminAllUsers" id="adminAllUsers" class="form-control form-control-sm" placeholder="Search by full name, email, blood group...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="adminAllUsersCard" class="d-flex flex-column gap-2"></div>
@@ -465,7 +465,7 @@
         </h5>
        </div>
        <div class="mt-1">
-        <input type="text" id="searchuserBooksHistory" class="form-control form-control-sm" placeholder="Search by book title or status...">
+        <input type="text" name="searchuserBooksHistory" id="searchuserBooksHistory" class="form-control form-control-sm" placeholder="Search by book title or status...">
        </div>
        <div class="card-body p-2" style="max-height: 50vh; overflow-y: auto;">
         <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
@@ -545,7 +545,7 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="allBookRequestHistory" class="form-control form-control-sm" placeholder="Search by user name, book title or status...">
+     <input type="text" autocomplete="off" name="allBookRequestHistory" id="allBookRequestHistory" class="form-control form-control-sm" placeholder="Search by user name, book title or status...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="allBookRequestsHistoryCard" class="d-flex flex-column gap-2"></div>
@@ -558,7 +558,7 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="allRejectedBooks" class="form-control form-control-sm" placeholder="Search by full name or book title...">
+     <input type="text" autocomplete="off" name="allRejectedBooks" id="allRejectedBooks" class="form-control form-control-sm" placeholder="Search by full name or book title...">
     </div>
     <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
      <div id="allRejectedRequestsCard" class="d-flex flex-column gap-2"></div>
@@ -1944,22 +1944,28 @@
    }
   });
 
-  // --- Load All Users (Admin) ---
-  function loadAllUsers() {
-   const container = document.getElementById("adminAllUsersCard");
-   onSnapshot(collection(db, "users"),
-    (snapshot) => {
-     container.innerHTML = "";
-     snapshot.forEach((docSnap) => {
+// --- Load All Users (Admin) ---
+function loadAllUsers() {
+  const container = document.getElementById("adminAllUsersCard");
+  const countEl = document.getElementById("userCount");
+
+  onSnapshot(collection(db, "users"), (snapshot) => {
+    container.innerHTML = "";
+    let total = 0;
+
+    snapshot.forEach((docSnap) => {
       const user = {
-       id: docSnap.id,
-       ...docSnap.data()
+        id: docSnap.id,
+        ...docSnap.data()
       };
+      total++;
+
       const card = document.createElement("div");
       card.className = "card mb-2 d-flex flex-column";
       card.style.maxWidth = "100%";
       const row = document.createElement("div");
       row.className = "d-flex flex-row align-items-center p-2";
+
       // --- Profile Picture ---
       const profileImg = document.createElement("img");
       profileImg.src = user.profileUrl || "https://via.placeholder.com/120x140?text=👤";
@@ -1968,24 +1974,25 @@
       profileImg.style.height = "75px";
       profileImg.style.objectFit = "cover";
       profileImg.style.borderRadius = "5px";
+
       // --- User Info ---
       const info = document.createElement("div");
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
-
-      <div class="card-body p-0">
-      <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
-      <p class="card-text small search-email mb-1">
-      <strong>Email</strong> : ${user.email}
-      </p>
-      <p class="card-text search-bloodgroup small mb-1">
-      <strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}
-      </p>
-      <p class="card-text small">
-      <strong>Joined On</strong> : <br>${formatDateTimeFromOffset(user.joinedAt)}
-      </p>
-      </div>
+        <div class="card-body p-0">
+          <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
+          <p class="card-text small search-email mb-1">
+            <strong>Email</strong> : ${user.email}
+          </p>
+          <p class="card-text search-bloodgroup small mb-1">
+            <strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}
+          </p>
+          <p class="card-text small">
+            <strong>Joined On</strong> : <br>${formatDateTimeFromOffset(user.joinedAt)}
+          </p>
+        </div>
       `;
+
       // --- Action Buttons ---
       const actions = document.createElement("div");
       actions.className = "d-flex justify-content-end gap-2 px-2 pb-2";
@@ -1994,15 +2001,20 @@
       editBtn.textContent = "Edit";
       editBtn.onclick = () => openUserProfileModal(user);
       actions.appendChild(editBtn);
-      // Assemble card
+
       row.appendChild(profileImg);
       row.appendChild(info);
       card.appendChild(row);
       card.appendChild(actions);
       container.appendChild(card);
-     });
     });
-  }
+
+    countEl.textContent = total;
+    container.setAttribute("data-total-count", total); // Save original total for later use
+  });
+}
+
+
   // -- Open User Detail Modal---
   document.addEventListener("DOMContentLoaded", () => {
    userProfileModal = new bootstrap.Modal(document.getElementById("userProfileModal"));
@@ -2380,7 +2392,7 @@
    }
   }
   // --- Search Filters ---
-function filterCards(containerId, searchText) {
+function filterCards(containerId, searchText, countBadgeId = null) {
   const container = document.getElementById(containerId);
   const cards = container.querySelectorAll(".card");
   const query = searchText.toLowerCase();
@@ -2427,6 +2439,17 @@ function filterCards(containerId, searchText) {
   } else {
     noMatchEl.classList.add("d-none");
   }
+
+  // Update count badge
+  if (countBadgeId) {
+    const badge = document.getElementById(countBadgeId);
+    const originalCount = container.getAttribute("data-total-count");
+    if (query === "" && originalCount !== null) {
+      badge.textContent = originalCount;
+    } else {
+      badge.textContent = matchCount;
+    }
+  }
 }
 
   // 🟢 User Dashboard: Available Books
@@ -2446,9 +2469,9 @@ function filterCards(containerId, searchText) {
    filterCards("checkedOutBooksCard", this.value);
   });
   // 🔵 Admin Dashboard: All Users
-  document.getElementById("adminAllUsers")?.addEventListener("input", function() {
-   filterCards("adminAllUsersCard", this.value);
-  });
+  document.getElementById("adminAllUsers")?.addEventListener("input", function () {
+  filterCards("adminAllUsersCard", this.value, "userCount");
+});
   // 🔵 Admin Dashboard: All Book Requests History
   document.getElementById("allBookRequestHistory")?.addEventListener("input", function() {
    filterCards("allBookRequestsHistoryCard", this.value);
