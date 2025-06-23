@@ -81,6 +81,38 @@
    left: -100%;
   }
  }
+
+ .bg-primary, .btn-primary, .text-bg-primary {
+  background-color: #2196F3 !important;
+ }
+
+ .bg-danger, .btn-danger, .text-bg-danger {
+  background-color: #ff4b4b !important;
+ }
+
+ .bg-success, .btn-success, .text-bg-success {
+  background-color: #1DCC70 !important;
+ }
+
+ .bg-white {
+  background-color: white !important;
+ }
+
+ .bg-black {
+  background-color: black !important;
+ }
+
+ .bg-light-grey {
+  background-color: #f1f1f1 !important;
+ }
+
+ .bg-orange {
+  background-color: #ffbb00 !important
+ }
+
+ .bg-grey {
+  background-color: #C0C0C0 !important
+ }
 </style>
 <body>
  <div class="container py-2">
@@ -184,7 +216,7 @@
 
    <div class="row">
     <div class="col-6">
-     <div class="card bg-danger text-white mb-3">
+     <div class="card bg-danger bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="signupRequestCount">0</span>
@@ -208,7 +240,7 @@
      </div>
     </div>
     <div class="col-6">
-     <div class="card bg-danger text-white mb-3">
+     <div class="card bg-danger bg-gradient  text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="pendingBookRequestCount">0</span>
@@ -230,7 +262,7 @@
      </div>
     </div>
     <div class="col-6">
-     <div class="card bg-primary text-white mb-3">
+     <div class="card bg-primary bg-gradient  text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="allBooksCount">0</span>
@@ -251,7 +283,7 @@
      </div>
     </div>
     <div class="col-6">
-     <div class="card bg-info text-white mb-3">
+     <div class="card bg-primary bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="userCount">0</span>
@@ -272,7 +304,7 @@
     </div>
 
     <div class="col-6">
-     <div class="card bg-warning text-white mb-3">
+     <div class="card bg-warning bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="checkedOutCount">0</span>
@@ -294,7 +326,7 @@
      </div>
     </div>
     <div class="col-6">
-     <div class="card bg-warning text-white mb-3">
+     <div class="card bg-warning bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="count-target fw-bold" data-count="rejectedBookCount">0</span>
@@ -336,7 +368,7 @@
      <div class="col-12 col-lg-6" id="pbr">
       <div class="card h-100">
        <div class="card-header" style="background-color:#e6e6e6">
-        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary count-target" id="pendingBookRequestCount">0</span>
+        <h5 class="card-title mb-0 d-flex justify-content-between">Pending Book Requests <span class="badge bg-secondary count-target" data-count="pendingBookRequestCount">0</span>
         </h5>
        </div>
        <div class="card-body p-2" style="max-height: 300px; overflow-y: auto;">
@@ -1429,7 +1461,7 @@
       row.className = "d-flex flex-row align-items-center p-2";
       // Avatar (Circle with Initial)
       const avatarDiv = document.createElement("div");
-      avatarDiv.className = "d-flex align-items-center justify-content-center bg-primary text-white";
+      avatarDiv.className = "d-flex align-items-center justify-content-center bg-primary bg-gradient text-white";
       avatarDiv.style.width = "100px";
       avatarDiv.style.height = "140px";
       avatarDiv.style.borderRadius = "5px";
