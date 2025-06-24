@@ -75,7 +75,7 @@
  }
 
  .badge {
-  font-size: .9em;
+  font-size: .8em;
  }
 
 @keyframes scroll-left {
@@ -126,7 +126,7 @@
 @media (max-width: 576px) {
   .modal.fade .custom-mobile-slide {
    transform: translateX(100%);
-   transition: transform 0.4s ease-in-out;
+   transition: transform 0.5s;
   }
 
   .modal.fade.show .custom-mobile-slide {
@@ -193,10 +193,20 @@
      <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
     </div>
    </div>
+   <!-- User Dashboard Marquee -->
+   <div class="d-flex m-2 gap-2 p-0" style="overflow:hidden">
+    <span class="w-100 position-relative p-0 m-0" style="height:1.3em; overflow: hidden;">
+     <div id="userMarqueeText" class="marquee-text"
+      style="white-space: nowrap; position: absolute; animation: scroll-left 20s linear infinite;">
+      📢 Welcome to the Library! Browse available books and check your request history in real time.
+     </div>
+    </span>
+   </div>
+
    <!-- Available Books Card -->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title m-0 d-flex justify-content-between">Available Books <span class="badge bg-secondary" id="availableBookCount">0</span>
+     <h5 class="card-title m-0 d-flex justify-content-between">Available Books <span class="badge bg-primary userAvailableBooks">0</span>
      </h5>
     </div>
     <div class="px-2 mt-2">
@@ -206,19 +216,105 @@
      <div id="userAvailableBooksCard" class="d-flex overflow-auto gap-2"></div>
     </div>
    </div>
-   <!-- User History Card -->
-   <div class="card mb-3">
-    <div class="card-header" style="background-color:#e6e6e6">
-     <h5 class="card-title mb-0 d-flex justify-content-between">Your Book Requests & Checkouts <span class="badge bg-secondary" id="userRequestCount">0</span>
-     </h5>
+
+
+
+
+   <div class="row">
+    <!-- User Tiles Card -->
+    <!-- Books Checked Out Tile -->
+    <div class="col-6 col-md-4 col-lg-3">
+     <div class="card bg-warning bg-gradient text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="fw-bold userCheckedOutCount">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journal-arrow-down" viewBox="0 0 16 16">
+         <path fill-rule="evenodd" d="M8 5a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5A.5.5 0 0 1 8 5" />
+         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+         <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Books Checked Out
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between" data-bs-toggle="modal" data-bs-target="#userAllCheckedOutBooks">
+       <a class="small text-white" href="#">View Details</a>
+       <i class="bi bi-arrow-right fs-3"></i>
+      </div>
+     </div>
     </div>
-    <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="userBooksHistory" class="form-control" placeholder="Search by book title...">
-    </div>
-    <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
-     <div id="userBooksHistoryCard" class="d-flex flex-column gap-2"></div>
+    <!-- All Book Requests History Tile -->
+    <div class="col-6 col-md-4 col-lg-3">
+     <div class="card bg-warning bg-gradient text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <h3 class="mt-2">
+        <span style="font-size: 2.2rem;" class="fw-bold userAllBookHistory">0</span>
+       </h3>
+       <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-text" viewBox="0 0 16 16">
+         <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+         <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+         <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+        </svg>
+       </div>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       All Book Request History
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between" data-bs-toggle="modal" data-bs-target="#userAllBookRequestHistory">
+       <a class="small text-white" href="#">View Details</a>
+       <i class="bi bi-arrow-right fs-3"></i>
+      </div>
+     </div>
     </div>
    </div>
+    <!-- User Tiles Card -->
+    <!-- User Tiles Modals -->
+    <!-- User Current Checked Out Card -->
+    <div class="modal fade" id="userAllCheckedOutBooks" tabindex="-1" aria-hidden="true">
+     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+      <div class="modal-content d-flex flex-column">
+       <!-- Header -->
+       <div class="modal-header d-flex justify-content-between">
+        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
+        <h6 class="card-title text-center mx-5">All Checked Out Book's</h6>
+        <span class="badge bg-secondary end userCheckedOutCount">0</span>
+       </div>
+       <!-- Card Section -->
+       <form autocomplete="off" class="px-2 my-2">
+        <input type="text" autocomplete="off" name="anything-but-search" id="userCheckedOutSearch" class="form-control" placeholder="Search by username or book title...">
+       </form>
+       <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
+        <div id="userCurrentCheckedOutBooksCard" class="d-flex flex-column gap-2"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+
+    <!-- User All Books Request History Modal-->
+    <div class="modal fade" id="userAllBookRequestHistory" tabindex="-1" aria-hidden="true">
+     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+      <div class="modal-content d-flex flex-column">
+       <!-- Header -->
+       <div class="modal-header d-flex justify-content-between">
+        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
+        <h6 class="card-title text-center mx-5">All Books Request History</h6>
+        <span class="badge bg-secondary end userAllBookHistory">0</span>
+       </div>
+       <!-- Card Section -->
+       <form autocomplete="off" class="px-2 my-2">
+        <input type="text" autocomplete="off" name="allBookRequestHistory" id="userBooksHistory" class="form-control" placeholder="Search by user name, book title or status...">
+       </form>
+       <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
+        <div id="userBooksHistoryCard" class="d-flex flex-column gap-2"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+  <!-- End User Tiles Modals -->
   </div>
 
   <!-- Admin dashboard -->
@@ -246,7 +342,7 @@
     </div>
    </div>
 
-   <!-- Tile Cards -->
+   <!-- Admin Tile Cards-->
    <div class="row">
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-danger bg-gradient text-white mb-3">
@@ -410,7 +506,25 @@
       </div>
      </div>
     </div>
+    <!-- Message Edit Tile-->
+    <div class="col-12 col-md-6 col-lg-4">
+     <div class="card bg-light bg-gradient text-dark mb-3">
+      <div class="card-body py-2 d-flex justify-content-between align-items-center">
+       <div>
+        <h5 class="fw-bold mb-1">User Marquee Message</h5>
+        <p class="small mb-0 text-muted">
+         Edit the welcome text for users
+        </p>
+       </div>
+       <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMarqueeModal">
+        Edit
+       </button>
+      </div>
+     </div>
+    </div>
+    <!-- Tile Ends-->
    </div>
+   <!-- Tile Container Ends-->
    <!-- Admin Dashboard Tile Modals-->
    <!-- Pending Signup Requests Modal-->
    <div class="modal fade" id="psrModal" tabindex="-1" aria-hidden="true">
@@ -550,6 +664,29 @@
        <div id="allRejectedRequestsCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
+    </div>
+   </div>
+   <!-- Edit Uder Message Modal-->
+   <div class="modal fade" id="editMarqueeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+     <form id="editMarqueeForm" class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title">Edit User Dashboard Marquee</h5>
+       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <p class="small mb-3 text-muted">
+        Tips :-
+        <br>- Add {name} to display user full name.
+        <br>- Add {bookscheckedout} to display no. of checked out books.
+       </p>
+       <textarea id="marqueeInput" class="form-control" rows="3" placeholder="Enter new marquee message..."></textarea>
+      </div>
+      <div class="modal-footer">
+       <button type="submit" class="btn btn-primary btn-sm">Save</button>
+       <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+      </div>
+     </form>
     </div>
    </div>
 
@@ -871,10 +1008,6 @@
   </div>
  </div>
 
-
-
-
-
  <!-- Edit Book Modal -->
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
@@ -955,10 +1088,6 @@
   </div>
  </div>
 
-
-
-
-
  <!-- Toast Notification-->
  <div class="toast-container position-fixed top-0 p-3" id="toastContainer" style="z-index: 1100;margin-top: -50px;width:100vw;"></div>
  <!-- Delete Confirmation Modal -->
@@ -990,7 +1119,6 @@
    <span class="visually-hidden">Loading...</span>
   </div>
  </div>
-
 
  <!-- Content End-->
  <!-- Test Scripts Here-->
@@ -1273,6 +1401,60 @@
    adminSection.classList.add("d-none");
    document.getElementById("main-action-btn").classList.remove("d-none");
   }
+  // --- Save & Load Message ---
+  document.getElementById("editMarqueeForm").addEventListener("submit", async (e) => {
+   e.preventDefault();
+   const newText = document.getElementById("marqueeInput").value.trim();
+   if (!newText) return;
+   showLoader();
+   try {
+    await setDoc(doc(db, "meta", "userMarquee"), {
+     text: newText
+    });
+    showToast("User marquee updated!", "bg-success");
+    document.getElementById("editMarqueeModal").querySelector(".btn-close").click();
+    loadUserMarquee(); // Update instantly
+   } catch (err) {
+    showToast("Failed to update marquee: " + err.message, "bg-danger");
+   } finally {
+    hideLoader();
+   }
+  });
+
+  // --- Load User Message ---
+  async function loadUserMarquee(userName = "") {
+   const el = document.getElementById("userMarqueeText");
+   const safeName = userName?.trim() || "User"; // fallback default
+
+   try {
+    const snap = await getDoc(doc(db, "meta", "userMarquee"));
+    if (snap.exists()) {
+     let text = snap.data().text || "📢 Welcome back, {name}!";
+     text = text.replace("{name}", safeName);
+     el.textContent = text;
+    } else {
+     el.textContent = `📢 Welcome back, ${safeName}!`;
+    }
+   } catch (err) {
+    console.error("Failed to load user marquee", err);
+    if (el) el.textContent = `📢 Welcome back, ${safeName}!`;
+   }
+  }
+
+  const editMarqueeModal = document.getElementById("editMarqueeModal");
+  const marqueeInput = document.getElementById("marqueeInput");
+
+  editMarqueeModal.addEventListener("show.bs.modal", async () => {
+   try {
+    const snap = await getDoc(doc(db, "meta", "userMarquee"));
+    marqueeInput.value = snap.exists() ? snap.data().text: "";
+   } catch (err) {
+    console.error("Failed to load marquee message for editing", err);
+    marqueeInput.value = "";
+   }
+  });
+
+
   // --- Show User Dashboard ---
   async function showUserDashboard(uid) {
    adminSection.classList.add("d-none");
@@ -1281,6 +1463,7 @@
    signupModal.hide();
    loginModal.hide();
    adminLoginModal.hide();
+   await loadUserMarquee();
    try {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
@@ -1289,155 +1472,174 @@
      document.getElementById("userEmail").textContent = userData.email || "Not available";
      document.getElementById("userDob").textContent = "DOB: " + (userData.dob || "-");
      document.getElementById("userProfileImg").src = userData.profileUrl || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
+     await loadUserMarquee(userData.fullname || "");
     }
    } catch (err) {
     console.error("Error loading user info:", err);
    }
-   onSnapshot(query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])), async (activeSnap) => {
-    const activeRequests = new Set();
-    const userRequests = new Set();
-    activeSnap.forEach((doc) => {
-     const data = doc.data();
-     activeRequests.add(data.bookId);
-     if (data.userId === uid) {
-      userRequests.add(data.bookId);
-     }
-    });
-    onSnapshot(collection(db, "books"),
-     (bookSnap) => {
-      const userAvailableBooksCard = document.getElementById("userAvailableBooksCard");
-      userAvailableBooksCard.innerHTML = "";
-      const books = [];
-      bookSnap.forEach((docSnap) => {
-       books.push({
-        ...docSnap.data(),
-        id: docSnap.id
-       });
-      });
-      books.sort((a, b) => (a.title || "").localeCompare(b.title || "")).forEach((book) => {
-       const bookId = book.id;
-       const status = book.availability || "Unavailable";
-       let buttonText = "Request";
-       let buttonClass = "btn-primary";
-       let buttonDisabled = false;
-       let isUserRequest = false;
-       if (activeRequests.has(bookId)) {
-        buttonText = "Not Available";
-        buttonClass = "btn-secondary";
-        buttonDisabled = true;
-        if (userRequests.has(bookId)) {
-         buttonText = "Cancel Request";
-         buttonClass = "btn-danger";
-         buttonDisabled = false;
-         isUserRequest = true;
-        }
-       } else if (status !== "Available") {
-        buttonText = "Not Available";
-        buttonClass = "btn-secondary";
-        buttonDisabled = true;
-       }
-       // Create card container
-       const card = document.createElement("div");
-       card.className = "card";
-       card.style.minWidth = "170px";
-       card.style.maxWidth = "170px";
-       // Determine badge color
-       let badgeColor = "secondary";
-       if (status === "Available") badgeColor = "success";
-       else if (status === "Requested") badgeColor = "warning";
-       else if (status === "Checked Out") badgeColor = "danger";
-       // Card Header with Cover
-       const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
-       const cardHeader = document.createElement("div");
-       cardHeader.className = "card-header text-center";
-       cardHeader.innerHTML = `
 
-       <img src="${coverImage}" alt="Book Cover"
-       class="img-fluid"
-       style="aspect-ratio: 1 / 1.414;width:90%;object-fit: cover; border-radius: 2px;" />
-       `;
-       card.appendChild(cardHeader);
-       // Card Body
-       const cardBody = document.createElement("div");
-       cardBody.className = "card-body p-2";
-       // Title scroll wrapper
-       const titleWrapper = document.createElement("div");
-       titleWrapper.className = "book-title-wrapper";
-       const titleSpan = document.createElement("h6");
-       titleSpan.className = "book-title search-title fw-bold";
-       titleSpan.textContent = book.title || "Untitled";
-       titleWrapper.appendChild(titleSpan);
-       cardBody.appendChild(titleWrapper);
-       // Author scroll wrapper
-       const authorWrapper = document.createElement("div");
-       authorWrapper.className = "book-title-wrapper";
-       const authorSpan = document.createElement("h6");
-       authorSpan.className = "book-title text-muted search-author";
-       authorSpan.textContent = book.author || "Unknown";
-       authorWrapper.appendChild(authorSpan);
-       cardBody.appendChild(authorWrapper);
-       // Sponsor
-       const sponsorWrapper = document.createElement("div");
-       sponsorWrapper.className = "book-title-wrapper overflow-hidden";
-       const sponsorSpan = document.createElement("p");
-       sponsorSpan.className = "mb-1 italic text-muted small book-title";
-       sponsorSpan.textContent = book.sponsor ? `Spon. by: ${book.sponsor}`: "No Sponsor";
-       sponsorWrapper.appendChild(sponsorSpan);
-       cardBody.appendChild(sponsorWrapper);
-       // Status badge
-       const badge = document.createElement("span");
-       badge.className = `badge w-100 bg-${badgeColor}`;
-       badge.textContent = status;
-       cardBody.appendChild(badge);
-       // Button
-       const button = document.createElement("button");
-       button.className = `btn w-100 btn-sm mt-2 ${buttonClass}`;
-       button.textContent = buttonText;
-       if (buttonDisabled) button.disabled = true;
-       button.onclick = () => {
-        if (isUserRequest) {
-         cancelBookRequest(book.id);
-        } else {
-         requestBook(book.id);
-        }
-       };
-       cardBody.appendChild(button);
-       card.appendChild(cardBody);
-       userAvailableBooksCard.appendChild(card);
-       // Start scroll animation for both title and author if overflow
-       setTimeout(() => {
-        if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
-         titleSpan.style.animationPlayState = 'running';
-        }
-        if (authorSpan.scrollWidth > authorWrapper.clientWidth) {
-         authorSpan.style.animationPlayState = 'running';
-        }
-       },
-        50);
-       const btn = card.querySelector("button");
-       if (!btn.disabled) {
-        btn.onclick = () => {
-         if (isUserRequest) {
-          cancelBookRequest(bookId);
-         } else {
-          requestBook(bookId);
-         }
-        };
-       }
-       userAvailableBooksCard.appendChild(card);
-      });
-      hideLoader();
+   onSnapshot(
+    query(collection(db, "bookRequests"), where("status", "in", ["Pending", "Approved"])),
+    async (activeSnap) => {
+     const activeRequests = new Set();
+     const userRequests = new Set();
+
+     activeSnap.forEach((doc) => {
+      const data = doc.data();
+      activeRequests.add(data.bookId);
+      if (data.userId === uid) {
+       userRequests.add(data.bookId);
+      }
      });
-   });
-   // --- Book History Table ---
-   onSnapshot(query(collection(db,
-    "bookRequests"), where("userId",
-    "==",
-    uid)),
+
+     onSnapshot(collection(db, "books"),
+      (bookSnap) => {
+       const container = document.getElementById("userAvailableBooksCard");
+       container.innerHTML = "";
+
+       const books = bookSnap.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id,
+       })).sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+
+       // --- Count "Available" books that are not currently requested ---
+       const availableCount = books.filter(book => {
+        return book.availability === "Available" && !activeRequests.has(book.id);
+       }).length;
+
+       document.querySelectorAll(".userAvailableBooks").forEach(el => {
+        el.textContent = availableCount;
+       });
+
+       books.forEach((book) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.minWidth = "170px";
+        card.style.maxWidth = "170px";
+
+        const bookId = book.id;
+        const status = book.availability || "Unavailable";
+
+        let buttonText = "Request";
+        let buttonClass = "btn-primary";
+        let buttonDisabled = false;
+        let isUserRequest = false;
+
+        if (activeRequests.has(bookId)) {
+         buttonText = "Not Available";
+         buttonClass = "btn-secondary";
+         buttonDisabled = true;
+
+         if (userRequests.has(bookId)) {
+          buttonText = "Cancel Request";
+          buttonClass = "btn-danger";
+          buttonDisabled = false;
+          isUserRequest = true;
+         }
+        } else if (status !== "Available") {
+         buttonText = "Not Available";
+         buttonClass = "btn-secondary";
+         buttonDisabled = true;
+        }
+
+        // --- Card Header ---
+        const cardHeader = document.createElement("div");
+        cardHeader.className = "card-header text-center";
+        const coverImage = book.coverUrl || "https://via.placeholder.com/100x120?text=Book";
+        cardHeader.innerHTML = `
+        <img src="${coverImage}" alt="Book Cover"
+        class="img-fluid"
+        style="aspect-ratio: 1 / 1.414;width:90%;object-fit: cover; border-radius: 2px;" />
+        `;
+        card.appendChild(cardHeader);
+
+        // --- Card Body ---
+        const cardBody = document.createElement("div");
+        cardBody.className = "card-body p-2";
+
+        // Title
+        const titleWrapper = document.createElement("div");
+        titleWrapper.className = "book-title-wrapper";
+        const titleSpan = document.createElement("h6");
+        titleSpan.className = "book-title search-title fw-bold";
+        titleSpan.textContent = book.title || "Untitled";
+        titleWrapper.appendChild(titleSpan);
+        cardBody.appendChild(titleWrapper);
+
+        // Author
+        const authorWrapper = document.createElement("div");
+        authorWrapper.className = "book-title-wrapper";
+        const authorSpan = document.createElement("h6");
+        authorSpan.className = "book-title text-muted search-author";
+        authorSpan.textContent = book.author || "Unknown";
+        authorWrapper.appendChild(authorSpan);
+        cardBody.appendChild(authorWrapper);
+
+        // Sponsor
+        const sponsorWrapper = document.createElement("div");
+        sponsorWrapper.className = "book-title-wrapper overflow-hidden";
+        const sponsorSpan = document.createElement("p");
+        sponsorSpan.className = "mb-1 italic text-muted small book-title";
+        sponsorSpan.textContent = book.sponsor ? `Spon. by: ${book.sponsor}`: "No Sponsor";
+        sponsorWrapper.appendChild(sponsorSpan);
+        cardBody.appendChild(sponsorWrapper);
+
+        // Badge
+        let badgeColor = "secondary";
+        if (status === "Available") badgeColor = "success";
+        else if (status === "Requested") badgeColor = "warning";
+        else if (status === "Checked Out") badgeColor = "danger";
+
+        const badge = document.createElement("span");
+        badge.className = `badge w-100 bg-${badgeColor}`;
+        badge.textContent = status;
+        cardBody.appendChild(badge);
+
+        // Button
+        const button = document.createElement("button");
+        button.className = `btn w-100 btn-sm mt-2 ${buttonClass}`;
+        button.textContent = buttonText;
+        if (buttonDisabled) button.disabled = true;
+
+        button.onclick = () => {
+         isUserRequest ? cancelBookRequest(bookId): requestBook(bookId);
+        };
+
+        cardBody.appendChild(button);
+        card.appendChild(cardBody);
+        container.appendChild(card);
+
+        // Scrolling animation if needed
+        setTimeout(() => {
+         if (titleSpan.scrollWidth > titleWrapper.clientWidth) {
+          titleSpan.style.animationPlayState = 'running';
+         }
+         if (authorSpan.scrollWidth > authorWrapper.clientWidth) {
+          authorSpan.style.animationPlayState = 'running';
+         }
+        },
+         50);
+       });
+
+       hideLoader();
+      });
+    }
+   );
+
+   // --- User Checked Out Books Card ---
+
+   onSnapshot(
+    query(collection(db,
+     "bookRequests"), where("userId",
+     "==",
+     uid), where("status",
+     "==",
+     "Checked Out")),
     (snapshot) => {
-     const container = document.getElementById("userBooksHistoryCard");
+     const container = document.getElementById("userCurrentCheckedOutBooksCard");
      container.innerHTML = "";
-     const sortedDocs = snapshot.docs.map(docSnap => {
+
+     const books = snapshot.docs.map(docSnap => {
       const data = docSnap.data();
       return {
        ...data,
@@ -1445,13 +1647,18 @@
       };
      }).sort((a,
       b) => b.requestedAt - a.requestedAt);
-     sortedDocs.forEach(req => {
+
+     document.querySelectorAll(".userCheckedOutCount").forEach(el => el.textContent = books.length);
+
+     books.forEach(req => {
       const card = document.createElement("div");
       card.className = "card mb-2 d-flex flex-column";
       card.style.maxWidth = "100%";
+
       const row = document.createElement("div");
       row.className = "d-flex flex-row align-items-center p-2";
-      // --- Book Cover ---
+
+      // Book Cover
       const cover = document.createElement("img");
       cover.src = req.coverUrl || "https://via.placeholder.com/120x168?text=Book";
       cover.alt = "Book Cover";
@@ -1459,30 +1666,98 @@
       cover.style.aspectRatio = "1 / 1.4";
       cover.style.objectFit = "cover";
       cover.style.borderRadius = "5px";
-      // --- Info ---
+
+      // Book Info
       const info = document.createElement("div");
       info.className = "flex-grow-1 px-3";
-      let badgeClass = "bg-secondary";
-      if (req.status === "Checked Out") badgeClass = "bg-primary";
-      else if (req.status === "Returned") badgeClass = "bg-success";
-      else if (req.status === "Rejected") badgeClass = "bg-danger";
       info.innerHTML = `
-
       <div class="card-body p-0">
-      <h6 class="card-title search-title fw-bold mb-2"><strong>${req.title}</strong></h6>
-      <span class="badge ${badgeClass}">${req.status}</span>
-      </p>
-      <p class="card-text small">
-      <strong>Requested On :-<br></strong>${formatDateTimeFromOffset(req.requestedAt)}
-      </p>
+      <h6 class="card-title fw-bold mb-1">${req.title || "Untitled"}</h6>
+      <p class="mb-1 text-muted"><small><strong>Checked Out On:</strong><br>${formatDateTimeFromOffset(req.requestedAt)}</small></p>
       </div>
       `;
+
       row.appendChild(cover);
       row.appendChild(info);
       card.appendChild(row);
       container.appendChild(card);
      });
-    });
+    }
+   );
+
+   // --- Book History Card ---
+
+   onSnapshot(
+    query(collection(db,
+     "bookRequests"), where("userId",
+     "==",
+     uid)),
+    (snapshot) => {
+     const container = document.getElementById("userBooksHistoryCard");
+     container.innerHTML = "";
+
+     const books = snapshot.docs
+     .map(docSnap => {
+      const data = docSnap.data();
+      return {
+       ...data,
+       requestedAt: data.requestedAt ? new Date(data.requestedAt): new Date(0),
+      };
+     })
+     .sort((a,
+      b) => b.requestedAt - a.requestedAt);
+
+     // Update all counters showing total book history count
+     document.querySelectorAll(".userAllBookHistory").forEach(el => {
+      el.textContent = books.length;
+     });
+
+     books.forEach(req => {
+      const card = document.createElement("div");
+      card.className = "card mb-2 d-flex flex-column";
+      card.style.maxWidth = "100%";
+
+      const row = document.createElement("div");
+      row.className = "d-flex flex-row align-items-center p-2";
+
+      // Book Cover
+      const cover = document.createElement("img");
+      cover.src = req.coverUrl || "https://via.placeholder.com/120x168?text=Book";
+      cover.alt = "Book Cover";
+      cover.style.width = "110px";
+      cover.style.aspectRatio = "1 / 1.4";
+      cover.style.objectFit = "cover";
+      cover.style.borderRadius = "5px";
+
+      // Info
+      const info = document.createElement("div");
+      info.className = "flex-grow-1 px-3";
+
+      let badgeClass = "bg-secondary";
+      if (req.status === "Checked Out") badgeClass = "bg-primary";
+      else if (req.status === "Returned") badgeClass = "bg-success";
+      else if (req.status === "Rejected") badgeClass = "bg-danger";
+
+      info.innerHTML = `
+      <div class="card-body p-0">
+      <h6 class="card-title search-title fw-bold mb-2"><strong>${req.title}</strong></h6>
+      <span class="badge ${badgeClass}">${req.status}</span>
+      <p class="card-text small mt-2">
+      <strong>Requested On :-<br></strong>${formatDateTimeFromOffset(req.requestedAt)}
+      </p>
+      </div>
+      `;
+
+      row.appendChild(cover);
+      row.appendChild(info);
+      card.appendChild(row);
+
+      container.appendChild(card);
+     });
+    }
+   );
+
+
    // --- Cancel book request ---
    async function cancelBookRequest(bookId) {
     showLoader();
@@ -1558,15 +1833,6 @@
      hideLoader();
     }
    }
-   //--- Count functionality (User)---
-   onSnapshot(query(collection(db, "books"), where("availability", "==", "Available")),
-    (snapshot) => {
-     document.getElementById("availableBookCount").textContent = snapshot.size;
-    });
-   onSnapshot(query(collection(db, "bookRequests"), where("userId", "==", uid)),
-    (snapshot) => {
-     document.getElementById("userRequestCount").textContent = snapshot.size;
-    });
   }
   // --- Show Admin Dashboard ---
   function showAdminDashboard() {
