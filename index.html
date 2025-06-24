@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -662,20 +661,26 @@
        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-      <div class="card mb-3" id="editUserPreviewCard">
- <div class="d-flex align-items-center p-2">
-  <div>
-   <img id="previewUserImg" src="https://cdn-icons-png.flaticon.com/512/10337/10337609.png" alt="Profile"
-    style="width:80px;height:80px;object-fit:cover;border-radius:50%;">
-  </div>
-  <div class="flex-grow-1 px-3">
-   <h6 class="mb-1 fw-bold text-truncate" id="previewUserName">Full Name</h6>
-   <p class="mb-1 small text-muted text-truncate" id="previewUserEmail">Email</p>
-   <p class="mb-0 small text-truncate" id="previewUserDob">DOB</p>
-   <p class="mb-0 small text-truncate" id="previewUserBlood">Blood Group</p>
-  </div>
- </div>
-</div>
+       <div class="card mb-3" id="editUserPreviewCard">
+        <div class="d-flex align-items-center p-2">
+         <div>
+          <img id="previewUserImg" src="https://cdn-icons-png.flaticon.com/512/10337/10337609.png" alt="Profile"
+          style="width:80px;height:80px;object-fit:cover;border-radius:50%;">
+         </div>
+         <div class="flex-grow-1 px-3">
+          <h6 class="mb-1 fw-bold text-truncate" id="previewUserName">Full Name</h6>
+          <p class="mb-1 small text-muted text-truncate" id="previewUserEmail">
+           Email
+          </p>
+          <p class="mb-0 small text-truncate" id="previewUserDob">
+           DOB
+          </p>
+          <p class="mb-0 small text-truncate" id="previewUserBlood">
+           Blood Group
+          </p>
+         </div>
+        </div>
+       </div>
 
        <input type="hidden" id="editUserId" />
        <div class="mb-2">
@@ -747,7 +752,7 @@
  <!-- Signup Modal -->
  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="signupForm" class="modal-content needs-validation" style="height:100%!important;" novalidate >
+   <form id="signupForm" class="modal-content needs-validation" style="height:100%!important;" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">User Signup</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -864,19 +869,23 @@
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
     <div class="modal-body">
-    <div class="card mb-3" id="editBookPreviewCard">
- <div class="d-flex flex-row align-items-center p-2">
-  <div>
-   <img id="previewCoverImg" src="https://via.placeholder.com/100x140?text=Cover" alt="Book Cover" style="width:90px;height:126px;object-fit:cover;border-radius:4px;">
-  </div>
-  <div class="flex-grow-1 px-3">
-   <h6 class="mb-1 fw-bold text-truncate" id="previewBookTitle">Book Title</h6>
-   <p class="mb-1 small text-muted text-truncate" id="previewBookAuthor">Author</p>
-   <p class="mb-0 small text-truncate" id="previewBookSponsor">Sponsor</p>
-  </div>
-  <span class="badge bg-secondary ms-2" id="previewBookAvailability">Status</span>
- </div>
-</div>
+     <div class="card mb-3" id="editBookPreviewCard">
+      <div class="d-flex flex-row align-items-center p-2">
+       <div>
+        <img id="previewCoverImg" src="https://via.placeholder.com/100x140?text=Cover" alt="Book Cover" style="width:90px;height:126px;object-fit:cover;border-radius:4px;">
+       </div>
+       <div class="flex-grow-1 px-3">
+        <h6 class="mb-1 fw-bold text-truncate" id="previewBookTitle">Book Title</h6>
+        <p class="mb-1 small text-muted text-truncate" id="previewBookAuthor">
+         Author
+        </p>
+        <p class="mb-0 small text-truncate" id="previewBookSponsor">
+         Sponsor
+        </p>
+       </div>
+       <span class="badge bg-secondary ms-2" id="previewBookAvailability">Status</span>
+      </div>
+     </div>
 
      <input type="hidden" id="editBookId" />
      <div class="mb-2">
@@ -950,7 +959,7 @@
  <!-- Content End-->
  <!-- Test Scripts Here-->
  <script>
- 
+
  </script>
  <!-- Test Scripts Here-->
  <script type="module">
@@ -2311,13 +2320,14 @@
      }
     });
    }
-   
-   document.getElementById("editUserBtn").addEventListener("click", () => {
-   const adminAllUserModal = bootstrap.Modal.getInstance(document.getElementById("adminAllUser"));
-   if (adminAllUserModal) {
-    adminAllUserModal.hide();
-   }
-  });
+
+   document.getElementById("editUserBtn").addEventListener("click",
+    () => {
+     const adminAllUserModal = bootstrap.Modal.getInstance(document.getElementById("adminAllUser"));
+     if (adminAllUserModal) {
+      adminAllUserModal.hide();
+     }
+    });
 
    // --- Open User Edit Modal
    document.getElementById("editUserBtn").onclick = () => {
@@ -2658,106 +2668,106 @@
    filterCards("allRejectedRequestsCard", this.value);
   });
  </script>
-  <script>
+ <script>
   // === Book Edit Preview ===
   const bookInputs = {
-    id:        document.getElementById("editBookId"),
-    title:     document.getElementById("editBookTitle"),
-    author:    document.getElementById("editBookAuthor"),
-    sponsor:   document.getElementById("editBookSponsor"),
-    cover:     document.getElementById("editBookCoverUrl"),
-    status:    document.getElementById("editBookAvailability"),
+   id: document.getElementById("editBookId"),
+   title: document.getElementById("editBookTitle"),
+   author: document.getElementById("editBookAuthor"),
+   sponsor: document.getElementById("editBookSponsor"),
+   cover: document.getElementById("editBookCoverUrl"),
+   status: document.getElementById("editBookAvailability"),
   };
 
   const bookPreview = {
-    title:       document.getElementById("previewBookTitle"),
-    author:      document.getElementById("previewBookAuthor"),
-    sponsor:     document.getElementById("previewBookSponsor"),
-    cover:       document.getElementById("previewCoverImg"),
-    availability:document.getElementById("previewBookAvailability"),
+   title: document.getElementById("previewBookTitle"),
+   author: document.getElementById("previewBookAuthor"),
+   sponsor: document.getElementById("previewBookSponsor"),
+   cover: document.getElementById("previewCoverImg"),
+   availability: document.getElementById("previewBookAvailability"),
   };
 
   function updateBookPreview() {
-    bookPreview.title.textContent = bookInputs.title.value.trim() || "Untitled";
-    bookPreview.author.textContent = bookInputs.author.value.trim() || "Unknown";
-    bookPreview.sponsor.textContent = bookInputs.sponsor.value.trim() || "-";
-    bookPreview.cover.src = bookInputs.cover.value.trim() || "https://via.placeholder.com/100x140?text=Cover";
+   bookPreview.title.textContent = bookInputs.title.value.trim() || "Untitled";
+   bookPreview.author.textContent = bookInputs.author.value.trim() || "Unknown";
+   bookPreview.sponsor.textContent = bookInputs.sponsor.value.trim() || "-";
+   bookPreview.cover.src = bookInputs.cover.value.trim() || "https://via.placeholder.com/100x140?text=Cover";
 
-    const status = bookInputs.status.value;
-    bookPreview.availability.textContent = status;
-    bookPreview.availability.className = "badge ms-2 " + 
-      (status === "Available" ? "bg-success" :
-       status === "Checked Out" ? "bg-danger" :
-       status === "Requested" ? "bg-warning text-dark" :
-       "bg-secondary");
+   const status = bookInputs.status.value;
+   bookPreview.availability.textContent = status;
+   bookPreview.availability.className = "badge ms-2 " +
+   (status === "Available" ? "bg-success":
+    status === "Checked Out" ? "bg-danger":
+    status === "Requested" ? "bg-warning text-dark":
+    "bg-secondary");
   }
 
   [bookInputs.title, bookInputs.author, bookInputs.sponsor, bookInputs.cover, bookInputs.status]
-    .forEach(input => input.addEventListener("input", updateBookPreview));
+  .forEach(input => input.addEventListener("input", updateBookPreview));
 
   document.getElementById("editBookModal")
-    .addEventListener("shown.bs.modal", updateBookPreview);
+  .addEventListener("shown.bs.modal", updateBookPreview);
 
   function openEditBookModal(book) {
-    bookInputs.id.value = book.id || "";
-    bookInputs.title.value = book.title || "";
-    bookInputs.author.value = book.author || "";
-    bookInputs.sponsor.value = book.sponsor || "";
-    bookInputs.cover.value = book.coverUrl || "";
-    bookInputs.status.value = book.availability || "Available";
+   bookInputs.id.value = book.id || "";
+   bookInputs.title.value = book.title || "";
+   bookInputs.author.value = book.author || "";
+   bookInputs.sponsor.value = book.sponsor || "";
+   bookInputs.cover.value = book.coverUrl || "";
+   bookInputs.status.value = book.availability || "Available";
 
-    updateBookPreview();
-    bootstrap.Modal.getOrCreateInstance(document.getElementById("editBookModal")).show();
+   updateBookPreview();
+   bootstrap.Modal.getOrCreateInstance(document.getElementById("editBookModal")).show();
   }
 
   // === User Edit Preview ===
   const userInputs = {
-    id:       document.getElementById("editUserId"),
-    name:     document.getElementById("editUserName"),
-    email:    document.getElementById("editUserEmail"),
-    dob:      document.getElementById("editUserDob"),
-    blood:    document.getElementById("editUserBlood"),
-    imgUrl:   document.getElementById("editUserProfileImg"),
+   id: document.getElementById("editUserId"),
+   name: document.getElementById("editUserName"),
+   email: document.getElementById("editUserEmail"),
+   dob: document.getElementById("editUserDob"),
+   blood: document.getElementById("editUserBlood"),
+   imgUrl: document.getElementById("editUserProfileImg"),
   };
 
   const userPreview = {
-    name:   document.getElementById("previewUserName"),
-    email:  document.getElementById("previewUserEmail"),
-    dob:    document.getElementById("previewUserDob"),
-    blood:  document.getElementById("previewUserBlood"),
-    img:    document.getElementById("previewUserImg"),
+   name: document.getElementById("previewUserName"),
+   email: document.getElementById("previewUserEmail"),
+   dob: document.getElementById("previewUserDob"),
+   blood: document.getElementById("previewUserBlood"),
+   img: document.getElementById("previewUserImg"),
   };
 
   function updateUserPreview() {
-    userPreview.name.textContent = userInputs.name.value.trim() || "Full Name";
-    userPreview.email.textContent = userInputs.email.value.trim() || "Email";
-    userPreview.dob.textContent = "DOB: " + (userInputs.dob.value || "-");
-    userPreview.blood.textContent = "Blood Group: " + (userInputs.blood.value.trim() || "-");
-    userPreview.img.src = userInputs.imgUrl.value.trim() || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
+   userPreview.name.textContent = userInputs.name.value.trim() || "Full Name";
+   userPreview.email.textContent = userInputs.email.value.trim() || "Email";
+   userPreview.dob.textContent = "DOB: " + (userInputs.dob.value || "-");
+   userPreview.blood.textContent = "Blood Group: " + (userInputs.blood.value.trim() || "-");
+   userPreview.img.src = userInputs.imgUrl.value.trim() || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
   }
 
   [userInputs.name, userInputs.email, userInputs.dob, userInputs.blood, userInputs.imgUrl]
-    .forEach(input => input.addEventListener("input", updateUserPreview));
+  .forEach(input => input.addEventListener("input", updateUserPreview));
 
   document.getElementById("editUserProfileModal")
-    .addEventListener("shown.bs.modal", updateUserPreview);
+  .addEventListener("shown.bs.modal", updateUserPreview);
 
   function openEditUserModal(user) {
-    userInputs.id.value = user.id || "";
-    userInputs.name.value = user.fullname || "";
-    userInputs.email.value = user.email || "";
-    userInputs.dob.value = user.dob || "";
-    userInputs.blood.value = user.bloodGroup || "";
-    userInputs.imgUrl.value = user.profileUrl || "";
+   userInputs.id.value = user.id || "";
+   userInputs.name.value = user.fullname || "";
+   userInputs.email.value = user.email || "";
+   userInputs.dob.value = user.dob || "";
+   userInputs.blood.value = user.bloodGroup || "";
+   userInputs.imgUrl.value = user.profileUrl || "";
 
-    updateUserPreview();
-    bootstrap.Modal.getOrCreateInstance(document.getElementById("editUserProfileModal")).show();
+   updateUserPreview();
+   bootstrap.Modal.getOrCreateInstance(document.getElementById("editUserProfileModal")).show();
   }
 
   // Optional: expose functions globally
   window.openEditBookModal = openEditBookModal;
   window.openEditUserModal = openEditUserModal;
-</script>
+ </script>
 
 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
