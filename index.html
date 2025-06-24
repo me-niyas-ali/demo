@@ -166,9 +166,9 @@
    </div>
   </div>
   <!-- User logged in message -->
-  <div id="userSection" class="d-none">
+  <div id="userSection" class="d-none mt-1">
    <!-- Welcome Card -->
-   <div class="card mb-2 d-flex flex-column" style="max-width: 100%;">
+   <div class="card mb-2 d-flex flex-column" style="max-width: 100%;background-color:#e6e6e6">
     <div class="d-flex flex-row align-items-center p-2">
      <!-- User Profile Image -->
      <div>
@@ -194,8 +194,8 @@
     </div>
    </div>
    <!-- User Dashboard Marquee -->
-   <div class="d-flex m-2 gap-2 p-0" style="overflow:hidden">
-    <span class="w-100 position-relative p-0 m-0" style="height:1.3em; overflow: hidden;">
+   <div class="d-flex m-2 gap-2 w-100 p-0 m-0" style="overflow:hidden">
+    <span class="w-100 position-relative p-0 m-0" style="height:1.2em; overflow: hidden;">
      <div id="userMarqueeText" class="marquee-text"
       style="white-space: nowrap; position: absolute; animation: scroll-left 20s linear infinite;">
       📢 Welcome to the Library! Browse available books and check your request history in real time.
@@ -216,15 +216,12 @@
      <div id="userAvailableBooksCard" class="d-flex overflow-auto gap-2"></div>
     </div>
    </div>
-
-
-
-
+   <!-- User Tiles Container -->
    <div class="row">
     <!-- User Tiles Card -->
     <!-- Books Checked Out Tile -->
-    <div class="col-6 col-md-4 col-lg-3">
-     <div class="card bg-warning bg-gradient text-white mb-3">
+    <div class="col-6 col-md-6 col-lg-4">
+     <div class="card bg-primary bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="fw-bold userCheckedOutCount">0</span>
@@ -247,8 +244,8 @@
      </div>
     </div>
     <!-- All Book Requests History Tile -->
-    <div class="col-6 col-md-4 col-lg-3">
-     <div class="card bg-warning bg-gradient text-white mb-3">
+    <div class="col-6 col-md-6 col-lg-4">
+     <div class="card bg-primary bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
        <h3 class="mt-2">
         <span style="font-size: 2.2rem;" class="fw-bold userAllBookHistory">0</span>
@@ -271,50 +268,50 @@
      </div>
     </div>
    </div>
-    <!-- User Tiles Card -->
-    <!-- User Tiles Modals -->
-    <!-- User Current Checked Out Card -->
-    <div class="modal fade" id="userAllCheckedOutBooks" tabindex="-1" aria-hidden="true">
-     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-      <div class="modal-content d-flex flex-column">
-       <!-- Header -->
-       <div class="modal-header d-flex justify-content-between">
-        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
-        <h6 class="card-title text-center mx-5">All Checked Out Book's</h6>
-        <span class="badge bg-secondary end userCheckedOutCount">0</span>
-       </div>
-       <!-- Card Section -->
-       <form autocomplete="off" class="px-2 my-2">
-        <input type="text" autocomplete="off" name="anything-but-search" id="userCheckedOutSearch" class="form-control" placeholder="Search by username or book title...">
-       </form>
-       <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
-        <div id="userCurrentCheckedOutBooksCard" class="d-flex flex-column gap-2"></div>
-       </div>
+   <!-- User Tiles Card -->
+   <!-- User Tiles Modals -->
+   <!-- User Current Checked Out Card -->
+   <div class="modal fade" id="userAllCheckedOutBooks" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+     <div class="modal-content d-flex flex-column">
+      <!-- Header -->
+      <div class="modal-header d-flex justify-content-between">
+       <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
+       <h6 class="card-title text-center mx-5">All Checked Out Book's</h6>
+       <span class="badge bg-secondary end userCheckedOutCount">0</span>
+      </div>
+      <!-- Card Section -->
+      <form autocomplete="off" class="px-2 my-2">
+       <input type="text" autocomplete="off" name="anything-but-search" id="userCheckedOutSearch" class="form-control" placeholder="Search by username or book title...">
+      </form>
+      <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
+       <div id="userCurrentCheckedOutBooksCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
     </div>
+   </div>
 
-    <!-- User All Books Request History Modal-->
-    <div class="modal fade" id="userAllBookRequestHistory" tabindex="-1" aria-hidden="true">
-     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-      <div class="modal-content d-flex flex-column">
-       <!-- Header -->
-       <div class="modal-header d-flex justify-content-between">
-        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
-        <h6 class="card-title text-center mx-5">All Books Request History</h6>
-        <span class="badge bg-secondary end userAllBookHistory">0</span>
-       </div>
-       <!-- Card Section -->
-       <form autocomplete="off" class="px-2 my-2">
-        <input type="text" autocomplete="off" name="allBookRequestHistory" id="userBooksHistory" class="form-control" placeholder="Search by user name, book title or status...">
-       </form>
-       <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
-        <div id="userBooksHistoryCard" class="d-flex flex-column gap-2"></div>
-       </div>
+   <!-- User All Books Request History Modal-->
+   <div class="modal fade" id="userAllBookRequestHistory" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
+     <div class="modal-content d-flex flex-column">
+      <!-- Header -->
+      <div class="modal-header d-flex justify-content-between">
+       <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
+       <h6 class="card-title text-center mx-5">All Books Request History</h6>
+       <span class="badge bg-secondary end userAllBookHistory">0</span>
+      </div>
+      <!-- Card Section -->
+      <form autocomplete="off" class="px-2 my-2">
+       <input type="text" autocomplete="off" name="allBookRequestHistory" id="userBooksHistory" class="form-control" placeholder="Search by user name, book title or status...">
+      </form>
+      <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
+       <div id="userBooksHistoryCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
     </div>
-  <!-- End User Tiles Modals -->
+   </div>
+   <!-- End User Tiles Modals -->
   </div>
 
   <!-- Admin dashboard -->
@@ -1672,7 +1669,7 @@
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
       <div class="card-body p-0">
-      <h6 class="card-title fw-bold mb-1">${req.title || "Untitled"}</h6>
+      <h6 class="card-title search-title fw-bold mb-1">${req.title || "Untitled"}</h6>
       <p class="mb-1 text-muted"><small><strong>Checked Out On:</strong><br>${formatDateTimeFromOffset(req.requestedAt)}</small></p>
       </div>
       `;
@@ -2945,7 +2942,11 @@
   document.getElementById("userAvailableBooks")?.addEventListener("input", function() {
    filterCards("userAvailableBooksCard", this.value);
   });
-  // 🟢 User Dashboard: Your Book Requests & Checkouts
+  // 🟢 User Dashboard: Your Book Checked Our
+  document.getElementById("userCheckedOutSearch")?.addEventListener("input", function() {
+   filterCards("userCurrentCheckedOutBooksCard", this.value);
+  });
+  // 🟢 User Dashboard: All Book Requests History
   document.getElementById("userBooksHistory")?.addEventListener("input", function() {
    filterCards("userBooksHistoryCard", this.value);
   });
