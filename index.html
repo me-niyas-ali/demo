@@ -585,44 +585,47 @@
      </form>
     </div>
    </div>
+   
+   
+   
+   
+   
+<!-- All Users Details Modal -->
 <!-- All Users Details Modal -->
 <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-    <div class="modal-content d-flex flex-column" style="height: 100dvh;">
+    <div class="modal-content d-flex flex-column" style="max-height: 100dvh;">
 
       <!-- Header -->
       <div class="modal-header">
         <h6 class="modal-title text-center w-100">
-          User Profile :
-          <span class="user-field fw-bold fs-6" data-field="fullname"></span>
+          User Profile : <span class="user-field fw-bold fs-6" data-field="fullname"></span>
         </h6>
         <button type="button" class="btn-close position-absolute start me-2" data-bs-dismiss="modal"></button>
       </div>
 
-      <!-- Body -->
-      <div class="modal-body d-flex flex-column flex-grow-1 overflow-hidden p-0">
+      <!-- Body (flex layout) -->
+      <div class="modal-body p-0 d-flex flex-column flex-grow-1 overflow-hidden">
 
-        <!-- User Info Card -->
-        <div class="card mb-0 rounded-0 border-0">
-          <div class="d-flex flex-row align-items-center p-3">
-            <div>
-              <img class="user-field" data-field="profileUrl" id="profileImg" alt="User"
-                style="width: 80px; height: 80px; object-fit: cover; border-radius: 50px;">
-            </div>
+        <!-- User Info Section -->
+        <div class="card mb-0 border-0 rounded-0">
+          <div class="d-flex align-items-center p-3" style="min-height: 100px;">
+            <img id="profileImg" data-field="profileUrl" class="user-field" alt="User"
+              style="width: 80px; height: 80px; object-fit: cover; border-radius: 50px;">
             <div class="flex-grow-1 px-3">
               <div class="card-body p-0">
-                <p class="card-text small mb-1"><strong>Email</strong> : <span class="user-field" data-field="email"></span></p>
-                <p class="card-text small mb-1"><strong>DOB</strong> : <span class="user-field" data-field="dob"></span></p>
-                <p class="card-text small mb-1"><strong>Blood Group</strong> : <span class="user-field" data-field="bloodGroup"></span></p>
-                <p class="card-text small mb-1"><strong>Joined Date</strong> : <span class="user-field" data-field="joinedAt"></span></p>
+                <p class="card-text small mb-1"><strong>Email</strong>: <span class="user-field" data-field="email"></span></p>
+                <p class="card-text small mb-1"><strong>DOB</strong>: <span class="user-field" data-field="dob"></span></p>
+                <p class="card-text small mb-1"><strong>Blood Group</strong>: <span class="user-field" data-field="bloodGroup"></span></p>
+                <p class="card-text small mb-1"><strong>Joined</strong>: <span class="user-field" data-field="joinedAt"></span></p>
               </div>
             </div>
-            <button class="btn btn-sm btn-outline-primary text-nowrap" id="editUserBtn">Edit Profile</button>
+            <button class="btn btn-sm btn-outline-primary" id="editUserBtn">Edit Profile</button>
           </div>
         </div>
 
-        <!-- Book History Card (scrollable section) -->
-        <div class="card rounded-0 d-flex flex-column flex-grow-1 p-0 overflow-hidden">
+        <!-- Scrollable History Section -->
+        <div class="card flex-grow-1 d-flex flex-column rounded-0 p-0 overflow-hidden">
           <div class="card-header bg-light rounded-0">
             <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
               Book Request & Checkout History
@@ -630,27 +633,30 @@
             </h5>
           </div>
 
-          <form autocomplete="off" class="py-2 px-3">
-            <input type="text" name="anything-but-search" id="searchuserBooksHistory"
-              class="form-control"
-              placeholder="Search by book title or status...">
-          </form>
+          <!-- Search -->
+          <div class="px-3 py-2">
+            <input type="text" id="searchuserBooksHistory" class="form-control"
+              placeholder="Search by book title or status..." autocomplete="off">
+          </div>
 
-          <!-- Scrollable content area -->
-          <div class="card-body pt-0 flex-grow-1 overflow-auto">
-            <div id="userBooksHistoryTable" class="d-flex flex-column gap-2 pb-3"></div>
+          <!-- Scrollable content -->
+          <div class="flex-grow-1 overflow-auto px-3 pb-3">
+            <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
           </div>
         </div>
+
       </div>
 
-      <!-- Fixed Footer -->
+      <!-- Footer -->
       <div class="modal-footer">
-        <button class="btn btn-sm w-100 btn-secondary" id="editUserCancelBtn" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-sm btn-secondary w-100" data-bs-dismiss="modal" id="editUserCancelBtn">Close</button>
       </div>
-      
+
     </div>
   </div>
 </div>
+
+
 
 
    <!-- All Users Details Edit Modal-->
