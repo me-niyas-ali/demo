@@ -75,7 +75,7 @@
  }
 
  .badge {
-  font-size: 1em;
+  font-size: .9em;
  }
 
 @keyframes scroll-left {
@@ -201,7 +201,7 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="userAvailableBooks" class="form-control form-control-sm" placeholder="Search by title or author...">
+     <input type="text" autocomplete="off" id="userAvailableBooks" class="form-control" placeholder="Search by title or author...">
     </div>
     <div class="card-body p-2">
      <div id="userAvailableBooksCard" class="d-flex overflow-auto gap-2"></div>
@@ -214,7 +214,7 @@
      </h5>
     </div>
     <div class="px-2 mt-2">
-     <input type="text" autocomplete="off" id="userBooksHistory" class="form-control form-control-sm" placeholder="Search by book title...">
+     <input type="text" autocomplete="off" id="userBooksHistory" class="form-control" placeholder="Search by book title...">
     </div>
     <div class="card-body p-2" style="max-height: 250px; overflow-y: auto;">
      <div id="userBooksHistoryCard" class="d-flex flex-column gap-2"></div>
@@ -424,7 +424,7 @@
        <span class="badge bg-secondary end count-target" data-count="signupRequestCount">0</span>
       </div>
       <!-- History Section -->
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="signupRequestsCardContainer" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -442,7 +442,7 @@
        <span class="badge bg-secondary end count-target" data-count="pendingBookRequestCount">0</span>
       </div>
       <!-- History Section -->
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="bookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -461,9 +461,9 @@
       </div>
       <!-- History Section -->
       <form autocomplete="off" class="px-2 my-2">
-       <input type="text" autocomplete="off" name="adminAllBooks" id="adminAllBooks" class="form-control form-control-sm" placeholder="Search by book title, author or sponsor...">
+       <input type="text" autocomplete="off" name="adminAllBooks" id="adminAllBooks" class="form-control" placeholder="Search by book title, author or sponsor...">
       </form>
-      <div class="card-body h-100 p-3" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="adminAllBooksCard" class="d-flex flex-wrap gap-3 justify-content-center"></div>
       </div>
      </div>
@@ -482,9 +482,9 @@
       </div>
       <!-- History Section -->
       <form autocomplete="off" class="px-2 my-2">
-       <input type="text" autocomplete="off" name="adminAllUsersSearch" id="adminAllUsersSearch" class="form-control form-control-sm" placeholder="Search by full name, email, blood group...">
+       <input type="text" autocomplete="off" name="adminAllUsersSearch" id="adminAllUsersSearch" class="form-control" placeholder="Search by full name, email, blood group...">
       </form>
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="adminAllUsersCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -503,9 +503,9 @@
       </div>
       <!-- History Section -->
       <form autocomplete="off" class="px-2 my-2">
-       <input type="text" autocomplete="off" name="anything-but-search" id="checkedOutBooks" class="form-control form-control-sm" placeholder="Search by username or book title...">
+       <input type="text" autocomplete="off" name="anything-but-search" id="checkedOutBooks" class="form-control" placeholder="Search by username or book title...">
       </form>
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="checkedOutBooksCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -524,9 +524,9 @@
       </div>
       <!-- History Section -->
       <form autocomplete="off" class="px-2 my-2">
-       <input type="text" autocomplete="off" name="allBookRequestHistory" id="allBookRequestHistory" class="form-control form-control-sm" placeholder="Search by user name, book title or status...">
+       <input type="text" autocomplete="off" name="allBookRequestHistory" id="allBookRequestHistory" class="form-control" placeholder="Search by user name, book title or status...">
       </form>
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="allBookRequestsHistoryCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -545,9 +545,9 @@
       </div>
       <!-- History Section -->
       <form autocomplete="off" class="px-2 my-2">
-       <input type="text" autocomplete="off" name="allRejectedBooks" id="allRejectedBooks" class="form-control form-control-sm" placeholder="Search by full name or book title...">
+       <input type="text" autocomplete="off" name="allRejectedBooks" id="allRejectedBooks" class="form-control" placeholder="Search by full name or book title...">
       </form>
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
        <div id="allRejectedRequestsCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -639,7 +639,7 @@
          class="form-control form-control-sm"
          placeholder="Search by book title or status...">
         </div>
-        <div class="card-body h-100 p-2" style="max-height: 60vh; overflow-y: auto;">
+        <div class="card-body h-100 px-2" style="max-height: 60vh; overflow-y: auto;">
          <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
         </div>
        </div>
