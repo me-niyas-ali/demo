@@ -118,11 +118,11 @@
  .bg-grey {
   background-color: #C0C0C0 !important
  }
- 
- 
-  .modal-content {
-   height: 90vh!important;
-  }
+
+
+ .modal-content {
+  height: 90vh!important;
+ }
 
 @media (max-width: 576px) {
   .modal.fade .custom-mobile-slide {
@@ -155,7 +155,7 @@
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
     <center>
-     <h2 class="mb-0 p-2">0927 PKNS LIBRARY</h2>
+     <h2 class="mb-0 p-2">0939 PKNS LIBRARY</h2>
     </center>
    </div>
    <div class="card-body">
@@ -502,9 +502,9 @@
        <span class="badge bg-secondary end count-target" data-count="checkedOutCount">0</span>
       </div>
       <!-- History Section -->
-      <div class="px-2 my-2" autocomplete="off">
+      <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="anything-but-search" id="checkedOutBooks" class="form-control form-control-sm" placeholder="Search by username or book title...">
-      </div>
+      </form>
       <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
        <div id="checkedOutBooksCard" class="d-flex flex-column gap-2"></div>
       </div>
@@ -920,12 +920,12 @@
  <!-- Content End-->
  <!-- Test Scripts Here-->
  <script>
-document.getElementById("editUserBtn").addEventListener("click", () => {
-  const adminAllUserModal = bootstrap.Modal.getInstance(document.getElementById("adminAllUser"));
-  if (adminAllUserModal) {
+  document.getElementById("editUserBtn").addEventListener("click", () => {
+   const adminAllUserModal = bootstrap.Modal.getInstance(document.getElementById("adminAllUser"));
+   if (adminAllUserModal) {
     adminAllUserModal.hide();
-  }
-});
+   }
+  });
 
  </script>
  <!-- Test Scripts Here-->
@@ -941,10 +941,12 @@ document.getElementById("editUserBtn").addEventListener("click", () => {
    const start = performance.now();
    finalizeLoading = () => {
     const elapsed = performance.now() - start;
-    const delay = Math.max(0, 1000 - elapsed); // at least 1 second
+    const delay = Math.max(0,
+     1000 - elapsed); // at least 1 second
     setTimeout(() => {
      document.getElementById("loadingBackdrop").classList.add("d-none");
-    }, delay);
+    },
+     delay);
    };
   }
 
@@ -954,15 +956,19 @@ document.getElementById("editUserBtn").addEventListener("click", () => {
   //--- Server Time ---
   async function syncServerTime() {
    try {
-    const ref = doc(db, "meta", "serverTime");
-    await setDoc(ref, {
-     timestamp: serverTimestamp()
-    }); // sets server timestamp
+    const ref = doc(db,
+     "meta",
+     "serverTime");
+    await setDoc(ref,
+     {
+      timestamp: serverTimestamp()
+     }); // sets server timestamp
     const docSnap = await getDoc(ref);
     const serverTime = docSnap.data().timestamp.toDate();
     serverOffset = serverTime.getTime() - Date.now();
    } catch (err) {
-    console.error("Failed to sync server time", err);
+    console.error("Failed to sync server time",
+     err);
    }
   }
 
