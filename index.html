@@ -627,19 +627,19 @@
         </div>
        </div>
        <!-- History Section -->
-       <div class="card rounded-0">
+       <div class="card rounded-0 p-0">
         <div class="card-header bg-light rounded-0">
          <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
           Book Request & Checkout History
           <span class="badge bg-secondary" id="userRequestCount">0</span>
          </h5>
         </div>
-        <div class="p-2">
-         <input type="text" name="searchuserBooksHistory" id="searchuserBooksHistory"
-         class="form-control form-control-sm"
+        <form autocomplete="off "class="py-2 border">
+         <input type="text" name="anything-but-search" id="searchuserBooksHistory"
+         class="form-control"
          placeholder="Search by book title or status...">
-        </div>
-        <div class="card-body h-100 px-2" style="max-height: 60vh; overflow-y: auto;">
+        </form>
+        <div class="card-body h-100 px-2 border" style="max-height: 60vh; overflow-y: auto;margin-top:-30px">
          <div id="userBooksHistoryTable" class="d-flex flex-column gap-2"></div>
         </div>
        </div>
