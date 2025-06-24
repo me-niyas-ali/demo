@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -423,8 +424,8 @@
        <h6 class="card-title text-center mx-5">Pending Signup Requests</h6>
        <span class="badge bg-secondary end count-target" data-count="signupRequestCount">0</span>
       </div>
-      <!-- History Section -->
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <!-- Card Section -->
+      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
        <div id="signupRequestsCardContainer" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -441,8 +442,8 @@
        <h6 class="card-title text-center mx-5">Pending Book Requests</h6>
        <span class="badge bg-secondary end count-target" data-count="pendingBookRequestCount">0</span>
       </div>
-      <!-- History Section -->
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <!-- Card Section -->
+      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
        <div id="bookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -459,7 +460,7 @@
        <h5 class="card-title text-center mx-5">All Books</h5>
        <span class="badge bg-secondary end" id="bookCount">0</span>
       </div>
-      <!-- History Section -->
+      <!-- Card Section -->
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="adminAllBooks" id="adminAllBooks" class="form-control" placeholder="Search by book title, author or sponsor...">
       </form>
@@ -480,7 +481,7 @@
        <h5 class="card-title text-center mx-5">All Users Details</h5>
        <span class="badge bg-secondary end count-target" id="userCount">0</span>
       </div>
-      <!-- History Section -->
+      <!-- Card Section -->
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="adminAllUsersSearch" id="adminAllUsersSearch" class="form-control" placeholder="Search by full name, email, blood group...">
       </form>
@@ -501,7 +502,7 @@
        <h6 class="card-title text-center mx-5">All Checked Out Book's</h6>
        <span class="badge bg-secondary end count-target" data-count="checkedOutCount">0</span>
       </div>
-      <!-- History Section -->
+      <!-- Card Section -->
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="anything-but-search" id="checkedOutBooks" class="form-control" placeholder="Search by username or book title...">
       </form>
@@ -522,7 +523,7 @@
        <h6 class="card-title text-center mx-5">All Books Request History</h6>
        <span class="badge bg-secondary end count-target" data-count="bookHistoryCount">0</span>
       </div>
-      <!-- History Section -->
+      <!-- Card Section -->
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="allBookRequestHistory" id="allBookRequestHistory" class="form-control" placeholder="Search by user name, book title or status...">
       </form>
@@ -543,7 +544,7 @@
        <h6 class="card-title text-center mx-5">All Rejected Books Request's</h6>
        <span class="badge bg-secondary end count-target" data-count="rejectedBookCount">0</span>
       </div>
-      <!-- History Section -->
+      <!-- Card Section -->
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="allRejectedBooks" id="allRejectedBooks" class="form-control" placeholder="Search by full name or book title...">
       </form>
@@ -626,7 +627,7 @@
          </div>
         </div>
        </div>
-       <!-- History Section -->
+       <!-- Card Section -->
        <div class="card rounded-0 p-0">
         <div class="card-header bg-light rounded-0">
          <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
@@ -661,6 +662,21 @@
        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
+      <div class="card mb-3" id="editUserPreviewCard">
+ <div class="d-flex align-items-center p-2">
+  <div>
+   <img id="previewUserImg" src="https://cdn-icons-png.flaticon.com/512/10337/10337609.png" alt="Profile"
+    style="width:80px;height:80px;object-fit:cover;border-radius:50%;">
+  </div>
+  <div class="flex-grow-1 px-3">
+   <h6 class="mb-1 fw-bold text-truncate" id="previewUserName">Full Name</h6>
+   <p class="mb-1 small text-muted text-truncate" id="previewUserEmail">Email</p>
+   <p class="mb-0 small text-truncate" id="previewUserDob">DOB</p>
+   <p class="mb-0 small text-truncate" id="previewUserBlood">Blood Group</p>
+  </div>
+ </div>
+</div>
+
        <input type="hidden" id="editUserId" />
        <div class="mb-2">
         <label class="form-label">Full Name</label>
@@ -731,7 +747,7 @@
  <!-- Signup Modal -->
  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="signupForm" class="modal-content needs-validation" novalidate>
+   <form id="signupForm" class="modal-content needs-validation" style="height:100%!important;" novalidate >
     <div class="modal-header">
      <h5 class="modal-title">User Signup</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -782,7 +798,7 @@
  <!-- User Login Modal -->
  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="loginForm" class="modal-content needs-validation" novalidate>
+   <form id="loginForm" class="modal-content needs-validation" style="height:100%!important;" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">User Login</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -812,7 +828,7 @@
  <!-- Admin Login Modal -->
  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="adminLoginForm" class="modal-content needs-validation" novalidate>
+   <form id="adminLoginForm" class="modal-content needs-validation" style="height:100%!important;" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">Admin Login</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -848,6 +864,20 @@
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
     <div class="modal-body">
+    <div class="card mb-3" id="editBookPreviewCard">
+ <div class="d-flex flex-row align-items-center p-2">
+  <div>
+   <img id="previewCoverImg" src="https://via.placeholder.com/100x140?text=Cover" alt="Book Cover" style="width:90px;height:126px;object-fit:cover;border-radius:4px;">
+  </div>
+  <div class="flex-grow-1 px-3">
+   <h6 class="mb-1 fw-bold text-truncate" id="previewBookTitle">Book Title</h6>
+   <p class="mb-1 small text-muted text-truncate" id="previewBookAuthor">Author</p>
+   <p class="mb-0 small text-truncate" id="previewBookSponsor">Sponsor</p>
+  </div>
+  <span class="badge bg-secondary ms-2" id="previewBookAvailability">Status</span>
+ </div>
+</div>
+
      <input type="hidden" id="editBookId" />
      <div class="mb-2">
       <label class="form-label">Title</label>
@@ -920,13 +950,7 @@
  <!-- Content End-->
  <!-- Test Scripts Here-->
  <script>
-  document.getElementById("editUserBtn").addEventListener("click", () => {
-   const adminAllUserModal = bootstrap.Modal.getInstance(document.getElementById("adminAllUser"));
-   if (adminAllUserModal) {
-    adminAllUserModal.hide();
-   }
-  });
-
+ 
  </script>
  <!-- Test Scripts Here-->
  <script type="module">
@@ -2287,6 +2311,13 @@
      }
     });
    }
+   
+   document.getElementById("editUserBtn").addEventListener("click", () => {
+   const adminAllUserModal = bootstrap.Modal.getInstance(document.getElementById("adminAllUser"));
+   if (adminAllUserModal) {
+    adminAllUserModal.hide();
+   }
+  });
 
    // --- Open User Edit Modal
    document.getElementById("editUserBtn").onclick = () => {
@@ -2627,6 +2658,108 @@
    filterCards("allRejectedRequestsCard", this.value);
   });
  </script>
+  <script>
+  // === Book Edit Preview ===
+  const bookInputs = {
+    id:        document.getElementById("editBookId"),
+    title:     document.getElementById("editBookTitle"),
+    author:    document.getElementById("editBookAuthor"),
+    sponsor:   document.getElementById("editBookSponsor"),
+    cover:     document.getElementById("editBookCoverUrl"),
+    status:    document.getElementById("editBookAvailability"),
+  };
+
+  const bookPreview = {
+    title:       document.getElementById("previewBookTitle"),
+    author:      document.getElementById("previewBookAuthor"),
+    sponsor:     document.getElementById("previewBookSponsor"),
+    cover:       document.getElementById("previewCoverImg"),
+    availability:document.getElementById("previewBookAvailability"),
+  };
+
+  function updateBookPreview() {
+    bookPreview.title.textContent = bookInputs.title.value.trim() || "Untitled";
+    bookPreview.author.textContent = bookInputs.author.value.trim() || "Unknown";
+    bookPreview.sponsor.textContent = bookInputs.sponsor.value.trim() || "-";
+    bookPreview.cover.src = bookInputs.cover.value.trim() || "https://via.placeholder.com/100x140?text=Cover";
+
+    const status = bookInputs.status.value;
+    bookPreview.availability.textContent = status;
+    bookPreview.availability.className = "badge ms-2 " + 
+      (status === "Available" ? "bg-success" :
+       status === "Checked Out" ? "bg-danger" :
+       status === "Requested" ? "bg-warning text-dark" :
+       "bg-secondary");
+  }
+
+  [bookInputs.title, bookInputs.author, bookInputs.sponsor, bookInputs.cover, bookInputs.status]
+    .forEach(input => input.addEventListener("input", updateBookPreview));
+
+  document.getElementById("editBookModal")
+    .addEventListener("shown.bs.modal", updateBookPreview);
+
+  function openEditBookModal(book) {
+    bookInputs.id.value = book.id || "";
+    bookInputs.title.value = book.title || "";
+    bookInputs.author.value = book.author || "";
+    bookInputs.sponsor.value = book.sponsor || "";
+    bookInputs.cover.value = book.coverUrl || "";
+    bookInputs.status.value = book.availability || "Available";
+
+    updateBookPreview();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("editBookModal")).show();
+  }
+
+  // === User Edit Preview ===
+  const userInputs = {
+    id:       document.getElementById("editUserId"),
+    name:     document.getElementById("editUserName"),
+    email:    document.getElementById("editUserEmail"),
+    dob:      document.getElementById("editUserDob"),
+    blood:    document.getElementById("editUserBlood"),
+    imgUrl:   document.getElementById("editUserProfileImg"),
+  };
+
+  const userPreview = {
+    name:   document.getElementById("previewUserName"),
+    email:  document.getElementById("previewUserEmail"),
+    dob:    document.getElementById("previewUserDob"),
+    blood:  document.getElementById("previewUserBlood"),
+    img:    document.getElementById("previewUserImg"),
+  };
+
+  function updateUserPreview() {
+    userPreview.name.textContent = userInputs.name.value.trim() || "Full Name";
+    userPreview.email.textContent = userInputs.email.value.trim() || "Email";
+    userPreview.dob.textContent = "DOB: " + (userInputs.dob.value || "-");
+    userPreview.blood.textContent = "Blood Group: " + (userInputs.blood.value.trim() || "-");
+    userPreview.img.src = userInputs.imgUrl.value.trim() || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
+  }
+
+  [userInputs.name, userInputs.email, userInputs.dob, userInputs.blood, userInputs.imgUrl]
+    .forEach(input => input.addEventListener("input", updateUserPreview));
+
+  document.getElementById("editUserProfileModal")
+    .addEventListener("shown.bs.modal", updateUserPreview);
+
+  function openEditUserModal(user) {
+    userInputs.id.value = user.id || "";
+    userInputs.name.value = user.fullname || "";
+    userInputs.email.value = user.email || "";
+    userInputs.dob.value = user.dob || "";
+    userInputs.blood.value = user.bloodGroup || "";
+    userInputs.imgUrl.value = user.profileUrl || "";
+
+    updateUserPreview();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("editUserProfileModal")).show();
+  }
+
+  // Optional: expose functions globally
+  window.openEditBookModal = openEditBookModal;
+  window.openEditUserModal = openEditUserModal;
+</script>
+
+
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
