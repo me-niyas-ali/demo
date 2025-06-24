@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -424,7 +425,7 @@
        <span class="badge bg-secondary end count-target" data-count="signupRequestCount">0</span>
       </div>
       <!-- Card Section -->
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 p-2 pb-2" style="max-height: 100%; overflow-y: auto;">
        <div id="signupRequestsCardContainer" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -442,7 +443,7 @@
        <span class="badge bg-secondary end count-target" data-count="pendingBookRequestCount">0</span>
       </div>
       <!-- Card Section -->
-      <div class="card-body h-100 p-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 p-2 pb-2" style="max-height: 100%; overflow-y: auto;">
        <div id="bookRequestsCardContainer" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -463,7 +464,7 @@
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="adminAllBooks" id="adminAllBooks" class="form-control" placeholder="Search by book title, author or sponsor...">
       </form>
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2 pb-3" style="max-height: 100%; overflow-y: auto;">
        <div id="adminAllBooksCard" class="d-flex flex-wrap gap-3 justify-content-center"></div>
       </div>
      </div>
@@ -484,7 +485,7 @@
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="adminAllUsersSearch" id="adminAllUsersSearch" class="form-control" placeholder="Search by full name, email, blood group...">
       </form>
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
        <div id="adminAllUsersCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -505,7 +506,7 @@
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="anything-but-search" id="checkedOutBooks" class="form-control" placeholder="Search by username or book title...">
       </form>
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
        <div id="checkedOutBooksCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -526,7 +527,7 @@
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="allBookRequestHistory" id="allBookRequestHistory" class="form-control" placeholder="Search by user name, book title or status...">
       </form>
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
        <div id="allBookRequestsHistoryCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -547,7 +548,7 @@
       <form autocomplete="off" class="px-2 my-2">
        <input type="text" autocomplete="off" name="allRejectedBooks" id="allRejectedBooks" class="form-control" placeholder="Search by full name or book title...">
       </form>
-      <div class="card-body h-100 px-2" style="max-height: 100%; overflow-y: auto;">
+      <div class="card-body h-100 px-2 pb-2" style="max-height: 100%; overflow-y: auto;">
        <div id="allRejectedRequestsCard" class="d-flex flex-column gap-2"></div>
       </div>
      </div>
@@ -624,6 +625,7 @@
            </p>
           </div>
          </div>
+         <button class="btn btn-sm btn-outline-primary text-nowrap" id="editUserBtn">Edit Profile</button>
         </div>
        </div>
        <!-- Card Section -->
@@ -646,8 +648,7 @@
       </div>
       <!-- Footer -->
       <div class="modal-footer">
-       <button class="btn btn-sm btn-outline-primary" id="editUserBtn">Edit Profile</button>
-       <button class="btn btn-sm btn-secondary" id="editUserCancelBtn"data-bs-dismiss="modal">Close</button>
+       <button class="btn btn-sm w-100 btn-secondary" id="editUserCancelBtn"data-bs-dismiss="modal">Close</button>
       </div>
      </div>
     </div>
@@ -668,14 +669,14 @@
           style="width:80px;height:80px;object-fit:cover;border-radius:50%;">
          </div>
          <div class="flex-grow-1 px-3">
-          <h6 class="mb-1 fw-bold text-truncate" id="previewUserName">Full Name</h6>
-          <p class="mb-1 small text-muted text-truncate" id="previewUserEmail">
+          <h6 class="mb-1 fw-bold" id="previewUserName">Full Name</h6>
+          <p class="mb-1 small text-muted" id="previewUserEmail">
            Email
           </p>
-          <p class="mb-0 small text-truncate" id="previewUserDob">
+          <p class="mb-0 small" id="previewUserDob">
            DOB
           </p>
-          <p class="mb-0 small text-truncate" id="previewUserBlood">
+          <p class="mb-0 small" id="previewUserBlood">
            Blood Group
           </p>
          </div>
@@ -875,11 +876,11 @@
         <img id="previewCoverImg" src="https://via.placeholder.com/100x140?text=Cover" alt="Book Cover" style="width:90px;height:126px;object-fit:cover;border-radius:4px;">
        </div>
        <div class="flex-grow-1 px-3">
-        <h6 class="mb-1 fw-bold text-truncate" id="previewBookTitle">Book Title</h6>
-        <p class="mb-1 small text-muted text-truncate" id="previewBookAuthor">
+        <h6 class="mb-1 fw-bold" id="previewBookTitle">Book Title</h6>
+        <p class="mb-1 small text-muted" id="previewBookAuthor">
          Author
         </p>
-        <p class="mb-0 small text-truncate" id="previewBookSponsor">
+        <p class="mb-0 small" id="previewBookSponsor">
          Sponsor
         </p>
        </div>
@@ -2188,7 +2189,7 @@
       actions.className = "d-flex justify-content-end gap-2 px-2 pb-2";
       const editBtn = document.createElement("button");
       editBtn.className = "btn btn-sm btn-secondary flex-fill";
-      editBtn.textContent = "Edit";
+      editBtn.textContent = "View Details";
       editBtn.onclick = () => openUserProfileModal(user);
       actions.appendChild(editBtn);
 
