@@ -585,10 +585,10 @@
      </form>
     </div>
    </div>
-   <!-- All Users Details Modal -->
+<!-- All Users Details Modal -->
 <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-    <div class="modal-content d-flex flex-column">
+    <div class="modal-content d-flex flex-column" style="height: 100dvh;">
 
       <!-- Header -->
       <div class="modal-header">
@@ -604,34 +604,24 @@
 
         <!-- User Info Card -->
         <div class="card mb-0 rounded-0 border-0">
-          <div class="d-flex flex-row align-items-center p-3" style="max-height: 12vh;">
-            <!-- Profile Image -->
+          <div class="d-flex flex-row align-items-center p-3">
             <div>
               <img class="user-field" data-field="profileUrl" id="profileImg" alt="User"
                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 50px;">
             </div>
-            <!-- User Details -->
             <div class="flex-grow-1 px-3">
               <div class="card-body p-0">
-                <p class="card-text small mb-1">
-                  <strong>Email</strong> : <span class="user-field" data-field="email"></span>
-                </p>
-                <p class="card-text small mb-1">
-                  <strong>DOB</strong> : <span class="user-field" data-field="dob"></span>
-                </p>
-                <p class="card-text small mb-1">
-                  <strong>Blood Group</strong> : <span class="user-field" data-field="bloodGroup"></span>
-                </p>
-                <p class="card-text small mb-1">
-                  <strong>Joined Date</strong> : <span class="user-field" data-field="joinedAt"></span>
-                </p>
+                <p class="card-text small mb-1"><strong>Email</strong> : <span class="user-field" data-field="email"></span></p>
+                <p class="card-text small mb-1"><strong>DOB</strong> : <span class="user-field" data-field="dob"></span></p>
+                <p class="card-text small mb-1"><strong>Blood Group</strong> : <span class="user-field" data-field="bloodGroup"></span></p>
+                <p class="card-text small mb-1"><strong>Joined Date</strong> : <span class="user-field" data-field="joinedAt"></span></p>
               </div>
             </div>
             <button class="btn btn-sm btn-outline-primary text-nowrap" id="editUserBtn">Edit Profile</button>
           </div>
         </div>
 
-        <!-- Book History Card -->
+        <!-- Book History Card (scrollable section) -->
         <div class="card rounded-0 d-flex flex-column flex-grow-1 p-0 overflow-hidden">
           <div class="card-header bg-light rounded-0">
             <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
@@ -639,27 +629,29 @@
               <span class="badge bg-secondary" id="userRequestCount">0</span>
             </h5>
           </div>
+
           <form autocomplete="off" class="py-2 px-3">
             <input type="text" name="anything-but-search" id="searchuserBooksHistory"
               class="form-control"
               placeholder="Search by book title or status...">
           </form>
 
-          <!-- Scrollable Area -->
-          <div class="card-body pt-0 overflow-auto flex-grow-1 user-details-modal">
+          <!-- Scrollable content area -->
+          <div class="card-body pt-0 flex-grow-1 overflow-auto">
             <div id="userBooksHistoryTable" class="d-flex flex-column gap-2 pb-3"></div>
           </div>
         </div>
       </div>
 
-      <!-- Footer -->
+      <!-- Fixed Footer -->
       <div class="modal-footer">
         <button class="btn btn-sm w-100 btn-secondary" id="editUserCancelBtn" data-bs-dismiss="modal">Close</button>
       </div>
-
+      
     </div>
   </div>
 </div>
+
 
    <!-- All Users Details Edit Modal-->
    <div class="modal fade" id="editUserProfileModal" tabindex="-1" aria-hidden="true">
