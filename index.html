@@ -870,19 +870,33 @@
    </form>
   </div>
  </div>
+
+
+
+
+
  <!-- Edit Book Modal -->
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-   <form id="editBookForm" class="modal-content needs-validation" novalidate>
+   <form id="editBookForm" class="modal-content needs-validation d-flex flex-column" novalidate style="max-height: 100dvh;">
+
+    <!-- Header -->
     <div class="modal-header">
      <h5 class="modal-title">Edit Book</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
-    <div class="modal-body">
+
+    <!-- Scrollable Body -->
+    <div class="modal-body overflow-auto flex-grow-1">
+
+     <!-- Book Preview -->
      <div class="card mb-3" id="editBookPreviewCard">
       <div class="d-flex flex-row align-items-center p-2">
        <div>
-        <img id="previewCoverImg" src="https://via.placeholder.com/100x140?text=Cover" alt="Book Cover" style="width:90px;height:126px;object-fit:cover;border-radius:4px;">
+        <img id="previewCoverImg"
+        src="https://via.placeholder.com/100x140?text=Cover"
+        alt="Book Cover"
+        style="width: 90px; height: 126px; object-fit: cover; border-radius: 4px;">
        </div>
        <div class="flex-grow-1 px-3">
         <h6 class="mb-1 fw-bold" id="previewBookTitle">Book Title</h6>
@@ -897,7 +911,10 @@
       </div>
      </div>
 
+     <!-- Hidden ID -->
      <input type="hidden" id="editBookId" />
+
+     <!-- Book Edit Fields -->
      <div class="mb-2">
       <label class="form-label">Title</label>
       <input type="text" id="editBookTitle" class="form-control form-control-sm" required />
@@ -922,7 +939,10 @@
        <option value="Requested">Requested</option>
       </select>
      </div>
+
     </div>
+
+    <!-- Footer -->
     <div class="modal-footer justify-content-between">
      <button id="deleteFromEditBtn" type="button" class="btn btn-sm btn-outline-danger">Delete</button>
      <div>
@@ -930,9 +950,15 @@
       <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
      </div>
     </div>
+
    </form>
   </div>
  </div>
+
+
+
+
+
  <!-- Toast Notification-->
  <div class="toast-container position-fixed top-0 p-3" id="toastContainer" style="z-index: 1100;margin-top: -50px;width:100vw;"></div>
  <!-- Delete Confirmation Modal -->
