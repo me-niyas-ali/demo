@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -75,7 +76,7 @@
  }
 
  .badge {
-  font-size: .7em;
+  font-size: 0.85em;
  }
 
 @keyframes scroll-left {
@@ -730,7 +731,7 @@
     </div>
    </div>
 
-   <!-- All Users Details Modal (Admin) -->
+   <!-- Individual Users Details Modal (Admin) -->
    <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
      <div class="modal-content modal-content-height d-flex flex-column" style="max-height: 100dvh;">
@@ -2102,12 +2103,12 @@
       details.innerHTML = `
       <div class="card-body p-0">
       <h6 class="card-title h5 mb-1"><strong>${data.fullname}</strong></h6>
-      <p class="card-text small mb-1"><strong>Email</strong>: ${data.email}</p>
-      <p class="card-text small mb-1"><strong>Phone</strong>: ${data.phone || "-"}</p>
-      <p class="card-text small mb-1"><strong>Gender</strong>: ${data.gender || "-"}</p>
-      <p class="card-text small mb-1"><strong>Blood Group</strong>: ${data.bloodGroup || "N/A"}</p>
-      <p class="card-text small mb-1"><strong>DOB</strong>: ${data.dob || "-"}</p>
-      <p class="card-text small"><strong>Status</strong>: <span class="badge bg-warning text-dark">Pending</span></p>
+      <p class="card-text small mb-1"><strong>Email</strong> : ${data.email}</p>
+      <p class="card-text small mb-1"><strong>Phone</strong> : ${data.phone || "-"}</p>
+      <p class="card-text small mb-1"><strong>Gender</strong> : ${data.gender || "-"}</p>
+      <p class="card-text small mb-1"><strong>Blood Group</strong> : ${data.bloodGroup || "N/A"}</p>
+      <p class="card-text small mb-1"><strong>DOB</strong> : ${data.dob || "-"}</p>
+      <p class="card-text small"><strong>Status</strong> : <span class="badge bg-warning text-dark">Pending</span></p>
       </div>
       `;
 
@@ -2650,8 +2651,8 @@
       const profileImg = document.createElement("img");
       profileImg.src = user.profileUrl || "https://via.placeholder.com/120x140?text=👤";
       profileImg.alt = "Profile";
-      profileImg.style.width = "75px";
-      profileImg.style.height = "75px";
+      profileImg.style.width = "95px";
+      profileImg.style.height = "95px";
       profileImg.style.objectFit = "cover";
       profileImg.style.borderRadius = "5px";
 
@@ -2660,15 +2661,13 @@
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
       <div class="card-body p-0">
-      <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
-      <p class="card-text small search-email mb-1"><strong>Email</strong>: ${user.email}</p>
-      <p class="card-text small mb-1"><strong>Phone</strong>: ${user.phone || "-"}</p>
-      <p class="card-text small mb-1"><strong>Gender</strong>: ${user.gender || "-"}</p>
-      <p class="card-text search-bloodgroup small mb-1"><strong>Blood Group</strong>: ${user.bloodGroup || "N/A"}</p>
-      <p class="card-text small"><strong>Joined On</strong>: <br>${formatDateTimeFromOffset(user.joinedAt)}</p>
-      <p class="card-text small currentbooksinhandcount">
-      <strong>Books In Hand:</strong> ${currentBookCount}
-      </p>
+      <h5 class="card-title search-name fw-bold mb-2">${user.fullname}</h5>
+      <p class="card-text small currentbooksinhandcount mb-1 badge bg-primary">Books In Hand : ${currentBookCount}</p>
+      <p class="card-text small search-email mb-1"><strong>Email</strong> : ${user.email}</p>
+      <p class="card-text small search-phone mb-1"><strong>Phone</strong> : ${user.phone || "-"}</p>
+      <p class="card-text small mb-1"><strong>Gender</strong>  : ${user.gender || "-"}</p>
+      <p class="card-text search-bloodgroup small mb-1"><strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}</p>
+      <p class="card-text small"><strong>Joined On</strong> : ${formatDateTimeFromOffset(user.joinedAt)}</p>
       </div>`;
 
       // --- Action Buttons ---
@@ -2727,7 +2726,6 @@
     populateUserProfile(user);
 
     // Hide edit button for admins
-    document.getElementById("editUserBtn").classList.toggle("d-none", user.role === "admin");
 
     // Load user's book request history
     const cardContainer = document.getElementById("userBooksHistoryTable");
@@ -3158,6 +3156,7 @@
     const sponsorEl = card.querySelector(".search-sponsor");
     const nameEl = card.querySelector(".search-name");
     const emailEl = card.querySelector(".search-email");
+    const phoneEl = card.querySelector(".search-phone");
     const bloodgroupEl = card.querySelector(".search-bloodgroup");
 
     const title = titleEl?.textContent.toLowerCase() || "";
@@ -3165,10 +3164,11 @@
     const sponsor = sponsorEl?.textContent.toLowerCase() || "";
     const name = nameEl?.textContent.toLowerCase() || "";
     const email = emailEl?.textContent.toLowerCase() || "";
+    const phone = phoneEl?.textContent.toLowerCase() || "";
     const bloodgroup = bloodgroupEl?.textContent.toLowerCase() || "";
 
     const matches = title.includes(query) || author.includes(query) || name.includes(query) ||
-    email.includes(query) || bloodgroup.includes(query) || sponsor.includes(query);
+    email.includes(query) || phone.includes(query) || bloodgroup.includes(query) || sponsor.includes(query);
 
     if (matches) {
      card.classList.remove("d-none");
