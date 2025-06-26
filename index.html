@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -79,12 +78,29 @@
   font-size: 0.85em;
  }
 
-@keyframes scroll-left {
+ .marquee {
+  width: 100%;
+  line-height: 10px;
+  color: black;
+  border: 1px solid lightgrey;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+ }
+ .marquee .marqueeText {
+  display: inline-block;
+  padding-left: 99%;
+  margin: 10px;
+  animation: marquee 20s linear infinite;
+ }
+@keyframes marquee {
   0% {
-   left: 100%;
+   transform: translate(0, 0);
   }
   100% {
-   left: -100%;
+   transform: translate(-100%, 0);
   }
  }
 
@@ -169,7 +185,7 @@
   <!-- User logged in message -->
   <div id="userSection" class="d-none mt-1">
    <!-- Profile Card (User)-->
-   <div class="card mb-1 d-flex flex-column" style="max-width: 100%;background-color:#e6e6e6">
+   <div class="card mb-1 d-flex flex-column" style="max-width: 100%;background-color:#f0f0f0">
     <div class="d-flex flex-row align-items-center p-2">
      <img src="{profileImgurl}" class="card rounded p-1" alt="User Profile Image"
      style="width: 110px;height:110px;object-fit: cover;" id="userProfileImg">
@@ -205,10 +221,9 @@
     </div>
    </div>
    <!-- User Dashboard Message -->
-   <div class="d-flex gap-2 w-100 mb-2" style="overflow:hidden">
-    <span class="w-100 position-relative" style="height:1.2em; overflow: hidden;">
-     <div id="userMarqueeText" class="marquee-text"
-      style="white-space: nowrap; position: absolute; animation: scroll-left 20s linear infinite;">
+   <div class="d-flex gap-2 w-100 mb-1" style="overflow:hidden">
+    <span class="marquee rounded" style="background-color:#f0f0f0">
+     <div id="userMarqueeText" class="marqueeText small">
       📢 Welcome to the Library! Browse available books and check your request history in real time.
      </div>
     </span>
@@ -216,7 +231,7 @@
 
    <!-- Available Books Card -->
    <div class="card mb-2">
-    <div class="card-header" style="background-color:#e6e6e6">
+    <div class="card-header" style="background-color:#f0f0f0">
      <h5 class="card-title m-0 d-flex justify-content-between">Available Books <span class="badge bg-primary userAvailableBooks">0</span>
      </h5>
     </div>
@@ -330,7 +345,7 @@
 
    <!-- Welcome Card -->
 
-   <div class="card mb-3" style="background-color:#e6e6e6">
+   <div class="card mb-3" style="background-color:#f0f0f0">
     <div class="card-header py-2 d-flex justify-content-between align-items-center">
      <h4 class="m-0 flex-grow-1">Admin Dashboard</h4>
      <span class="badge text-bg-success" style="margin-right:12px">
@@ -690,9 +705,23 @@
        <p class="small mb-3 text-muted">
         Tips :-
         <br>- Add {name} to display user full name.
-        <br>- Add {bookscheckedout} to display no. of checked out books.
+        <br>- Add {bookcount} to display no. of checked out books.
        </p>
        <textarea id="marqueeInput" class="form-control" rows="3" placeholder="Enter new marquee message..."></textarea>
+       <hr class="my-3">
+       <p class="small fw-bold mb-1">
+        Live Preview
+       </p>
+       <div class="d-flex gap-2 w-100 mb-1" style="overflow:hidden">
+        <span class="marquee rounded" style="background-color:#f0f0f0">
+         <div id="marqueePreview" class="marqueeText small">
+          📢 Welcome to the Library! Browse available books and check your request history in real time.
+         </div>
+        </span>
+       </div>
+       <div id="marqueePeview" class="marquee-text border rounded bg-light px-3 py-2 small">
+        📢 Live message will appear here...
+       </div>
       </div>
       <div class="modal-footer">
        <button type="submit" class="btn btn-primary btn-sm">Save</button>
@@ -704,7 +733,7 @@
 
    <!-- Add New Book (Admin)-->
    <div class="card mb-3">
-    <div class="card-header" style="background-color:#e6e6e6">
+    <div class="card-header" style="background-color:#f0f0f0">
      <h5 class="mb-0">Add New Book</h5>
     </div>
     <div class="card-body">
@@ -905,7 +934,7 @@
      </div>
     </div>
    </div>
-   <footer class="py-4 bg-light bor mt-auto" style="border-top:3px solid #e6e6e6;border-radius:10px">
+   <footer class="py-4 bg-light bor mt-auto" style="border-top:3px solid #f0f0f0;border-radius:10px">
     <div class="container-fluid px-3">
      <div class="d-flex align-items-center justify-content-between small">
       <div class="text-muted">
@@ -1540,76 +1569,100 @@
    adminSection.classList.add("d-none");
    document.getElementById("main-action-btn").classList.remove("d-none");
   }
-  // --- Save & Load Message ---
-  document.getElementById("editMarqueeForm").addEventListener("submit", async (e) => {
-   e.preventDefault();
-   const newText = document.getElementById("marqueeInput").value.trim();
-   if (!newText) return;
-   showLoader();
-   try {
-    await setDoc(doc(db, "meta", "userMarquee"), {
-     text: newText
-    });
-    showToast("User marquee updated!", "bg-success");
-    document.getElementById("editMarqueeModal").querySelector(".btn-close").click();
-    loadUserMarquee(); // Update instantly
-   } catch (err) {
-    showToast("Failed to update marquee: " + err.message, "bg-danger");
-   } finally {
-    hideLoader();
-   }
-  });
 
-  // --- Load User Message ---// --- Load User Message ---
-  async function loadUserMarquee(userName = "", userId = "") {
-   const el = document.getElementById("userMarqueeText");
-   const safeName = userName?.trim() || "User";
-   let checkedOutCount = 0;
-
-   // Step 1: Get checked out count
-   if (userId) {
-    try {
-     const q = query(
-      collection(db, "bookRequests"),
-      where("userId", "==", userId),
-      where("status", "==", "Checked Out")
-     );
-     const snap = await getDocs(q);
-     checkedOutCount = snap.size;
-    } catch (err) {
-     console.error("Error fetching checked out count", err);
-    }
-   }
-
-   // Step 2: Load and populate message
-   try {
-    const snap = await getDoc(doc(db, "meta", "userMarquee"));
-    let text = snap.exists()
-    ? snap.data().text || "📢 Welcome back, {name}!": "📢 Welcome back, {name}!";
-
-    text = text
-    .replace("{name}", safeName)
-    .replace("{currentcheckedoutbooks}", checkedOutCount);
-
-    el.textContent = text;
-   } catch (err) {
-    console.error("Failed to load user marquee", err);
-    el.textContent = `📢 Welcome back, ${safeName}!`;
-   }
-  }
-
+  // --- Load marquee text into textarea when modal opens ---
   const editMarqueeModal = document.getElementById("editMarqueeModal");
   const marqueeInput = document.getElementById("marqueeInput");
+  const marqueePreview = document.getElementById("marqueePreview");
+
+  // Default preview name and book count (for preview only)
+  let previewName = "Niyas";
+  let previewBookCount = 3;
+
+  // Live update the preview as the user types
+  marqueeInput.addEventListener("input", () => {
+   const raw = marqueeInput.value || "";
+   const previewText = raw
+   .replace("{name}", previewName)
+   .replace("{bookcount}", previewBookCount);
+   marqueePreview.textContent = previewText;
+  });
 
   editMarqueeModal.addEventListener("show.bs.modal", async () => {
    try {
     const snap = await getDoc(doc(db, "meta", "userMarquee"));
     marqueeInput.value = snap.exists() ? snap.data().text: "";
    } catch (err) {
-    console.error("Failed to load marquee message for editing", err);
+    console.error("Failed to load marquee text", err);
     marqueeInput.value = "";
    }
   });
+
+  // --- Save updated marquee text ---
+  document.getElementById("editMarqueeForm").addEventListener("submit", async (e) => {
+   e.preventDefault();
+   const newText = marqueeInput.value.trim();
+   if (!newText) return;
+
+   showLoader();
+   try {
+    await setDoc(doc(db, "meta", "userMarquee"), {
+     text: newText
+    });
+    showToast("User marquee updated!", "bg-success");
+
+    // Close modal
+    bootstrap.Modal.getInstance(editMarqueeModal)?.hide();
+
+    // Optionally reload marquee on current user's dashboard
+    const uid = auth.currentUser?.uid || null;
+    if (uid) {
+     const userDoc = await getDoc(doc(db, "users", uid));
+     if (userDoc.exists()) {
+      const data = userDoc.data();
+      await loadUserMarquee(data.fullname || "", uid);
+     }
+    }
+
+   } catch (err) {
+    console.error("Error saving marquee:", err);
+    showToast("Failed to update marquee: " + err.message, "bg-danger");
+   } finally {
+    hideLoader();
+   }
+  });
+
+
+  async function loadUserMarquee(userName = "", uid = "") {
+   const el = document.getElementById("userMarqueeText");
+   const safeName = userName?.trim() || "Reader";
+   let bookCount = 0;
+
+   try {
+    // Get the book count for the user
+    const q = query(collection(db, "bookRequests"),
+     where("userId", "==", uid),
+     where("status", "==", "Checked Out"));
+    const snapshot = await getDocs(q);
+    bookCount = snapshot.size;
+
+    // Get the marquee text from Firestore
+    const snap = await getDoc(doc(db, "meta", "userMarquee"));
+    let text = snap.exists() ? snap.data().text: "📢 Welcome back, {name}! You have {bookcount} books.";
+
+    // Replace placeholders
+    text = text.replace("{name}",
+     safeName).replace("{bookcount}",
+     bookCount);
+    el.textContent = text;
+
+   } catch (err) {
+    console.error("Failed to load user marquee",
+     err);
+    el.textContent = `📢 Welcome back, ${safeName}!`;
+   }
+  }
+
 
 
   // --- Show User Dashboard ---
@@ -1621,8 +1674,6 @@
    loginModal.hide();
    adminLoginModal.hide();
 
-   await loadUserMarquee();
-
    try {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
@@ -1633,8 +1684,8 @@
      userData.profileUrl || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
 
      document.getElementById("userFullName").textContent = userData.fullname || "Unknown";
-     document.getElementById("userEmail").textContent = userData.email || "Not available";
-     document.getElementById("userPhoneNumber").textContent = userData.phone || "-";
+     document.getElementById("userEmail").textContent = "E-mail : " + userData.email || "Not available";
+     document.getElementById("userPhoneNumber").textContent = "Phone No : " + userData.phone || "-";
      document.getElementById("userGender").textContent = "Gender : " + (userData.gender || "-");
      document.getElementById("userDob").textContent = "DOB : " + (userData.dob || "-");
      document.getElementById("userBloodGroup").textContent = "Blood Group : " + (userData.bloodGroup || "-");
@@ -1644,7 +1695,7 @@
      document.getElementById("userJoinedOn").textContent = "Joined On : " + joined;
 
      // Update marquee with name if needed
-     await loadUserMarquee(userData.fullname || "");
+     await loadUserMarquee(userData.fullname || "", uid);
     }
    } catch (err) {
     console.error("Error loading user info:", err);
@@ -1751,7 +1802,7 @@
         const sponsorWrapper = document.createElement("div");
         sponsorWrapper.className = "book-title-wrapper overflow-hidden";
         const sponsorSpan = document.createElement("p");
-        sponsorSpan.className = "mb-1 italic text-muted small book-title";
+        sponsorSpan.className = "mb-1 italic text-muted small search-sponsor book-title";
         sponsorSpan.textContent = book.sponsor ? `Spon. by: ${book.sponsor}`: "No Sponsor";
         sponsorWrapper.appendChild(sponsorSpan);
         cardBody.appendChild(sponsorWrapper);
@@ -2163,48 +2214,49 @@
   }
 
   // --- Approve Signup ---
-async function approveSignup(docId, data) {
-  showLoader();
-  try {
+  async function approveSignup(docId, data) {
+   showLoader();
+   try {
     // Initialize a secondary Firebase app instance
-    const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+    const secondaryApp = initializeApp(firebaseConfig,
+     "Secondary");
     const secondaryAuth = getAuth(secondaryApp);
 
     // Create user without logging out admin
     const userCredential = await createUserWithEmailAndPassword(
-      secondaryAuth,
-      data.email,
-      data.password
+     secondaryAuth,
+     data.email,
+     data.password
     );
     const uid = userCredential.user.uid;
 
     // Choose profile picture based on gender
     let profileUrl = "https://cdn-icons-png.flaticon.com/128/3641/3641764.png"; // default male
     if (data.gender?.toLowerCase() === "female") {
-      profileUrl = "https://cdn-icons-png.flaticon.com/128/6076/6076362.png";
+     profileUrl = "https://cdn-icons-png.flaticon.com/128/6076/6076362.png";
     }
 
     // Store user data in Firestore
     await setDoc(doc(db, "users", uid), {
-      fullname: data.fullname,
-      email: data.email,
-      phone: data.phone || "",
-      gender: data.gender || "",
-      dob: data.dob,
-      bloodGroup: data.bloodGroup,
-      joinedAt: new Date().toISOString(),
-      profileUrl: profileUrl,
-      role: "user"
+     fullname: data.fullname,
+     email: data.email,
+     phone: data.phone || "",
+     gender: data.gender || "",
+     dob: data.dob,
+     bloodGroup: data.bloodGroup,
+     joinedAt: new Date().toISOString(),
+     profileUrl: profileUrl,
+     role: "user"
     });
 
     // Delete the signup request
     await deleteDoc(doc(db, "signupRequests", docId));
-  } catch (error) {
+   } catch (error) {
     showToast("Error approving signup: " + error.message, "bg-danger");
-  } finally {
+   } finally {
     hideLoader();
+   }
   }
-}
 
 
   // --- Load Book Requests ---
