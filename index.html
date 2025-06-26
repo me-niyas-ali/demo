@@ -75,7 +75,7 @@
  }
 
  .badge {
-  font-size: .8em;
+  font-size: .7em;
  }
 
 @keyframes scroll-left {
@@ -119,7 +119,7 @@
   background-color: #C0C0C0 !important
  }
 
- .modal-content {
+ .modal-content-height {
   height: 90vh!important;
  }
 
@@ -139,11 +139,11 @@
    max-width: 100%;
   }
 
-  .custom-mobile-slide .modal-content {
+  .custom-mobile-slide .modal-content-height {
    height: 100%;
    border-radius: 0;
   }
-  .modal-content {
+  .modal-content-height {
    height: 100vh!important;
   }
  }
@@ -154,7 +154,7 @@
   <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="main-action-btn">
    <div class="card-header">
     <center>
-     <h2 class="mb-0 p-2">0215 PKNS LIBRARY</h2>
+     <h2 class="mb-0 p-2">10:26 PKNS LIBRARY</h2>
     </center>
    </div>
    <div class="card-body">
@@ -167,35 +167,45 @@
   </div>
   <!-- User logged in message -->
   <div id="userSection" class="d-none mt-1">
-   <!-- Welcome Card -->
-   <div class="card mb-2 d-flex flex-column" style="max-width: 100%;background-color:#e6e6e6">
+   <!-- Profile Card (User)-->
+   <div class="card mb-1 d-flex flex-column" style="max-width: 100%;background-color:#e6e6e6">
     <div class="d-flex flex-row align-items-center p-2">
-     <!-- User Profile Image -->
-     <div>
-      <img src="{profileImgurl}" class="card rounded p-1" alt="User Profile Image"
-      style="width: 90px;height:90px;object-fit: cover;" id="userProfileImg">
-     </div>
+     <img src="{profileImgurl}" class="card rounded p-1" alt="User Profile Image"
+     style="width: 110px;height:110px;object-fit: cover;" id="userProfileImg">
      <!-- User Details -->
      <div class="flex-grow-1 px-2">
-      <div class="card-body p-0">
-       <p class="card-title mb-1 h6" id="userFullName">
+      <div class="card-body small p-0">
+       <h5 class="card-title mb-1" id="userFullName">
         Full Name
-       </p>
-       <p class="card-text small mb-1" id="userEmail">
+       </h5>
+       <p class="card-text small m-0" id="userEmail">
         E-mail
        </p>
-       <p class="card-text small mb-1" id="userDob">
-        Dob:--
+       <p class="card-text small m-0" id="userPhoneNumber">
+        Phone No.
+       </p>
+       <p class="card-text small m-0" id="userGender">
+        Gender
+       </p>
+       <p class="card-text small m-0" id="userDob">
+        Dateofbirth
+       </p>
+       <p class="card-text small m-0" id="userBloodGroup">
+        Blood Group
+       </p>
+       <p class="card-text small m-0" id="userJoinedOn">
+        Joined On
        </p>
       </div>
      </div>
+
      <!-- Logout Button -->
      <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
     </div>
    </div>
-   <!-- User Dashboard Marquee -->
-   <div class="d-flex m-2 gap-2 w-100 p-0 m-0" style="overflow:hidden">
-    <span class="w-100 position-relative p-0 m-0" style="height:1.2em; overflow: hidden;">
+   <!-- User Dashboard Message -->
+   <div class="d-flex gap-2 w-100 mb-2" style="overflow:hidden">
+    <span class="w-100 position-relative" style="height:1.2em; overflow: hidden;">
      <div id="userMarqueeText" class="marquee-text"
       style="white-space: nowrap; position: absolute; animation: scroll-left 20s linear infinite;">
       📢 Welcome to the Library! Browse available books and check your request history in real time.
@@ -204,7 +214,7 @@
    </div>
 
    <!-- Available Books Card -->
-   <div class="card mb-3">
+   <div class="card mb-2">
     <div class="card-header" style="background-color:#e6e6e6">
      <h5 class="card-title m-0 d-flex justify-content-between">Available Books <span class="badge bg-primary userAvailableBooks">0</span>
      </h5>
@@ -273,7 +283,7 @@
    <!-- User Current Checked Out Card -->
    <div class="modal fade" id="userAllCheckedOutBooks" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -294,7 +304,7 @@
    <!-- User All Books Request History Modal-->
    <div class="modal fade" id="userAllBookRequestHistory" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -526,7 +536,7 @@
    <!-- Pending Signup Requests Modal-->
    <div class="modal fade" id="psrModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column" style="height: 95vh;">
+     <div class="modal-content modal-content-height d-flex flex-column" style="height: 95vh;">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -544,7 +554,7 @@
    <!-- Pending Book Requests Modal-->
    <div class="modal fade" id="pbrModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -562,7 +572,7 @@
    <!-- Admin All Book Modal-->
    <div class="modal fade" id="adminAllBook" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -583,7 +593,7 @@
    <!-- Admin All User Modal-->
    <div class="modal fade" id="adminAllUser" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -604,7 +614,7 @@
    <!-- Admin Checked Out Books Modal-->
    <div class="modal fade" id="adminAllCheckedOutBooks" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -625,7 +635,7 @@
    <!-- Admin All Books Request History Modal-->
    <div class="modal fade" id="adminAllBookRequestHistory" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -646,7 +656,7 @@
    <!-- Admin Rejected Books Request Modal-->
    <div class="modal fade" id="adminAllRejectedBookRequest" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column">
+     <div class="modal-content modal-content-height d-flex flex-column">
       <!-- Header -->
       <div class="modal-header d-flex justify-content-between">
        <button type="button" class="btn-close position-absolute me-2" data-bs-dismiss="modal"></button>
@@ -663,10 +673,11 @@
      </div>
     </div>
    </div>
-   <!-- Edit Uder Message Modal-->
+
+   <!-- Edit User Message Modal (Admin)-->
    <div class="modal fade" id="editMarqueeModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <form id="editMarqueeForm" class="modal-content">
+     <form id="editMarqueeForm" class="modal-content modal-content-height">
       <div class="modal-header">
        <h5 class="modal-title">Edit User Dashboard Marquee</h5>
        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -687,7 +698,7 @@
     </div>
    </div>
 
-   <!-- Add New Book -->
+   <!-- Add New Book (Admin)-->
    <div class="card mb-3">
     <div class="card-header" style="background-color:#e6e6e6">
      <h5 class="mb-0">Add New Book</h5>
@@ -719,11 +730,10 @@
     </div>
    </div>
 
-
-   <!-- All Users Details Modal -->
+   <!-- All Users Details Modal (Admin) -->
    <div class="modal fade" id="userProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <div class="modal-content d-flex flex-column" style="max-height: 100dvh;">
+     <div class="modal-content modal-content-height d-flex flex-column" style="max-height: 100dvh;">
       <!-- Header -->
       <div class="modal-header">
        <h6 class="modal-title text-center w-100">
@@ -762,7 +772,7 @@
         <div class="card-header bg-light rounded-0">
          <h5 class="card-title mb-0 d-flex justify-content-between align-items-center">
           Book Request & Checkout History
-          <span class="badge bg-secondary" id="userRequestCount">0</span>
+          <span class="badge bg-secondary all-book-request-history">0</span>
          </h5>
         </div>
         <!-- Search -->
@@ -783,10 +793,10 @@
      </div>
     </div>
    </div>
-   <!-- All Users Details Edit Modal -->
+   <!-- All Users Details Edit Modal (Admin)-->
    <div class="modal fade" id="editUserProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-     <form id="editUserForm" class="modal-content needs-validation d-flex flex-column" novalidate style="max-height: 100dvh;">
+     <form id="editUserForm" class="modal-content modal-content-height needs-validation d-flex flex-column" novalidate style="max-height: 100dvh;">
       <!-- Header -->
       <div class="modal-header">
        <h5 class="modal-title">Edit User Profile</h5>
@@ -808,6 +818,12 @@
           <p class="mb-1 small text-muted" id="previewUserEmail">
            Email
           </p>
+          <p class="mb-1 small text-muted" id="previewUserPhone">
+           Phone
+          </p>
+          <p class="mb-1 small text-muted" id="previewUserGender">
+           Gender
+          </p>
           <p class="mb-0 small" id="previewUserDob">
            DOB
           </p>
@@ -821,23 +837,36 @@
        <input type="hidden" id="editUserId" />
        <!-- Form Inputs -->
        <div class="mb-2">
-        <label class="form-label">Full Name</label>
+        <label for="editUserName" class="form-label">Full Name</label>
         <input type="text" class="form-control" id="editUserName" required />
        </div>
        <div class="mb-2">
-        <label class="form-label">Email</label>
+        <label for="editUserEmail" class="form-label">Email</label>
         <input type="email" class="form-control" id="editUserEmail" required />
        </div>
        <div class="mb-2">
-        <label class="form-label">Date of Birth</label>
+        <label for="editUserPhone" class="form-label">Phone</label>
+        <input type="tel" class="form-control form-control" id="editUserPhone" pattern="[+0-9]{10,15}" />
+       </div>
+       <div class="mb-3">
+        <label for="editUserGender" class="form-label">Gender</label>
+        <select class="form-select form-select" id="editUserGender">
+         <option value="">Select gender</option>
+         <option value="Male">Male</option>
+         <option value="Female">Female</option>
+        </select>
+       </div>
+
+       <div class="mb-2">
+        <label for="editUserDob" class="form-label">Date of Birth</label>
         <input type="date" class="form-control" id="editUserDob" />
        </div>
        <div class="mb-2">
-        <label class="form-label">Blood Group</label>
+        <label for="editUserBlood" class="form-label">Blood Group</label>
         <input type="text" class="form-control" id="editUserBlood" />
        </div>
        <div class="mb-2">
-        <label class="form-label">Profile Image URL</label>
+        <label for="editUserProfileImg"class="form-label">Profile Image URL</label>
         <input type="url" class="form-control" id="editUserProfileImg" />
        </div>
       </div>
@@ -851,12 +880,7 @@
     </div>
    </div>
 
-
-
-
-
-
-   <!-- Delete User Confirmation Modal -->
+   <!-- Delete User Confirmation Modal (Admin)-->
    <div class="modal fade" id="deleteUserConfirmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
      <div class="modal-content">
@@ -893,10 +917,12 @@
    </footer>
   </div>
  </div>
+
  <!-- Signup Modal -->
+
  <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="signupForm" class="modal-content needs-validation" style="height:100%!important;" novalidate>
+   <form id="signupForm" class="modal-content needs-validation" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">User Signup</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -909,6 +935,7 @@
        Please enter your full name.
       </div>
      </div>
+
      <div class="mb-3">
       <label for="email" class="form-label">Email address</label>
       <input type="email" id="email" autocomplete="off" class="form-control form-control-sm" required />
@@ -916,20 +943,56 @@
        Please enter a valid email.
       </div>
      </div>
+
      <div class="mb-3">
-      <label for="dob" class="form-label">Date of Birth</label>
+      <label for="phone" class="form-label">Phone Number</label>
+      <div class="input-group input-group-sm has-validation">
+       <span class="input-group-text">+91</span>
+       <input type="tel" id="phone" autocomplete="off" class="form-control" pattern="[0-9]{10}" required />
+       <div class="invalid-feedback">
+        Please enter a valid 10-digit phone number.
+       </div>
+      </div>
+     </div>
+
+     <div class="mb-3">
+      <label for="gender" class="form-label">Gender</label>
+      <select id="gender" class="form-select form-select-sm" required>
+       <option value="">Select gender</option>
+       <option value="Male">Male</option>
+       <option value="Female">Female</option>
+      </select>
+      <div class="invalid-feedback">
+       Please select your gender.
+      </div>
+     </div>
+
+     <div class="mb-3">
+      <label for="dob" class="form-label">Date of Birth (DD-MM-YYYY)</label>
       <input type="date" id="dob" autocomplete="off" class="form-control form-control-sm" required />
       <div class="invalid-feedback">
        Please enter your date of birth.
       </div>
      </div>
+
      <div class="mb-3">
       <label for="bloodGroup" class="form-label">Blood Group</label>
-      <input type="text" id="bloodGroup" autocomplete="off" class="form-control form-control-sm" required />
+      <select id="bloodGroup" class="form-select form-select-sm" required>
+       <option value="">Select blood group</option>
+       <option value="A+">A+</option>
+       <option value="A-">A-</option>
+       <option value="B+">B+</option>
+       <option value="B-">B-</option>
+       <option value="O+">O+</option>
+       <option value="O-">O-</option>
+       <option value="AB+">AB+</option>
+       <option value="AB-">AB-</option>
+      </select>
       <div class="invalid-feedback">
-       Please enter your blood group.
+       Please select your blood group.
       </div>
      </div>
+
      <div class="mb-3">
       <label for="password" class="form-label">Password</label>
       <input type="password" id="password" autocomplete="off" class="form-control form-control-sm" required minlength="6" />
@@ -938,16 +1001,19 @@
       </div>
      </div>
     </div>
+
     <div class="modal-footer">
      <button type="submit" class="btn btn-sm btn-primary">Sign Up</button>
     </div>
    </form>
   </div>
  </div>
+
  <!-- User Login Modal -->
+
  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="loginForm" class="modal-content needs-validation" style="height:100%!important;" novalidate>
+   <form id="loginForm" class="modal-content needs-validation" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">User Login</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -977,7 +1043,7 @@
  <!-- Admin Login Modal -->
  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-   <form id="adminLoginForm" class="modal-content needs-validation" style="height:100%!important;" novalidate>
+   <form id="adminLoginForm" class="modal-content needs-validation" novalidate>
     <div class="modal-header">
      <h5 class="modal-title">Admin Login</h5>
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -1008,7 +1074,7 @@
  <!-- Edit Book Modal -->
  <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
-   <form id="editBookForm" class="modal-content needs-validation d-flex flex-column" novalidate style="max-height: 100dvh;">
+   <form id="editBookForm" class="modal-content modal-content-height needs-validation d-flex flex-column" novalidate style="max-height: 100dvh;">
 
     <!-- Header -->
     <div class="modal-header">
@@ -1086,7 +1152,7 @@
  </div>
 
  <!-- Toast Notification-->
- <div class="toast-container position-fixed top-0 p-3" id="toastContainer" style="z-index: 1100;margin-top: -50px;width:100vw;"></div>
+ <div class="toast-container position-fixed top-0 p-2" id="toastContainer" style="z-index: 1100;margin-top:-45px;width:100vw;"></div>
  <!-- Delete Confirmation Modal -->
  <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -1267,37 +1333,109 @@
    },
     false);
   }
+
   // --- SIGNUP ---
   const signupForm = document.getElementById("signupForm");
   enableBootstrapValidation(signupForm);
+
   signupForm.addEventListener("submit", async (e) => {
    e.preventDefault();
    if (!signupForm.checkValidity()) return;
-   const fullname = document.getElementById("fullname").value.trim();
-   const email = document.getElementById("email").value.trim();
-   const dob = document.getElementById("dob").value;
-   const bloodGroup = document.getElementById("bloodGroup").value.trim();
-   const password = document.getElementById("password").value;
+
+   // Get form fields
+   const fullnameInput = document.getElementById("fullname");
+   const emailInput = document.getElementById("email");
+   const phoneInput = document.getElementById("phone");
+   const dobInput = document.getElementById("dob");
+   const genderInput = document.getElementById("gender");
+   const bloodGroupInput = document.getElementById("bloodGroup");
+   const passwordInput = document.getElementById("password");
+
+   // Get values
+   const fullname = fullnameInput.value.trim();
+   const email = emailInput.value.trim();
+   const phone = phoneInput.value.trim();
+   const dob = dobInput.value;
+   const gender = genderInput.value;
+   const bloodGroup = bloodGroupInput.value;
+   const password = passwordInput.value;
+
+   // Clear previous invalid states and messages
+   [emailInput,
+    phoneInput].forEach(input => {
+     input.classList.remove("is-invalid");
+     const feedback = input.closest(".input-group")?.querySelector(".invalid-feedback") ||
+     input.parentElement.querySelector(".invalid-feedback");
+     if (feedback) feedback.textContent = "";
+    });
+
    showLoader();
+
    try {
+    // Check for duplicates
+    const checkDuplicate = async (collectionName,
+     field,
+     value) => {
+     const q = query(collection(db, collectionName),
+      where(field, "==", value));
+     const snap = await getDocs(q);
+     return !snap.empty;
+    };
+
+    const [emailExistsInUsers, emailExistsInRequests] = await Promise.all([
+     checkDuplicate("users", "email", email),
+     checkDuplicate("signupRequests", "email", email),
+    ]);
+
+    const [phoneExistsInUsers, phoneExistsInRequests] = await Promise.all([
+     checkDuplicate("users", "phone", phone),
+     checkDuplicate("signupRequests", "phone", phone),
+    ]);
+
+    // Email check
+    if (emailExistsInUsers || emailExistsInRequests) {
+     const msg = "This email is already registered or pending approval.";
+     emailInput.classList.add("is-invalid");
+     emailInput.parentElement.querySelector(".invalid-feedback").textContent = msg;
+     showToast(msg, "bg-danger");
+     return;
+    }
+
+    // Phone check
+    if (phoneExistsInUsers || phoneExistsInRequests) {
+     const msg = "This phone number is already registered or pending approval.";
+     phoneInput.classList.add("is-invalid");
+     phoneInput.closest(".input-group").querySelector(".invalid-feedback").textContent = msg;
+     showToast(msg, "bg-danger");
+     return;
+    }
+
+    // Proceed with signup
     await addDoc(collection(db, "signupRequests"), {
      fullname,
      email,
+     phone,
+     gender,
      dob,
      bloodGroup,
      password,
      createdAt: new Date().toISOString(),
     });
+
     showToast("Signup request submitted. Wait for admin approval.", "bg-warning");
     signupForm.reset();
     signupForm.classList.remove("was-validated");
     signupModal.hide();
+
    } catch (error) {
     showToast("Error submitting signup request: " + error.message, "bg-danger");
    } finally {
     hideLoader();
    }
   });
+
+
+
   // --- USER LOGIN ---
   const loginForm = document.getElementById("loginForm");
   enableBootstrapValidation(loginForm);
@@ -1418,23 +1556,41 @@
    }
   });
 
-  // --- Load User Message ---
-  async function loadUserMarquee(userName = "") {
+  // --- Load User Message ---// --- Load User Message ---
+  async function loadUserMarquee(userName = "", userId = "") {
    const el = document.getElementById("userMarqueeText");
-   const safeName = userName?.trim() || "User"; // fallback default
+   const safeName = userName?.trim() || "User";
+   let checkedOutCount = 0;
 
+   // Step 1: Get checked out count
+   if (userId) {
+    try {
+     const q = query(
+      collection(db, "bookRequests"),
+      where("userId", "==", userId),
+      where("status", "==", "Checked Out")
+     );
+     const snap = await getDocs(q);
+     checkedOutCount = snap.size;
+    } catch (err) {
+     console.error("Error fetching checked out count", err);
+    }
+   }
+
+   // Step 2: Load and populate message
    try {
     const snap = await getDoc(doc(db, "meta", "userMarquee"));
-    if (snap.exists()) {
-     let text = snap.data().text || "📢 Welcome back, {name}!";
-     text = text.replace("{name}", safeName);
-     el.textContent = text;
-    } else {
-     el.textContent = `📢 Welcome back, ${safeName}!`;
-    }
+    let text = snap.exists()
+    ? snap.data().text || "📢 Welcome back, {name}!": "📢 Welcome back, {name}!";
+
+    text = text
+    .replace("{name}", safeName)
+    .replace("{currentcheckedoutbooks}", checkedOutCount);
+
+    el.textContent = text;
    } catch (err) {
     console.error("Failed to load user marquee", err);
-    if (el) el.textContent = `📢 Welcome back, ${safeName}!`;
+    el.textContent = `📢 Welcome back, ${safeName}!`;
    }
   }
 
@@ -1460,15 +1616,30 @@
    signupModal.hide();
    loginModal.hide();
    adminLoginModal.hide();
+
    await loadUserMarquee();
+
    try {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
      const userData = userDoc.data();
+
+     // Set Profile Data
+     document.getElementById("userProfileImg").src =
+     userData.profileUrl || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
+
      document.getElementById("userFullName").textContent = userData.fullname || "Unknown";
      document.getElementById("userEmail").textContent = userData.email || "Not available";
-     document.getElementById("userDob").textContent = "DOB: " + (userData.dob || "-");
-     document.getElementById("userProfileImg").src = userData.profileUrl || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
+     document.getElementById("userPhoneNumber").textContent = userData.phone || "-";
+     document.getElementById("userGender").textContent = "Gender : " + (userData.gender || "-");
+     document.getElementById("userDob").textContent = "DOB : " + (userData.dob || "-");
+     document.getElementById("userBloodGroup").textContent = "Blood Group : " + (userData.bloodGroup || "-");
+
+     const joined = userData.joinedAt
+     ? formatDateTimeFromOffset(userData.joinedAt): "-";
+     document.getElementById("userJoinedOn").textContent = "Joined On : " + joined;
+
+     // Update marquee with name if needed
      await loadUserMarquee(userData.fullname || "");
     }
    } catch (err) {
@@ -1912,8 +2083,10 @@
       const card = document.createElement("div");
       card.className = "card mb-2 d-flex flex-column";
       card.style.maxWidth = "100%";
+
       const row = document.createElement("div");
       row.className = "d-flex flex-row align-items-center p-2";
+
       // Avatar (Circle with Initial)
       const avatarDiv = document.createElement("div");
       avatarDiv.className = "d-flex align-items-center justify-content-center bg-primary bg-gradient text-white";
@@ -1922,30 +2095,26 @@
       avatarDiv.style.borderRadius = "5px";
       avatarDiv.style.fontSize = "42px";
       avatarDiv.textContent = data.fullname?.charAt(0).toUpperCase() || "👤";
+
       // User Details
       const details = document.createElement("div");
       details.className = "flex-grow-1 px-3";
       details.innerHTML = `
-
       <div class="card-body p-0">
       <h6 class="card-title h5 mb-1"><strong>${data.fullname}</strong></h6>
-      <p class="card-text small mb-1">
-      <strong>Email</strong> : ${data.email}
-      </p>
-      <p class="card-text small mb-1">
-      <strong>Blood Group</strong> : ${data.bloodGroup || "N/A"}
-      </p>
-      <p class="card-text small mb-1">
-      <strong>DOB</strong> : ${data.dob || "-"}
-      </p>
-      <p class="card-text small">
-      <strong>Status</strong> : <span class="badge bg-warning text-dark">Pending</span>
-      </p>
+      <p class="card-text small mb-1"><strong>Email</strong>: ${data.email}</p>
+      <p class="card-text small mb-1"><strong>Phone</strong>: ${data.phone || "-"}</p>
+      <p class="card-text small mb-1"><strong>Gender</strong>: ${data.gender || "-"}</p>
+      <p class="card-text small mb-1"><strong>Blood Group</strong>: ${data.bloodGroup || "N/A"}</p>
+      <p class="card-text small mb-1"><strong>DOB</strong>: ${data.dob || "-"}</p>
+      <p class="card-text small"><strong>Status</strong>: <span class="badge bg-warning text-dark">Pending</span></p>
       </div>
       `;
+
       // Action Buttons
       const actionButtons = document.createElement("div");
       actionButtons.className = "d-flex justify-content-end gap-2 px-2 pb-2";
+
       const approveBtn = document.createElement("button");
       approveBtn.className = "btn btn-success btn-sm flex-fill";
       approveBtn.textContent = "Approve";
@@ -1960,6 +2129,7 @@
         hideLoader();
        }
       };
+
       const rejectBtn = document.createElement("button");
       rejectBtn.className = "btn btn-danger btn-sm flex-fill";
       rejectBtn.textContent = "Reject";
@@ -1974,8 +2144,10 @@
         hideLoader();
        }
       };
+
       actionButtons.appendChild(approveBtn);
       actionButtons.appendChild(rejectBtn);
+
       // Assemble Card
       row.appendChild(avatarDiv);
       row.appendChild(details);
@@ -1985,6 +2157,46 @@
      });
     });
   }
+
+  // --- Approve Signup ---
+  async function approveSignup(docId, data) {
+   showLoader();
+   try {
+    // Initialize a secondary Firebase app instance
+    const secondaryApp = initializeApp(firebaseConfig,
+     "Secondary");
+    const secondaryAuth = getAuth(secondaryApp);
+
+    // Create user without logging out admin
+    const userCredential = await createUserWithEmailAndPassword(secondaryAuth,
+     data.email,
+     data.password);
+    const uid = userCredential.user.uid;
+
+    // Store user data in Firestore
+    await setDoc(doc(db, "users", uid),
+     {
+      fullname: data.fullname,
+      email: data.email,
+      phone: data.phone || "",
+      gender: data.gender || "",
+      dob: data.dob,
+      bloodGroup: data.bloodGroup,
+      joinedAt: new Date().toISOString(),
+      profileUrl: "https://cdn-icons-png.flaticon.com/512/10337/10337609.png",
+      role: "user"
+     });
+
+    // Delete the signup request
+    await deleteDoc(doc(db, "signupRequests", docId));
+   } catch (error) {
+    showToast("Error approving signup: " + error.message,
+     "bg-danger");
+   } finally {
+    hideLoader();
+   }
+  }
+
   // --- Load Book Requests ---
   function loadBookRequests() {
    const container = document.getElementById("bookRequestsCardContainer");
@@ -2369,39 +2581,6 @@
      }
     });
   }
-  // --- Approve Signup ---
-  async function approveSignup(docId, data) {
-   showLoader();
-   try {
-    // Initialize a secondary Firebase app instance
-    const secondaryApp = initializeApp(firebaseConfig,
-     "Secondary");
-    const secondaryAuth = getAuth(secondaryApp);
-    // Create user with secondary app (avoids logging out the admin)
-    const userCredential = await createUserWithEmailAndPassword(secondaryAuth,
-     data.email,
-     data.password);
-    const uid = userCredential.user.uid;
-    // Store user data in Firestore
-    await setDoc(doc(db, "users", uid),
-     {
-      fullname: data.fullname,
-      email: data.email,
-      dob: data.dob,
-      bloodGroup: data.bloodGroup,
-      joinedAt: new Date().toISOString(),
-      profileUrl: "https://cdn-icons-png.flaticon.com/512/10337/10337609.png",
-      role: "user"
-     });
-    // Delete from signupRequests collection
-    await deleteDoc(doc(db, "signupRequests", docId));
-   } catch (error) {
-    showToast("Error approving signup: " + error.message,
-     "bg-danger");
-   } finally {
-    hideLoader(); // Always hide loader when operation is done or errors out
-   }
-  }
 
   // --- Add New Book ---
   addBookForm.addEventListener("submit", async (e) => {
@@ -2438,20 +2617,32 @@
    const countEl = document.getElementById("userCount");
 
    onSnapshot(collection(db, "users"),
-    (snapshot) => {
+    async (snapshot) => {
      container.innerHTML = "";
      let total = 0;
 
-     snapshot.forEach((docSnap) => {
+     for (const docSnap of snapshot.docs) {
       const user = {
        id: docSnap.id,
        ...docSnap.data()
       };
       total++;
 
+      // Fetch current book count (Checked Out) from bookRequests
+      const bookQuery = query(
+       collection(db, "bookRequests"),
+       where("userId", "==", user.id),
+       where("status", "==", "Checked Out")
+      );
+
+      const bookSnap = await getDocs(bookQuery);
+      const currentBookCount = bookSnap.size;
+
+      // === Card Layout ===
       const card = document.createElement("div");
       card.className = "card mb-2 d-flex flex-column";
       card.style.maxWidth = "100%";
+
       const row = document.createElement("div");
       row.className = "d-flex flex-row align-items-center p-2";
 
@@ -2470,36 +2661,54 @@
       info.innerHTML = `
       <div class="card-body p-0">
       <h6 class="card-title search-name fw-bold mb-2">${user.fullname}</h6>
-      <p class="card-text small search-email mb-1">
-      <strong>Email</strong> : ${user.email}
+      <p class="card-text small search-email mb-1"><strong>Email</strong>: ${user.email}</p>
+      <p class="card-text small mb-1"><strong>Phone</strong>: ${user.phone || "-"}</p>
+      <p class="card-text small mb-1"><strong>Gender</strong>: ${user.gender || "-"}</p>
+      <p class="card-text search-bloodgroup small mb-1"><strong>Blood Group</strong>: ${user.bloodGroup || "N/A"}</p>
+      <p class="card-text small"><strong>Joined On</strong>: <br>${formatDateTimeFromOffset(user.joinedAt)}</p>
+      <p class="card-text small currentbooksinhandcount">
+      <strong>Books In Hand:</strong> ${currentBookCount}
       </p>
-      <p class="card-text search-bloodgroup small mb-1">
-      <strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}
-      </p>
-      <p class="card-text small">
-      <strong>Joined On</strong> : <br>${formatDateTimeFromOffset(user.joinedAt)}
-      </p>
-      </div>
-      `;
+      </div>`;
 
       // --- Action Buttons ---
       const actions = document.createElement("div");
       actions.className = "d-flex justify-content-end gap-2 px-2 pb-2";
+
+      // View Details Button
       const editBtn = document.createElement("button");
-      editBtn.className = "btn btn-sm btn-secondary flex-fill";
+      editBtn.className = "btn btn-sm btn-secondary w-50";
       editBtn.textContent = "View Details";
       editBtn.onclick = () => openUserProfileModal(user);
-      actions.appendChild(editBtn);
 
+      // WhatsApp Message Button
+      const whatsappBtn = document.createElement("a");
+      whatsappBtn.className = "btn btn-sm btn-success w-50";
+      whatsappBtn.textContent = "Message";
+
+      const phoneNumber = "+91" + (user.phone || "").replace(/[^0-9]/g, "");
+      const messageText = encodeURIComponent(
+       `Hi ${user.fullname}, This is the Admin from PKNS Library Sankaramkulam. You have ${currentBookCount} book(s) in hand.`
+      );
+
+      whatsappBtn.href = `https://wa.me/${phoneNumber}?text=${messageText}`;
+      whatsappBtn.target = "_blank";
+      whatsappBtn.rel = "noopener noreferrer";
+
+      // Append buttons
+      actions.appendChild(editBtn);
+      actions.appendChild(whatsappBtn);
+
+      // Assemble card
       row.appendChild(profileImg);
       row.appendChild(info);
       card.appendChild(row);
       card.appendChild(actions);
       container.appendChild(card);
-     });
+     }
 
      countEl.textContent = total;
-     container.setAttribute("data-total-count", total); // Save original total for later use
+     container.setAttribute("data-total-count", total);
     });
   }
 
@@ -2577,14 +2786,23 @@
      }).sort((a, b) => b.requestedAt - a.requestedAt);
 
      function renderCards(filteredRows) {
-      cardContainer.innerHTML = "";
+      const container = document.getElementById("userBooksHistoryTable");
+      container.innerHTML = "";
+
+      const countEls = document.querySelectorAll(".all-book-request-history");
+
       if (filteredRows.length === 0) {
-       cardContainer.innerHTML = `<div class="text-center text-muted">No matches found.</div>`;
+       container.innerHTML = `<div class="text-center text-muted">No matches found.</div>`;
+       countEls.forEach(el => el.textContent = "0");
        return;
       }
+
       filteredRows.forEach((row) => {
-       cardContainer.insertAdjacentHTML("beforeend", row.html);
+       container.insertAdjacentHTML("beforeend", row.html);
       });
+
+      // Update count wherever class .all-book-request-history exists
+      countEls.forEach(el => el.textContent = filteredRows.length);
      }
 
      renderCards(sorted);
@@ -2634,6 +2852,8 @@
     document.getElementById("editUserId").value = user.id;
     document.getElementById("editUserName").value = user.fullname;
     document.getElementById("editUserEmail").value = user.email;
+    document.getElementById("editUserPhone").value = user.phone;
+    document.getElementById("editUserGender").value = user.gender;
     document.getElementById("editUserDob").value = user.dob;
     document.getElementById("editUserBlood").value = user.bloodGroup;
     document.getElementById("editUserProfileImg").value = user.profileUrl || "";
@@ -2641,23 +2861,68 @@
     editUserModal.show();
    };
   });
-  // -- Update User Detail ---
+  // --- Update User Detail with Duplicate Check ---
   document.getElementById("editUserForm").addEventListener("submit", async (e) => {
    e.preventDefault();
    if (!editUserForm.checkValidity()) return;
+
    const userId = document.getElementById("editUserId").value;
+   const email = document.getElementById("editUserEmail").value.trim();
+   const phone = document.getElementById("editUserPhone").value.trim();
+
+   // --- Duplicate Check ---
+   const isDuplicate = async (collectionName, field, value) => {
+    const q = query(collection(db, collectionName), where(field, "==", value));
+    const snap = await getDocs(q);
+    return snap.docs.some(doc => doc.id !== userId); // Exclude current user
+   };
+
+   const [emailInUsers,
+    emailInRequests] = await Promise.all([
+     isDuplicate("users", "email", email),
+     isDuplicate("signupRequests", "email", email)
+    ]);
+
+   const [phoneInUsers,
+    phoneInRequests] = await Promise.all([
+     isDuplicate("users", "phone", phone),
+     isDuplicate("signupRequests", "phone", phone)
+    ]);
+
+   // --- Show Validation if Duplicate Found ---
+   const emailInput = document.getElementById("editUserEmail");
+   const phoneInput = document.getElementById("editUserPhone");
+   emailInput.classList.remove("is-invalid");
+   phoneInput.classList.remove("is-invalid");
+
+   if (emailInUsers || emailInRequests) {
+    showToast("This email is already registered or pending approval.", "bg-danger");
+    emailInput.classList.add("is-invalid");
+    return;
+   }
+
+   if (phoneInUsers || phoneInRequests) {
+    showToast("This phone number is already registered or pending approval.", "bg-danger");
+    phoneInput.classList.add("is-invalid");
+    return;
+   }
+
    const updatedUser = {
     fullname: document.getElementById("editUserName").value.trim(),
-    email: document.getElementById("editUserEmail").value.trim(),
+    email,
+    phone,
+    gender: document.getElementById("editUserGender").value,
     dob: document.getElementById("editUserDob").value,
     bloodGroup: document.getElementById("editUserBlood").value.trim(),
     profileUrl: document.getElementById("editUserProfileImg").value.trim(),
    };
+
    showLoader();
    try {
     // Update users collection
     await updateDoc(doc(db, "users", userId), updatedUser);
-    // Update related bookRequests (if you want to sync fullname/email into requests too)
+
+    // Sync related bookRequests (optional)
     const reqQuery = query(collection(db, "bookRequests"), where("userId", "==", userId));
     const reqSnap = await getDocs(reqQuery);
     for (const docSnap of reqSnap.docs) {
@@ -2666,6 +2931,7 @@
       userEmail: updatedUser.email
      });
     }
+
     showToast("User profile and related data updated.", "bg-success");
     editUserModal.hide();
    } catch (err) {
@@ -2674,6 +2940,7 @@
     hideLoader();
    }
   });
+
   // -- Delete User ---
   const deleteUserModal = new bootstrap.Modal(document.getElementById("deleteUserConfirmModal"));
   const confirmDeleteUserBtn = document.getElementById("confirmDeleteUserBtn");
@@ -2834,7 +3101,7 @@
   function showToast(message, bgColor = "bg-primary") {
    const container = document.getElementById("toastContainer");
    const toastEl = document.createElement("div");
-   toastEl.className = `toast slide-in w-100 align-items-center m-auto text-white ${bgColor} border-0`;
+   toastEl.className = `toast slide-in mb-2 w-100 align-items-center text-white ${bgColor} border-0`;
    toastEl.style.maxWidth = "500px";
    toastEl.setAttribute("role",
     "alert");
@@ -2970,9 +3237,31 @@
   document.getElementById("allRejectedBooks")?.addEventListener("input", function() {
    filterCards("allRejectedRequestsCard", this.value);
   });
+
  </script>
  <script>
-  // === Book Edit Preview ===
+  // === User & Book Input and Preview Elements ===
+  const userInputs = {
+   id: document.getElementById("editUserId"),
+   name: document.getElementById("editUserName"),
+   email: document.getElementById("editUserEmail"),
+   phone: document.getElementById("editUserPhone"),
+   gender: document.getElementById("editUserGender"),
+   dob: document.getElementById("editUserDob"),
+   blood: document.getElementById("editUserBlood"),
+   imgUrl: document.getElementById("editUserProfileImg"),
+  };
+
+  const userPreview = {
+   name: document.getElementById("previewUserName"),
+   email: document.getElementById("previewUserEmail"),
+   phone: document.getElementById("previewUserPhone"),
+   gender: document.getElementById("previewUserGender"),
+   dob: document.getElementById("previewUserDob"),
+   blood: document.getElementById("previewUserBlood"),
+   img: document.getElementById("previewUserImg"),
+  };
+
   const bookInputs = {
    id: document.getElementById("editBookId"),
    title: document.getElementById("editBookTitle"),
@@ -2990,27 +3279,86 @@
    availability: document.getElementById("previewBookAvailability"),
   };
 
+  // === User Live Preview Update ===
+  function updateUserPreview() {
+   userPreview.name.textContent = userInputs.name.value.trim() || "Full Name";
+   userPreview.email.textContent = userInputs.email.value.trim() || "Email";
+   userPreview.phone.textContent = userInputs.phone.value.trim() || "Phone";
+   userPreview.gender.textContent = userInputs.gender.value.trim() || "Gender";
+   userPreview.dob.textContent = userInputs.dob.value
+   ? `DOB: ${userInputs.dob.value}`: "DOB: -";
+   userPreview.blood.textContent = userInputs.blood.value.trim()
+   ? `Blood Group: ${userInputs.blood.value.trim()}`: "Blood Group: -";
+   userPreview.img.src =
+   userInputs.imgUrl.value.trim() ||
+   "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
+  }
+
+  // === Book Live Preview Update ===
   function updateBookPreview() {
    bookPreview.title.textContent = bookInputs.title.value.trim() || "Untitled";
    bookPreview.author.textContent = bookInputs.author.value.trim() || "Unknown";
    bookPreview.sponsor.textContent = bookInputs.sponsor.value.trim() || "-";
-   bookPreview.cover.src = bookInputs.cover.value.trim() || "https://via.placeholder.com/100x140?text=Cover";
+   bookPreview.cover.src =
+   bookInputs.cover.value.trim() ||
+   "https://via.placeholder.com/100x140?text=Cover";
 
    const status = bookInputs.status.value;
    bookPreview.availability.textContent = status;
-   bookPreview.availability.className = "badge ms-2 " +
-   (status === "Available" ? "bg-success":
-    status === "Checked Out" ? "bg-danger":
-    status === "Requested" ? "bg-warning text-dark":
-    "bg-secondary");
+   bookPreview.availability.className =
+   "badge ms-2 " +
+   (status === "Available"
+    ? "bg-success": status === "Checked Out"
+    ? "bg-danger": status === "Requested"
+    ? "bg-warning text-dark": "bg-secondary");
   }
 
-  [bookInputs.title, bookInputs.author, bookInputs.sponsor, bookInputs.cover, bookInputs.status]
-  .forEach(input => input.addEventListener("input", updateBookPreview));
+  // === Attach Real-Time Listeners (User + Book) ===
+  [
+   userInputs.name,
+   userInputs.email,
+   userInputs.phone,
+   userInputs.gender,
+   userInputs.dob,
+   userInputs.blood,
+   userInputs.imgUrl,
+  ].forEach((input) => input?.addEventListener("input", updateUserPreview));
 
-  document.getElementById("editBookModal")
+  [
+   bookInputs.title,
+   bookInputs.author,
+   bookInputs.sponsor,
+   bookInputs.cover,
+   bookInputs.status,
+  ].forEach((input) => input?.addEventListener("input", updateBookPreview));
+
+  // === Modal Show Events (User + Book) ===
+  document
+  .getElementById("editUserProfileModal")
+  .addEventListener("shown.bs.modal", updateUserPreview);
+
+  document
+  .getElementById("editBookModal")
   .addEventListener("shown.bs.modal", updateBookPreview);
 
+  // === Open User Edit Modal ===
+  function openEditUserModal(user) {
+   userInputs.id.value = user.id || "";
+   userInputs.name.value = user.fullname || "";
+   userInputs.email.value = user.email || "";
+   userInputs.phone.value = user.phone || "";
+   userInputs.gender.value = user.gender || "";
+   userInputs.dob.value = user.dob || "";
+   userInputs.blood.value = user.bloodGroup || "";
+   userInputs.imgUrl.value = user.profileUrl || "";
+
+   updateUserPreview();
+   bootstrap
+   .Modal.getOrCreateInstance(document.getElementById("editUserProfileModal"))
+   .show();
+  }
+
+  // === Open Book Edit Modal ===
   function openEditBookModal(book) {
    bookInputs.id.value = book.id || "";
    bookInputs.title.value = book.title || "";
@@ -3020,57 +3368,17 @@
    bookInputs.status.value = book.availability || "Available";
 
    updateBookPreview();
-   bootstrap.Modal.getOrCreateInstance(document.getElementById("editBookModal")).show();
+   bootstrap
+   .Modal.getOrCreateInstance(document.getElementById("editBookModal"))
+   .show();
   }
 
-  // === User Edit Preview ===
-  const userInputs = {
-   id: document.getElementById("editUserId"),
-   name: document.getElementById("editUserName"),
-   email: document.getElementById("editUserEmail"),
-   dob: document.getElementById("editUserDob"),
-   blood: document.getElementById("editUserBlood"),
-   imgUrl: document.getElementById("editUserProfileImg"),
-  };
-
-  const userPreview = {
-   name: document.getElementById("previewUserName"),
-   email: document.getElementById("previewUserEmail"),
-   dob: document.getElementById("previewUserDob"),
-   blood: document.getElementById("previewUserBlood"),
-   img: document.getElementById("previewUserImg"),
-  };
-
-  function updateUserPreview() {
-   userPreview.name.textContent = userInputs.name.value.trim() || "Full Name";
-   userPreview.email.textContent = userInputs.email.value.trim() || "Email";
-   userPreview.dob.textContent = "DOB: " + (userInputs.dob.value || "-");
-   userPreview.blood.textContent = "Blood Group: " + (userInputs.blood.value.trim() || "-");
-   userPreview.img.src = userInputs.imgUrl.value.trim() || "https://cdn-icons-png.flaticon.com/512/10337/10337609.png";
-  }
-
-  [userInputs.name, userInputs.email, userInputs.dob, userInputs.blood, userInputs.imgUrl]
-  .forEach(input => input.addEventListener("input", updateUserPreview));
-
-  document.getElementById("editUserProfileModal")
-  .addEventListener("shown.bs.modal", updateUserPreview);
-
-  function openEditUserModal(user) {
-   userInputs.id.value = user.id || "";
-   userInputs.name.value = user.fullname || "";
-   userInputs.email.value = user.email || "";
-   userInputs.dob.value = user.dob || "";
-   userInputs.blood.value = user.bloodGroup || "";
-   userInputs.imgUrl.value = user.profileUrl || "";
-
-   updateUserPreview();
-   bootstrap.Modal.getOrCreateInstance(document.getElementById("editUserProfileModal")).show();
-  }
-
-  // Optional: expose functions globally
-  window.openEditBookModal = openEditBookModal;
+  // === Expose globally if needed ===
   window.openEditUserModal = openEditUserModal;
+  window.openEditBookModal = openEditBookModal;
  </script>
+
+
 
 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
