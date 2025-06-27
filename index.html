@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -779,21 +780,27 @@
        <!-- User Info Section -->
        <div class="card mb-0 border-0 rounded-0">
         <div class="d-flex align-items-center p-3" style="min-height: 100px;">
-         <img id="profileImg" data-field="profileUrl" class="user-field" alt="User"
-         style="width: 80px; height: 80px; object-fit: cover; border-radius: 50px;">
+         <img id="profileImg" data-field="profileUrl" class="user-field rounded" alt="User"
+         style="width:100px; height:100px; object-fit: cover;">
          <div class="flex-grow-1 px-3">
           <div class="card-body p-0">
-           <p class="card-text small mb-1">
-            <strong>Email</strong>: <span class="user-field" data-field="email"></span>
+           <p class="card-text small mb-0">
+            <strong>Email</strong> : <span class="user-field" data-field="email"></span>
            </p>
-           <p class="card-text small mb-1">
-            <strong>DOB</strong>: <span class="user-field" data-field="dob"></span>
+           <p class="card-text small mb-0">
+            <strong>Phone No.</strong> : <span class="user-field" data-field="phone"></span>
            </p>
-           <p class="card-text small mb-1">
-            <strong>Blood Group</strong>: <span class="user-field" data-field="bloodGroup"></span>
+            <p class="card-text small mb-0">
+            <strong>Gender</strong> : <span class="user-field" data-field="gender"></span>
            </p>
-           <p class="card-text small mb-1">
-            <strong>Joined</strong>: <span class="user-field" data-field="joinedAt"></span>
+           <p class="card-text small mb-0">
+            <strong>DOB</strong> : <span class="user-field" data-field="dob"></span>
+           </p>
+           <p class="card-text small mb-0">
+            <strong>Blood Group</strong> : <span class="user-field" data-field="bloodGroup"></span>
+           </p>
+           <p class="card-text small mb-0">
+            <strong>Joined</strong> : <span class="user-field" data-field="joinedAt"></span>
            </p>
           </div>
          </div>
@@ -843,24 +850,23 @@
          <div>
           <img id="previewUserImg"
           src="https://cdn-icons-png.flaticon.com/512/10337/10337609.png"
-          alt="Profile"
-          style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+          alt="Profile" style="width: 100px; height: 100px; object-fit: cover;" class="rounded">
          </div>
          <div class="flex-grow-1 px-3">
-          <h6 class="mb-1 fw-bold" id="previewUserName">Full Name</h6>
-          <p class="mb-1 small text-muted" id="previewUserEmail">
+          <h5 class="mb-0 fw-bold" id="previewUserName">Full Name</h5>
+          <p class="mb-0 small text-muted" id="previewUserEmail">
            Email
           </p>
-          <p class="mb-1 small text-muted" id="previewUserPhone">
+          <p class="mb-0 small text-muted" id="previewUserPhone">
            Phone
           </p>
-          <p class="mb-1 small text-muted" id="previewUserGender">
+          <p class="mb-0 small text-muted" id="previewUserGender">
            Gender
           </p>
-          <p class="mb-0 small" id="previewUserDob">
+          <p class="mb-0 small text-muted" id="previewUserDob">
            DOB
           </p>
-          <p class="mb-0 small" id="previewUserBlood">
+          <p class="mb-0 small text-muted" id="previewUserBlood">
            Blood Group
           </p>
          </div>
@@ -875,7 +881,7 @@
        </div>
        <div class="mb-2">
         <label for="editUserEmail" class="form-label">Email</label>
-        <input type="email" class="form-control" id="editUserEmail" required />
+        <input type="email" class="form-control" id="editUserEmail" disabled required />
        </div>
        <div class="mb-2">
         <label for="editUserPhone" class="form-label">Phone</label>
@@ -896,7 +902,17 @@
        </div>
        <div class="mb-2">
         <label for="editUserBlood" class="form-label">Blood Group</label>
-        <input type="text" class="form-control" id="editUserBlood" />
+        <select id="editUserBlood" class="form-select" required>
+       <option value="">Select blood group</option>
+       <option value="A+">A+</option>
+       <option value="A-">A-</option>
+       <option value="B+">B+</option>
+       <option value="B-">B-</option>
+       <option value="O+">O+</option>
+       <option value="O-">O-</option>
+       <option value="AB+">AB+</option>
+       <option value="AB-">AB-</option>
+      </select>
        </div>
        <div class="mb-2">
         <label for="editUserProfileImg"class="form-label">Profile Image URL</label>
@@ -1305,6 +1321,7 @@
   } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
   import {
    getFirestore,
+   getCountFromServer,
    collection,
    addDoc,
    getDocs,
@@ -2672,35 +2689,26 @@
     hideLoader(); // Always hide loader after process completes
    }
   });
-
+  
+  
+  
   // --- Load All Users (Admin) ---
-  function loadAllUsers() {
-   const container = document.getElementById("adminAllUsersCard");
-   const countEl = document.getElementById("userCount");
+  // --- Load All Users (Admin) ---
+function loadAllUsers() {
+  const container = document.getElementById("adminAllUsersCard");
+  const countEl = document.getElementById("userCount");
 
-   onSnapshot(collection(db, "users"),
-    async (snapshot) => {
-     container.innerHTML = "";
-     let total = 0;
+  onSnapshot(collection(db, "users"), (snapshot) => {
+    container.innerHTML = "";
+    let total = 0;
 
-     for (const docSnap of snapshot.docs) {
+    snapshot.forEach((docSnap) => {
       const user = {
-       id: docSnap.id,
-       ...docSnap.data()
+        id: docSnap.id,
+        ...docSnap.data()
       };
       total++;
 
-      // Fetch current book count (Checked Out) from bookRequests
-      const bookQuery = query(
-       collection(db, "bookRequests"),
-       where("userId", "==", user.id),
-       where("status", "==", "Checked Out")
-      );
-
-      const bookSnap = await getDocs(bookQuery);
-      const currentBookCount = bookSnap.size;
-
-      // === Card Layout ===
       const card = document.createElement("div");
       card.className = "card mb-2 d-flex flex-column";
       card.style.maxWidth = "100%";
@@ -2712,8 +2720,8 @@
       const profileImg = document.createElement("img");
       profileImg.src = user.profileUrl || "https://via.placeholder.com/120x140?text=👤";
       profileImg.alt = "Profile";
-      profileImg.style.width = "95px";
-      profileImg.style.height = "95px";
+      profileImg.style.width = "100px";
+      profileImg.style.height = "100px";
       profileImg.style.objectFit = "cover";
       profileImg.style.borderRadius = "5px";
 
@@ -2721,59 +2729,80 @@
       const info = document.createElement("div");
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
-      <div class="card-body p-0">
-      <h5 class="card-title search-name fw-bold mb-2">${user.fullname}</h5>
-      <p class="card-text small currentbooksinhandcount mb-1 badge bg-primary">Books In Hand : ${currentBookCount}</p>
-      <p class="card-text small search-email mb-1"><strong>Email</strong> : ${user.email}</p>
-      <p class="card-text small search-phone mb-1"><strong>Phone</strong> : ${user.phone || "-"}</p>
-      <p class="card-text small mb-1"><strong>Gender</strong>  : ${user.gender || "-"}</p>
-      <p class="card-text search-bloodgroup small mb-1"><strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}</p>
-      <p class="card-text small"><strong>Joined On</strong> : ${formatDateTimeFromOffset(user.joinedAt)}</p>
-      </div>`;
+        <div class="card-body p-0">
+          <h5 class="card-title search-name fw-bold mb-2">${user.fullname}</h5>
+          <p class="card-text small search-email mb-0"><strong>Email</strong> : ${user.email}</p>
+          <p class="card-text small search-phone mb-0"><strong>Phone No.</strong> : ${user.phone}</p>
+          <p class="card-text small mb-0"><strong>Gender</strong> : ${user.gender}</p>
+          <p class="card-text search-bloodgroup small mb-0"><strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}</p>
+          <p class="card-text small mb-0"><strong>Books Checked Out</strong> : <span class="book-count">Loading...</span></p>
+          <p class="card-text small"><strong>Joined</strong> : ${formatDateTimeFromOffset(user.joinedAt)}</p>
+        </div>
+      `;
+
+      // --- Load Checked Out Book Count ---
+      const countSpan = info.querySelector(".book-count");
+      const q = query(
+        collection(db, "bookRequests"),
+        where("userId", "==", user.id),
+        where("status", "==", "Checked Out")
+      );
+      getCountFromServer(q)
+        .then((snap) => {
+          countSpan.textContent = snap.data().count;
+        })
+        .catch(() => {
+          countSpan.textContent = "0";
+        });
 
       // --- Action Buttons ---
       const actions = document.createElement("div");
       actions.className = "d-flex justify-content-end gap-2 px-2 pb-2";
 
-      // View Details Button
+      // --- View Details Button ---
       const editBtn = document.createElement("button");
-      editBtn.className = "btn btn-sm btn-secondary w-50";
+      editBtn.className = "btn btn-sm btn-primary flex-fill";
       editBtn.textContent = "View Details";
       editBtn.onclick = () => openUserProfileModal(user);
-
-      // WhatsApp Message Button
-      const whatsappBtn = document.createElement("a");
-      whatsappBtn.className = "btn btn-sm btn-success w-50";
-      whatsappBtn.textContent = "Message";
-
-      const phoneNumber = "+91" + (user.phone || "").replace(/[^0-9]/g, "");
-      const messageText = encodeURIComponent(
-       `Hi ${user.fullname}, This is the Admin from PKNS Library Sankaramkulam. You have ${currentBookCount} book(s) in hand.`
-      );
-
-      whatsappBtn.href = `https://wa.me/${phoneNumber}?text=${messageText}`;
-      whatsappBtn.target = "_blank";
-      whatsappBtn.rel = "noopener noreferrer";
-
-      // Append buttons
       actions.appendChild(editBtn);
-      actions.appendChild(whatsappBtn);
 
-      // Assemble card
+      // --- Message Button ---
+      const msgBtn = document.createElement("button");
+      msgBtn.className = "btn btn-sm btn-success flex-fill";
+      msgBtn.textContent = "Message";
+      msgBtn.onclick = async () => {
+        const phone = user.phone;
+        if (!phone) return alert("User has no phone number saved.");
+
+        // Count the user's checked-out books
+        const q = query(
+          collection(db, "bookRequests"),
+          where("userId", "==", user.id),
+          where("status", "==", "Checked Out")
+        );
+        const snapshot = await getDocs(q);
+        const bookCount = snapshot.size;
+
+        const message = `Hi ${user.fullname}, you currently have ${bookCount} book${bookCount !== 1 ? "s" : ""} checked out from the library. Please return them on or before the due date.`;
+        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, "_blank");
+      };
+      actions.appendChild(msgBtn);
+
+      // --- Assemble Card ---
       row.appendChild(profileImg);
       row.appendChild(info);
       card.appendChild(row);
       card.appendChild(actions);
       container.appendChild(card);
-     }
-
-     countEl.textContent = total;
-     container.setAttribute("data-total-count", total);
     });
-  }
 
+    countEl.textContent = total;
+    container.setAttribute("data-total-count", total);
+  });
+}
 
-  // -- Open User Detail Modal---
+ // -- Open User Detail Modal---
   document.addEventListener("DOMContentLoaded", () => {
    userProfileModal = new bootstrap.Modal(document.getElementById("userProfileModal"));
    editUserModal = new bootstrap.Modal(document.getElementById("editUserProfileModal"));
@@ -2888,7 +2917,7 @@
      if (field === "profileUrl") {
       el.src = value || "https://via.placeholder.com/80?text=👤";
      } else if (field === "dob") {
-      el.textContent = value ? `DOB: ${value}`: "DOB: -";
+      el.textContent = value ? `${value}` : "-";
      } else if (field === "joinedAt") {
       el.textContent = value ? formatDateTimeFromOffset(value): "-";
      } else {
