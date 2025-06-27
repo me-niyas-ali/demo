@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -216,7 +215,6 @@
        </p>
       </div>
      </div>
-
      <!-- Logout Button -->
      <button id="userLogoutBtn" class="btn btn-outline-danger btn-sm">Logout</button>
     </div>
@@ -229,7 +227,6 @@
      </div>
     </span>
    </div>
-
    <!-- Available Books Card -->
    <div class="card mb-2">
     <div class="card-header" style="background-color:#f0f0f0">
@@ -317,7 +314,6 @@
      </div>
     </div>
    </div>
-
    <!-- User All Books Request History Modal-->
    <div class="modal fade" id="userAllBookRequestHistory" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
@@ -340,12 +336,9 @@
    </div>
    <!-- End User Tiles Modals -->
   </div>
-
   <!-- Admin dashboard -->
   <div id="adminSection" class="d-none">
-
    <!-- Welcome Card -->
-
    <div class="card mb-3" style="background-color:#f0f0f0">
     <div class="card-header py-2 d-flex justify-content-between align-items-center">
      <h4 class="m-0 flex-grow-1">Admin Dashboard</h4>
@@ -354,20 +347,19 @@
      </span>
      <button id="adminLogoutBtn" class="btn btn-sm btn-outline-danger">Logout</button>
     </div>
-
-    <!-- Marquee Wrapper -->
-
-    <div class="d-flex m-2 gap-2 p-0" style="overflow:hidden">
-     <span class="w-100 position-relative p-0 m-0" style="height:1.3em; overflow: hidden;">
-      <div class="marquee-text" style="white-space: nowrap; position: absolute; animation: scroll-left 20s linear infinite;">
+    <!-- Admin Dashboard Message -->
+    <div class="d-flex gap-2 w-100 my-1" style="overflow:hidden">
+     <span class="marquee border-0" style="background-color:#f0f0f0">
+      <div class="marqueeText small">
        📢 Welcome to the Admin Dashboard! Stay updated with requests and user activity in real time.
       </div>
      </span>
     </div>
    </div>
-
    <!-- Admin Tile Cards-->
    <div class="row">
+    
+   <!-- Pending Signup Requests Cards-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-danger bg-gradient text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
@@ -390,6 +382,8 @@
       </div>
      </div>
     </div>
+
+   <!-- Pending Books Requests Cards-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-danger bg-gradient  text-white mb-3">
       <div class="card-body py-1 d-flex justify-content-around align-items-center">
@@ -413,6 +407,7 @@
       </div>
      </div>
     </div>
+    
     <!-- Total Books Tile-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-primary bg-gradient  text-white mb-3">
@@ -436,6 +431,7 @@
       </div>
      </div>
     </div>
+    
     <!-- Total Users Tile-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-primary bg-gradient text-white mb-3">
@@ -458,6 +454,7 @@
       </div>
      </div>
     </div>
+    
     <!-- Books Checked Out Tile-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-warning bg-gradient text-white mb-3">
@@ -482,6 +479,7 @@
       </div>
      </div>
     </div>
+    
     <!-- All Book Requests History Tile-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-warning bg-gradient text-white mb-3">
@@ -506,6 +504,7 @@
       </div>
      </div>
     </div>
+    
     <!-- Rejected Book Requests Tile-->
     <div class="col-6 col-md-4 col-lg-3">
      <div class="card bg-warning bg-gradient text-white mb-3">
@@ -530,22 +529,24 @@
       </div>
      </div>
     </div>
+    
     <!-- Message Edit Tile-->
-    <div class="col-12 col-md-6 col-lg-4">
-     <div class="card bg-light bg-gradient text-dark mb-3">
-      <div class="card-body py-2 d-flex justify-content-between align-items-center">
-       <div>
-        <h5 class="fw-bold mb-1">User Marquee Message</h5>
-        <p class="small mb-0 text-muted">
-         Edit the welcome text for users
-        </p>
+    <div class="col-6 col-md-4 col-lg-3">
+     <div class="card bg-warning bg-gradient text-white mb-3">
+      <div class="card-body py-1 d-flex justify-content-around align-items-center">
+       <div class="icon p-2" style="margin:4px">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+        </svg>
        </div>
-       <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMarqueeModal">
-        Edit
-       </button>
-       <button class="btn btn-sm btn-outline-primary" id="testToastBtn">
-        Edit
-       </button>
+      </div>
+      <div class="text-center small fw-bold mb-2 mt-0">
+       Edit User Message
+      </div>
+      <div class="card-footer d-flex align-items-center justify-content-between" data-bs-toggle="modal" data-bs-target="#editMarqueeModal">
+       <a class="small text-white" href="#">Edit Details</a>
+       <i class="bi bi-arrow-right fs-3"></i>
       </div>
      </div>
     </div>
@@ -553,6 +554,7 @@
    </div>
    <!-- Tile Container Ends-->
    <!-- Admin Dashboard Tile Modals-->
+   
    <!-- Pending Signup Requests Modal-->
    <div class="modal fade" id="psrModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-sm-down custom-mobile-slide">
@@ -703,13 +705,6 @@
        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-       <p class="small mb-3 text-muted">
-        Tips :-
-        <br>- Add {name} to display user full name.
-        <br>- Add {bookcount} to display no. of checked out books.
-       </p>
-       <textarea id="marqueeInput" class="form-control" rows="3" placeholder="Enter new marquee message..."></textarea>
-       <hr class="my-3">
        <p class="small fw-bold mb-1">
         Live Preview
        </p>
@@ -720,9 +715,15 @@
          </div>
         </span>
        </div>
-       <div id="marqueePeview" class="marquee-text border rounded bg-light px-3 py-2 small">
-        📢 Live message will appear here...
-       </div>
+       <hr class="my-2">
+       <p class="small mb-3 text-muted">
+        Tips :-
+        <br>- Add {name} to display user full name.
+        <br>- Add {bookcount} to display no. of checked out books.
+       </p>
+       <textarea id="marqueeInput" class="form-control" rows="3" placeholder="Enter new marquee message..."></textarea>
+
+
       </div>
       <div class="modal-footer">
        <button type="submit" class="btn btn-primary btn-sm">Save</button>
@@ -790,7 +791,7 @@
            <p class="card-text small mb-0">
             <strong>Phone No.</strong> : <span class="user-field" data-field="phone"></span>
            </p>
-            <p class="card-text small mb-0">
+           <p class="card-text small mb-0">
             <strong>Gender</strong> : <span class="user-field" data-field="gender"></span>
            </p>
            <p class="card-text small mb-0">
@@ -903,16 +904,16 @@
        <div class="mb-2">
         <label for="editUserBlood" class="form-label">Blood Group</label>
         <select id="editUserBlood" class="form-select" required>
-       <option value="">Select blood group</option>
-       <option value="A+">A+</option>
-       <option value="A-">A-</option>
-       <option value="B+">B+</option>
-       <option value="B-">B-</option>
-       <option value="O+">O+</option>
-       <option value="O-">O-</option>
-       <option value="AB+">AB+</option>
-       <option value="AB-">AB-</option>
-      </select>
+         <option value="">Select blood group</option>
+         <option value="A+">A+</option>
+         <option value="A-">A-</option>
+         <option value="B+">B+</option>
+         <option value="B-">B-</option>
+         <option value="O+">O+</option>
+         <option value="O-">O-</option>
+         <option value="AB+">AB+</option>
+         <option value="AB-">AB-</option>
+        </select>
        </div>
        <div class="mb-2">
         <label for="editUserProfileImg"class="form-label">Profile Image URL</label>
@@ -2689,23 +2690,24 @@
     hideLoader(); // Always hide loader after process completes
    }
   });
-  
-  
-  
+
+
+
   // --- Load All Users (Admin) ---
   // --- Load All Users (Admin) ---
-function loadAllUsers() {
-  const container = document.getElementById("adminAllUsersCard");
-  const countEl = document.getElementById("userCount");
+  function loadAllUsers() {
+   const container = document.getElementById("adminAllUsersCard");
+   const countEl = document.getElementById("userCount");
 
-  onSnapshot(collection(db, "users"), (snapshot) => {
-    container.innerHTML = "";
-    let total = 0;
+   onSnapshot(collection(db, "users"),
+    (snapshot) => {
+     container.innerHTML = "";
+     let total = 0;
 
-    snapshot.forEach((docSnap) => {
+     snapshot.forEach((docSnap) => {
       const user = {
-        id: docSnap.id,
-        ...docSnap.data()
+       id: docSnap.id,
+       ...docSnap.data()
       };
       total++;
 
@@ -2729,31 +2731,31 @@ function loadAllUsers() {
       const info = document.createElement("div");
       info.className = "flex-grow-1 px-3";
       info.innerHTML = `
-        <div class="card-body p-0">
-          <h5 class="card-title search-name fw-bold mb-2">${user.fullname}</h5>
-          <p class="card-text small search-email mb-0"><strong>Email</strong> : ${user.email}</p>
-          <p class="card-text small search-phone mb-0"><strong>Phone No.</strong> : ${user.phone}</p>
-          <p class="card-text small mb-0"><strong>Gender</strong> : ${user.gender}</p>
-          <p class="card-text search-bloodgroup small mb-0"><strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}</p>
-          <p class="card-text small mb-0"><strong>Books Checked Out</strong> : <span class="book-count">Loading...</span></p>
-          <p class="card-text small"><strong>Joined</strong> : ${formatDateTimeFromOffset(user.joinedAt)}</p>
-        </div>
+      <div class="card-body p-0">
+      <h5 class="card-title search-name fw-bold mb-2">${user.fullname}</h5>
+      <p class="card-text small search-email mb-0"><strong>Email</strong> : ${user.email}</p>
+      <p class="card-text small search-phone mb-0"><strong>Phone No.</strong> : ${user.phone}</p>
+      <p class="card-text small mb-0"><strong>Gender</strong> : ${user.gender}</p>
+      <p class="card-text search-bloodgroup small mb-0"><strong>Blood Group</strong> : ${user.bloodGroup || "N/A"}</p>
+      <p class="card-text small mb-0"><strong>Books Checked Out</strong> : <span class="book-count">Loading...</span></p>
+      <p class="card-text small"><strong>Joined</strong> : ${formatDateTimeFromOffset(user.joinedAt)}</p>
+      </div>
       `;
 
       // --- Load Checked Out Book Count ---
       const countSpan = info.querySelector(".book-count");
       const q = query(
-        collection(db, "bookRequests"),
-        where("userId", "==", user.id),
-        where("status", "==", "Checked Out")
+       collection(db, "bookRequests"),
+       where("userId", "==", user.id),
+       where("status", "==", "Checked Out")
       );
       getCountFromServer(q)
-        .then((snap) => {
-          countSpan.textContent = snap.data().count;
-        })
-        .catch(() => {
-          countSpan.textContent = "0";
-        });
+      .then((snap) => {
+       countSpan.textContent = snap.data().count;
+      })
+      .catch(() => {
+       countSpan.textContent = "0";
+      });
 
       // --- Action Buttons ---
       const actions = document.createElement("div");
@@ -2771,21 +2773,21 @@ function loadAllUsers() {
       msgBtn.className = "btn btn-sm btn-success flex-fill";
       msgBtn.textContent = "Message";
       msgBtn.onclick = async () => {
-        const phone = user.phone;
-        if (!phone) return alert("User has no phone number saved.");
+       const phone = user.phone;
+       if (!phone) return alert("User has no phone number saved.");
 
-        // Count the user's checked-out books
-        const q = query(
-          collection(db, "bookRequests"),
-          where("userId", "==", user.id),
-          where("status", "==", "Checked Out")
-        );
-        const snapshot = await getDocs(q);
-        const bookCount = snapshot.size;
+       // Count the user's checked-out books
+       const q = query(
+        collection(db, "bookRequests"),
+        where("userId", "==", user.id),
+        where("status", "==", "Checked Out")
+       );
+       const snapshot = await getDocs(q);
+       const bookCount = snapshot.size;
 
-        const message = `Hi ${user.fullname}, you currently have ${bookCount} book${bookCount !== 1 ? "s" : ""} checked out from the library. Please return them on or before the due date.`;
-        const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, "_blank");
+       const message = `Hi ${user.fullname}, you currently have ${bookCount} book${bookCount !== 1 ? "s": ""} checked out from the library. Please return them on or before the due date.`;
+       const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+       window.open(whatsappUrl, "_blank");
       };
       actions.appendChild(msgBtn);
 
@@ -2795,14 +2797,15 @@ function loadAllUsers() {
       card.appendChild(row);
       card.appendChild(actions);
       container.appendChild(card);
+     });
+
+     countEl.textContent = total;
+     container.setAttribute("data-total-count",
+      total);
     });
+  }
 
-    countEl.textContent = total;
-    container.setAttribute("data-total-count", total);
-  });
-}
-
- // -- Open User Detail Modal---
+  // -- Open User Detail Modal---
   document.addEventListener("DOMContentLoaded", () => {
    userProfileModal = new bootstrap.Modal(document.getElementById("userProfileModal"));
    editUserModal = new bootstrap.Modal(document.getElementById("editUserProfileModal"));
@@ -2823,7 +2826,8 @@ function loadAllUsers() {
     cardContainer.innerHTML = `<div class="text-center text-muted">Loading...</div>`;
     searchInput.value = "";
 
-    const q = query(collection(db, "bookRequests"), where("userId", "==", user.id));
+    const q = query(collection(db, "bookRequests"),
+     where("userId", "==", user.id));
     getDocs(q).then((snapshot) => {
 
      const sorted = snapshot.docs.map((doc) => {
@@ -2917,7 +2921,7 @@ function loadAllUsers() {
      if (field === "profileUrl") {
       el.src = value || "https://via.placeholder.com/80?text=👤";
      } else if (field === "dob") {
-      el.textContent = value ? `${value}` : "-";
+      el.textContent = value ? `${value}`: "-";
      } else if (field === "joinedAt") {
       el.textContent = value ? formatDateTimeFromOffset(value): "-";
      } else {
