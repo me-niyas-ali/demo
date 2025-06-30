@@ -3,1061 +3,721 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title>Simple POS System</title>
+ <title>Warehouse Inventory System</title>
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
- <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
- <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
  <style>
-  body {
-   padding: .5rem;
-  }
-
-  .object-fit-cover {
-   aspect-ratio: 1 / 1;
+  .product-img {
+   aspect-ratio: 1: 1;
+   height: 155px;
    object-fit: cover;
-   border-bottom: 1px solid lightgrey;
+   border-radius: 8px;
   }
-
-  .modal-content {
-   max-height: 90vh;
-   overflow-y: auto;
+  .low-stock {
+   background-color: #fff3cd;
   }
-
   .cursor-pointer {
    cursor: pointer;
   }
-
-  ion-icon {
-   font-size: 1.4rem;
+  .input-group-text.pointer {
+   cursor: pointer;
   }
  </style>
 </head>
-<body>
- <div class="card mb-2 position-absolute top-50 start-50 translate-middle" style="width:80vw;max-width:550px" id="action-btn-group">
-  <div class="card-header">
-   <center>
-    <h2 class="mb-0 p-2">2042 PKNS LIBRARY</h2>
-   </center>
+<body class="bg-light">
+ <div class="container py-4">
+  <h2 class="mb-4 text-center">Warehouse Inventory System</h2>
+
+  <!--Add Product and Manage Brands & Categories -->
+  <div class="d-flex justify-content-around mb-3">
+   <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
+    ➕ Add Product
+   </button>
+   <button type="button" class="btn btn-outline-secondary" id="manageBrandCatBtn">
+    🗃️ Manage Brands & Categories
+   </button>
   </div>
-  <div class="card-body">
-   <div class="d-grid gap-4">
-    <button id="btnSignup" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
-    <button id="btnSignin" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signinModal">Sign In</button>
-    <button id="btnLogout" class="btn btn-outline-primary d-none">Logout</button>
+
+  <!-- Filters and Search -->
+  <div class="d-flex justify-content-around mb-3 gap-1">
+   <div class="col">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search by product name or supplier" />
+   </div>
+   <div class="col-2">
+    <select id="filterBrand" class="form-select">
+     <option value="">Filter by Brand</option>
+    </select>
+   </div>
+   <div class="col-2">
+    <select id="filterCategory" class="form-select">
+     <option value="">Filter by Category</option>
+    </select>
+   </div>
+  </div>
+
+  <!-- Product List -->
+  <div id="productList" class="row g-3"></div>
+ </div>
+
+ <!-- Add Product Modal -->
+ <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Add New Product</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+     <!-- Add Product Form -->
+     <form id="productForm">
+      <div class="row g-2">
+       <div class="col-md-3">
+        <input type="text" class="form-control" placeholder="Product Name" id="productName" required />
+       </div>
+       <div class="col-md-2 d-flex align-items-center">
+        <select id="productBrand" class="form-select" required></select>
+        <button type="button" class="btn btn-outline-secondary ms-1" id="addBrandBtn" title="Add Brand">➕</button>
+       </div>
+       <div class="col-md-2 d-flex align-items-center">
+        <select id="productCategory" class="form-select" required></select>
+        <button type="button" class="btn btn-outline-secondary ms-1" id="addCategoryBtn" title="Add Category">➕</button>
+       </div>
+       <div class="col-md-1">
+        <input type="number" class="form-control" placeholder="Stock Qty" id="productQty" min="0" required />
+       </div>
+       <div class="col-md-1">
+        <input type="number" class="form-control" placeholder="Reorder Level" id="reorderLevel" min="0" required />
+       </div>
+       <div class="col-md-1">
+        <input type="number" step="0.01" class="form-control" placeholder="Cost" id="productCost" min="0" required />
+       </div>
+       <div class="col-md-2">
+        <input type="text" class="form-control" placeholder="Supplier Name" id="productSupplier" required />
+       </div>
+       <div class="col-md-12 mt-2">
+        <input type="url" class="form-control" placeholder="Image URL" id="productImage" required />
+       </div>
+      </div>
+     </form>
+    </div>
+    <div class="modal-footer">
+     <button type="submit" form="productForm" class="btn btn-primary">Add Product</button>
+    </div>
    </div>
   </div>
  </div>
 
- <!-- User Dashboard -->
- <section id="userDashboard" class="d-none">
-  <h5>Welcome, <span id="profileName"></span>
-  </h5>
-  <div class="d-flex gap-3 justify-content-center align-items-center mb-3">
-   <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
-   <button class="btn btn-sm btn-outline-secondary" onclick="loadUserOrders()">My Orders</button>
-   <button class="btn btn-sm btn-outline-secondary" onclick="showWishlist()">Wishlist</button>
-   <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#cartModal"> Cart ( <span id="cartCount">0</span> ) </button>
-  </div>
-  <div id="productGrid" class="row"></div>
- </section>
- <!-- Admin Dashboard -->
- <section id="adminDashboard" class="d-none">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-   <h3>Admin Dashboard</h3>
-   <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
-   <button class="btn btn-sm btn-secondary" onclick="loadAdminOrders()">Order Requests</button>
-   <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#adminOrdersModal">View Orders</button>
-   <button class="btn btn-sm btn-danger" id="btnLogoutAdmin">Logout</button>
-  </div>
-  <div id="productGrid" class="row"></div>
- </section>
-</div>
-<!-- Modals -->
-<!-- Signup Modal -->
-<div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <form class="modal-content p-3" id="signupForm">
-   <h5>Sign Up</h5>
-   <input name="name" class="form-control mb-2" type="text" placeholder="Name" required />
-   <input name="email" class="form-control mb-2" type="email" placeholder="Email" required />
-   <input name="phone" class="form-control mb-2" type="tel" placeholder="WhatsApp Phone No." required />
-   <input name="address" class="form-control mb-2" type="text" placeholder="Address (optional)" />
-   <input name="password" class="form-control mb-2" type="password" placeholder="Password" required />
-   <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-  </form>
- </div>
-</div>
-<!-- Signin Modal -->
-<div class="modal fade" id="signinModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <form class="modal-content p-3" id="signinForm">
-   <h5>Sign In</h5>
-   <input class="form-control mb-2" type="email" placeholder="Email" required />
-   <input class="form-control mb-3" type="password" placeholder="Password" required />
-   <button type="submit" class="btn btn-primary w-100">Sign In</button>
-  </form>
- </div>
-</div>
-<!-- Edit Profile Modal -->
-<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <form class="modal-content" id="editProfileForm">
-   <div class="modal-header">
-    <h5 class="modal-title">Edit Profile</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-   </div>
-   <div class="modal-body">
-    <input class="form-control mb-2" type="text" placeholder="Name" required />
-    <input class="form-control mb-2" type="tel" placeholder="WhatsApp Phone No." required />
-    <input class="form-control mb-2" type="text" placeholder="Address (optional)" />
-   </div>
-   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary w-100">Save</button>
-   </div>
-  </form>
- </div>
-</div>
-<!-- User Orders Modal -->
-<div class="modal fade" id="userOrdersModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog modal-dialog-scrollable">
-  <div class="modal-content">
-   <div class="modal-header">
-    <h5 class="modal-title">My Orders</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-   </div>
-   <div class="modal-body" id="userOrdersContainer"></div>
-  </div>
- </div>
-</div>
-<!-- Wishlist Modal -->
-<div class="modal fade" id="wishlistModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
-  <div class="modal-content">
-   <div class="modal-header">
-    <h5 class="modal-title">My Wishlist</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-   </div>
-   <div class="modal-body">
-    <div id="wishlistContainer" class="row row-cols-2 g-3"></div>
-   </div>
-   <div class="modal-footer">
-    <button class="btn btn-secondary w-100" data-bs-dismiss="modal">Close</button>
+ <!-- Product Detail Modal -->
+ <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Product Details</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body" id="productDetails"></div>
+    <div class="modal-footer">
+     <button class="btn btn-secondary" onclick="openEditModal()">Edit</button>
+     <button class="btn btn-warning" onclick="openQtyModal()">Update Qty</button>
+     <button class="btn btn-danger" onclick="openDeleteModal()">Delete</button>
+    </div>
    </div>
   </div>
  </div>
-</div>
-<!-- Cart Modal -->
-<div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog modal-dialog-scrollable">
-  <div class="modal-content p-3">
-   <h5>Cart</h5>
-   <div class="modal-body"></div>
-   <div class="mb-2">
-    <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#checkoutModal" data-bs-dismiss="modal">Proceed to Checkout</button>
-   </div>
-  </div>
- </div>
-</div>
-<!-- Checkout Modal -->
-<div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <form class="modal-content p-3" id="checkoutForm">
-   <h5>Checkout</h5>
-   <div class="mb-3">
-    <label>
-     <input type="radio" name="deliveryOption" value="Pickup" checked /> Pickup </label>
-    <br />
-    <label>
-     <input type="radio" name="deliveryOption" value="Delivery" /> Delivery (+AED 10.00) </label>
-   </div>
-   <input class="form-control mb-2" type="text" placeholder="Delivery Address" id="deliveryAddress" disabled />
-   <input class="form-control mb-2" type="tel" placeholder="Phone No." id="deliveryPhone" required />
-   <button type="submit" class="btn btn-primary w-100">Place Order</button>
-  </form>
- </div>
-</div>
-<!-- Order Placed Modal -->
-<div class="modal fade" id="orderPlacedModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog modal-dialog-centered">
-  <div class="modal-content p-3 text-center">
-   <h5>Order placed successfully!</h5>
-   <button class="btn btn-primary w-100" data-bs-dismiss="modal">Close</button>
-  </div>
- </div>
-</div>
-<!-- Add Product Modal (Admin) -->
-<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <form class="modal-content p-3" id="addProductForm">
-   <h5>Add Product</h5>
-   <input class="form-control mb-2" type="url" placeholder="Image URL" required />
-   <input class="form-control mb-2" type="text" placeholder="Product Name" required />
-   <input class="form-control mb-2" type="number" step="0.01" placeholder="Cost Price" required />
-   <input class="form-control mb-2" type="number" step="0.01" placeholder="Retail Price" required />
-   <input class="form-control mb-2" type="text" placeholder="Brand Group" required />
-   <input class="form-control mb-2" type="text" placeholder="Category" required />
-   <input class="form-control mb-2" type="text" placeholder="Sizes (label:qty, comma separated)" />
-   <input class="form-control mb-2" type="text" placeholder="SKU" required />
-   <button type="submit" class="btn btn-primary w-100">Add Product</button>
-  </form>
- </div>
-</div>
-<!-- Admin Orders Modal -->
-<div class="modal fade" id="adminOrdersModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-sm-down">
-  <div class="modal-content">
-   <div class="modal-header">
-    <h5 class="modal-title">Admin Order Requests</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-   </div>
-   <div class="modal-body" id="adminOrdersContainer"></div>
-  </div>
- </div>
-</div>
-<!-- Edit Product Modal -->
-<div class="modal fade" id="editProductModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <form class="modal-content p-3" id="editProductForm">
-   <h5>Edit Product</h5>
-   <input name="imageUrl" class="form-control mb-2" type="url" placeholder="Image URL" required />
-   <input name="name" class="form-control mb-2" type="text" placeholder="Product Name" required />
-   <input name="cost" class="form-control mb-2" type="number" step="0.01" placeholder="Cost Price" required />
-   <input name="retail" class="form-control mb-2" type="number" step="0.01" placeholder="Retail Price" required />
-   <input name="brand" class="form-control mb-2" type="text" placeholder="Brand Group" required />
-   <input name="category" class="form-control mb-2" type="text" placeholder="Category" required />
-   <input name="sizesStr" class="form-control mb-2" type="text" placeholder="Sizes (label:qty, comma separated)" />
-   <input name="sku" class="form-control mb-2" type="text" placeholder="SKU" required />
-   <button type="submit" class="btn btn-primary w-100">Update Product</button>
-  </form>
- </div>
-</div>
-<!-- Confirm Delete Modal -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
- <div class="modal-dialog">
-  <div class="modal-content p-3">
-   <h5 class="modal-title">Confirm Deletion</h5>
-   <p>
-    Are you sure you want to delete this product?
-   </p>
-   <div class="d-flex justify-content-end gap-2">
-    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-    <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-   </div>
-  </div>
- </div>
-</div>
-<!-- Loading Overlay -->
-<div id="loadingBackdrop" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-none" style="z-index:1055;">
- <div class="d-flex justify-content-center align-items-center h-100">
-  <div class="spinner-border text-light" role="status"></div>
- </div>
-</div>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script>
- // === Firebase config - Replace with your values ===
- const firebaseConfig = {
-  apiKey: "AIzaSyCfVNcvz25-qjN3aoLONcZZLrlVmchN84U",
-  authDomain: "simple-pos-fc8a4.firebaseapp.com",
-  projectId: "simple-pos-fc8a4",
-  storageBucket: "simple-pos-fc8a4.firebasestorage.app",
-  messagingSenderId: "88169235141",
-  appId: "1:88169235141:web:510462f1153f279c7b66ac"
- };
- // Initialize Firebase
- firebase.initializeApp(firebaseConfig);
- const auth = firebase.auth();
- const db = firebase.firestore();
- // === Global State ===
- let currentUser = null;
- let currentRole = 'user';
- let cart = [];
- // === UI Elements ===
- const userDashboard = document.getElementById('userDashboard');
- const adminDashboard = document.getElementById('adminDashboard');
- const profileNameElem = document.getElementById('profileName');
- const productGridElems = document.querySelectorAll('#productGrid');
- const loadingBackdrop = document.getElementById('loadingBackdrop');
- // Show / Hide loading
- function showLoader() {
-  loadingBackdrop.classList.remove('d-none');
- }
 
- function hideLoader() {
-  loadingBackdrop.classList.add('d-none');
- }
- // Utility: run async fn with loader and error alert
- async function runWithLoader(fn) {
-  try {
-   showLoader();
-   await fn();
-  } catch (e) {
-   alert('Error: ' + e.message);
-  } finally {
-   hideLoader();
-  }
- }
- // === Auth UI logic ===
- document.getElementById('signupForm').onsubmit = e => {
-  e.preventDefault();
-  const [name,
-   email,
-   phone,
-   address,
-   password
-  ] = Array.from(e.target.elements).filter(el => el.tagName === 'INPUT').map(i => i.value.trim());
-  runWithLoader(async () => {
-   const cred = await auth.createUserWithEmailAndPassword(email, password);
-   await db.collection('users').doc(cred.user.uid).set({
-    name,
-    email,
-    phone,
-    address,
-    role: 'user'
+ <!-- Edit Product Modal -->
+ <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Edit Product</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+     <form id="editForm">
+      <div class="mb-2">
+       <input type="text" id="editName" class="form-control" placeholder="Name" required />
+      </div>
+      <div class="mb-2 d-flex align-items-center">
+       <select id="editBrand" class="form-select" required></select>
+       <button type="button" class="btn btn-outline-secondary ms-1" id="editAddBrandBtn" title="Add Brand">➕</button>
+      </div>
+      <div class="mb-2 d-flex align-items-center">
+       <select id="editCategory" class="form-select" required></select>
+       <button type="button" class="btn btn-outline-secondary ms-1" id="editAddCategoryBtn" title="Add Category">➕</button>
+      </div>
+      <div class="mb-2">
+       <input type="number" id="editQty" class="form-control" placeholder="Quantity" min="0" required />
+      </div>
+      <div class="mb-2">
+       <input type="number" id="editReorder" class="form-control" placeholder="Reorder Level" min="0" required />
+      </div>
+      <div class="mb-2">
+       <input type="number" step="0.01" id="editCost" class="form-control" placeholder="Cost" min="0" required />
+      </div>
+      <div class="mb-2">
+       <input type="text" id="editSupplier" class="form-control" placeholder="Supplier" required />
+      </div>
+      <div class="mb-2">
+       <input type="url" id="editImage" class="form-control" placeholder="Image URL" required />
+      </div>
+     </form>
+    </div>
+    <div class="modal-footer">
+     <button class="btn btn-success" id="saveEditBtn">Save Changes</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <!-- Update Quantity Modal -->
+ <div class="modal fade" id="qtyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Update Quantity</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+     <input type="number" id="qtyChange" class="form-control" placeholder="Enter new quantity" min="0" required />
+    </div>
+    <div class="modal-footer">
+     <button class="btn btn-success" id="updateQtyBtn">Update</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <!-- Global Delete Confirmation Modal -->
+ <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Confirm Delete</h5>
+    </div>
+    <div class="modal-body">
+     <!-- Message will be injected dynamically -->
+    </div>
+    <div class="modal-footer">
+     <button class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+     <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <!-- Manage Brands & Categories Modal -->
+ <div class="modal fade" id="manageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Manage Brands & Categories</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body d-flex gap-5 flex-wrap">
+     <div style="flex: 1 1 45%;">
+      <h6>Brands</h6>
+      <ul class="list-group mb-3" id="brandList"></ul>
+      <div class="input-group">
+       <input type="text" id="newBrandInput" class="form-control" placeholder="New Brand Name" />
+       <button class="btn btn-primary" id="addBrandConfirmBtn">Add Brand</button>
+      </div>
+     </div>
+     <div style="flex: 1 1 45%;">
+      <h6>Categories</h6>
+      <ul class="list-group mb-3" id="categoryList"></ul>
+      <div class="input-group">
+       <input type="text" id="newCategoryInput" class="form-control" placeholder="New Category Name" />
+       <button class="btn btn-primary" id="addCategoryConfirmBtn">Add Category</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <!-- Add/Edit Brand or Category Modal -->
+ <div class="modal fade" id="brandCategoryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title" id="brandCategoryModalTitle">Edit</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+     <input type="text" id="brandCategoryInput" class="form-control" placeholder="Enter name" />
+    </div>
+    <div class="modal-footer">
+     <button class="btn btn-success" id="brandCategorySaveBtn">Save</button>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+  document.addEventListener('DOMContentLoaded', function () {
+   const LS_PRODUCTS = 'warehouse_products';
+   const LS_BRANDS = 'warehouse_brands';
+   const LS_CATEGORIES = 'warehouse_categories';
+
+   let products = JSON.parse(localStorage.getItem(LS_PRODUCTS)) || [];
+   let brands = JSON.parse(localStorage.getItem(LS_BRANDS)) || [];
+   let categories = JSON.parse(localStorage.getItem(LS_CATEGORIES)) || [];
+
+   let currentProductId = null;
+   let deleteCallback = null;
+
+   const productForm = document.getElementById('productForm');
+   const productList = document.getElementById('productList');
+   const searchInput = document.getElementById('searchInput');
+   const filterBrand = document.getElementById('filterBrand');
+   const filterCategory = document.getElementById('filterCategory');
+   const productDetails = document.getElementById('productDetails');
+   const manageBrandCatBtn = document.getElementById('manageBrandCatBtn');
+   const productBrandSelect = document.getElementById('productBrand');
+   const productCategorySelect = document.getElementById('productCategory');
+   const addBrandBtn = document.getElementById('addBrandBtn');
+   const addCategoryBtn = document.getElementById('addCategoryBtn');
+
+   const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+   const editName = document.getElementById('editName');
+   const editBrand = document.getElementById('editBrand');
+   const editCategory = document.getElementById('editCategory');
+   const editQty = document.getElementById('editQty');
+   const editReorder = document.getElementById('editReorder');
+   const editCost = document.getElementById('editCost');
+   const editSupplier = document.getElementById('editSupplier');
+   const editImage = document.getElementById('editImage');
+   const saveEditBtn = document.getElementById('saveEditBtn');
+   const editAddBrandBtn = document.getElementById('editAddBrandBtn');
+   const editAddCategoryBtn = document.getElementById('editAddCategoryBtn');
+
+   const qtyModal = new bootstrap.Modal(document.getElementById('qtyModal'));
+   const qtyChangeInput = document.getElementById('qtyChange');
+   const updateQtyBtn = document.getElementById('updateQtyBtn');
+
+   const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+   const manageModal = new bootstrap.Modal(document.getElementById('manageModal'));
+   const brandList = document.getElementById('brandList');
+   const categoryList = document.getElementById('categoryList');
+   const newBrandInput = document.getElementById('newBrandInput');
+   const newCategoryInput = document.getElementById('newCategoryInput');
+   const addBrandConfirmBtn = document.getElementById('addBrandConfirmBtn');
+   const addCategoryConfirmBtn = document.getElementById('addCategoryConfirmBtn');
+
+   const brandCategoryModal = new bootstrap.Modal(document.getElementById('brandCategoryModal'));
+   const brandCategoryModalTitle = document.getElementById('brandCategoryModalTitle');
+   const brandCategoryInput = document.getElementById('brandCategoryInput');
+   const brandCategorySaveBtn = document.getElementById('brandCategorySaveBtn');
+
+   let editingType = null; // 'brand' or 'category'
+   let editingIndex = null;
+
+   init();
+
+   function init() {
+    loadBrandsCategories();
+    populateBrandCategorySelects();
+    populateFilterSelects();
+    renderProducts();
+   }
+
+   function saveProducts() {
+    localStorage.setItem(LS_PRODUCTS, JSON.stringify(products));
+   }
+
+   function saveBrandsCategories() {
+    localStorage.setItem(LS_BRANDS, JSON.stringify(brands));
+    localStorage.setItem(LS_CATEGORIES, JSON.stringify(categories));
+   }
+
+   function loadBrandsCategories() {
+    if (!brands.length) brands = [];
+    if (!categories.length) categories = [];
+   }
+
+   function populateSelect(selectElem, optionsArr, addAll = false) {
+    selectElem.innerHTML = '';
+    if (addAll) selectElem.innerHTML = `<option value="">All</option>`;
+    optionsArr.forEach(opt => {
+     const option = document.createElement('option');
+     option.value = opt;
+     option.textContent = opt;
+     selectElem.appendChild(option);
+    });
+   }
+
+   function populateBrandCategorySelects() {
+    populateSelect(productBrandSelect, brands);
+    populateSelect(productCategorySelect, categories);
+    populateSelect(editBrand, brands);
+    populateSelect(editCategory, categories);
+   }
+
+   function populateFilterSelects() {
+    populateSelect(filterBrand, brands, true);
+    populateSelect(filterCategory, categories, true);
+   }
+
+   // Brand/Category Management
+   manageBrandCatBtn.addEventListener('click', () => {
+    renderBrandList();
+    renderCategoryList();
+    manageModal.show();
    });
-   bootstrap.Modal.getInstance(document.getElementById('signupModal')).hide();
-   e.target.reset();
-  });
- };
- document.getElementById('signinForm').onsubmit = e => {
-  e.preventDefault();
-  const [email,
-   password
-  ] = Array.from(e.target.elements).filter(el => el.tagName === 'INPUT').map(i => i.value.trim());
-  runWithLoader(async () => {
-   await auth.signInWithEmailAndPassword(email, password);
-   bootstrap.Modal.getInstance(document.getElementById('signinModal')).hide();
-   e.target.reset();
-  });
- };
- document.getElementById('btnLogout').onclick = () => auth.signOut();
- document.getElementById('btnLogoutAdmin').onclick = () => auth.signOut();
- // === Auth state change ===
- // === Auth state change ===
- auth.onAuthStateChanged(async user => {
-  if (user) {
-   currentUser = user;
-   const doc = await db.collection('users').doc(user.uid).get();
-   const data = doc.data();
-   currentRole = data?.role || 'user';
-   profileNameElem.textContent = data?.name || 'User';
-   // Show dashboards accordingly
-   userDashboard.classList.toggle('d-none', currentRole === 'admin');
-   adminDashboard.classList.toggle('d-none', currentRole !== 'admin');
-   document.getElementById('action-btn-group').classList.add('d-none');
-   document.getElementById('btnLogout').classList.remove('d-none');
-   document.getElementById('btnLogoutAdmin').classList.toggle('d-none', currentRole !== 'admin');
-   // Load products only
-   await loadProducts();
-  } else {
-   currentUser = null;
-   currentRole = 'user';
-   profileNameElem.textContent = '';
-   userDashboard.classList.add('d-none');
-   adminDashboard.classList.add('d-none');
-   document.getElementById('btnSignup').classList.remove('d-none');
-   document.getElementById('btnSignin').classList.remove('d-none');
-   document.getElementById('btnLogout').classList.add('d-none');
-   document.getElementById('btnLogoutAdmin').classList.add('d-none');
-   cart = [];
-   updateCartCount();
-   clearProductGrid();
-  }
- });
- // Clear product grids
- function clearProductGrid() {
-  productGridElems.forEach(pg => pg.innerHTML = '');
- }
- // === Product Utilities ===
- function parseSizes(str = '') {
-  return str.split(',').map(s => {
-   const [label,
-    qty
-   ] = s.split(':').map(x => x.trim());
-   return label ? {
-    label,
-    qty: parseInt(qty) || 0
-   }: null;
-  }).filter(Boolean);
- }
- // === Load products from Firestore ===
- async function loadProducts() {
-  runWithLoader(async () => {
-   const snap = await db.collection('products').orderBy('brand').orderBy('name').get();
-   const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-   productGridElems.forEach(pg => pg.innerHTML = '');
-   snap.forEach(doc => {
-    const p = doc.data();
-    const sizes = (p.sizes || []).map(s => s.label).join(', ');
-    const retailPrice = Number(p.retail || 0).toFixed(2);
-    const isWished = wishlist.includes(doc.id);
-    const card = document.createElement('div');
-    card.className = 'col-6 col-sm-6 col-md-4 col-lg-3 col-xxl-2 mb-3';
-    const heartIcon = document.createElement('ion-icon');
-    heartIcon.setAttribute('name', isWished ? 'heart-dislike': 'heart');
-    // Wishlist Button
-    const wishBtn = document.createElement('button');
-    wishBtn.className = 'btn btn-sm w-100 btn-outline-secondary';
-    wishBtn.appendChild(heartIcon);
-    wishBtn.onclick = () => {
-     const icon = wishBtn.querySelector('ion-icon');
-     let list = JSON.parse(localStorage.getItem('wishlist') || '[]');
-     const idx = list.indexOf(doc.id);
-     if (idx > -1) {
-      list.splice(idx, 1);
-      icon.setAttribute('name', 'heart');
-     } else {
-      list.push(doc.id);
-      icon.setAttribute('name', 'heart-dislike');
-     }
-     localStorage.setItem('wishlist', JSON.stringify(list));
-    };
-    // Cart Button
-    const cartBtn = document.createElement('button');
-    cartBtn.className = 'btn btn-sm w-100 btn-outline-success';
-    cartBtn.innerHTML = `
-    <ion-icon name="cart"></ion-icon>`;
-    cartBtn.onclick = () => {
-     chooseSizeAndAdd(doc.id, p.name, retailPrice, p.sizes || [], p.imageUrl); // pass image
-    };
-    // Card inner HTML
-    const body = document.createElement('div');
-    body.className = 'card-body p-2';
-    body.innerHTML = `
 
-    <h6 class="card-title">${p.name}</h6>
-    <p class="text-muted mb-0">AED ${retailPrice}</p>
-    <p class="small mb-0">Brand : ${p.brand}</p>
-    <p class="small mb-0">Sizes : ${sizes}</p>
-    `;
-    if (currentRole !== 'admin') {
-     const btnRow = document.createElement('div');
-     btnRow.className = 'd-flex gap-2 justify-content-between mt-2';
-     btnRow.appendChild(wishBtn);
-     btnRow.appendChild(cartBtn);
-     body.appendChild(btnRow);
-    }
-    if (currentRole === 'admin') {
-     const adminRow = document.createElement('div');
-     adminRow.className = 'mt-2 d-flex gap-2';
-     adminRow.innerHTML = `
-
-     <button class="btn btn-sm btn-outline-primary" onclick="startEditProduct('${doc.id}')">Edit</button>
-     <button class="btn btn-sm btn-outline-danger" onclick="deleteProduct('${doc.id}')">Delete</button>
+   function renderBrandList() {
+    brandList.innerHTML = '';
+    brands.forEach((b, i) => {
+     const li = document.createElement('li');
+     li.className = 'list-group-item d-flex justify-content-between align-items-center';
+     li.innerHTML = `
+     <span>${b}</span>
+     <div>
+     <button class="btn btn-sm btn-outline-primary me-1" onclick="editBrandPrompt(${i})">Edit</button>
+     <button class="btn btn-sm btn-outline-danger" onclick="deleteBrand(${i})">Delete</button>
+     </div>
      `;
-     body.appendChild(adminRow);
-    }
-    card.innerHTML = `
-    <div class="card h-100">
-    <img src="${p.imageUrl}" class="card-img-top object-fit-cover" alt="${p.name}">
-    </div>`;
-    card.querySelector('.card').appendChild(body);
-    // Only render into relevant dashboard
-    if (currentRole === 'admin') {
-     document.getElementById('adminDashboard').querySelector('#productGrid').appendChild(card);
+     brandList.appendChild(li);
+    });
+   }
+
+   function renderCategoryList() {
+    categoryList.innerHTML = '';
+    categories.forEach((c, i) => {
+     const li = document.createElement('li');
+     li.className = 'list-group-item d-flex justify-content-between align-items-center';
+     li.innerHTML = `
+     <span>${c}</span>
+     <div>
+     <button class="btn btn-sm btn-outline-primary me-1" onclick="editCategoryPrompt(${i})">Edit</button>
+     <button class="btn btn-sm btn-outline-danger" onclick="deleteCategory(${i})">Delete</button>
+     </div>
+     `;
+     categoryList.appendChild(li);
+    });
+   }
+
+   window.editBrandPrompt = function(index) {
+    editingType = 'brand';
+    editingIndex = index;
+    brandCategoryModalTitle.textContent = 'Edit Brand';
+    brandCategoryInput.value = brands[index];
+    brandCategoryModal.show();
+   };
+
+   window.editCategoryPrompt = function(index) {
+    editingType = 'category';
+    editingIndex = index;
+    brandCategoryModalTitle.textContent = 'Edit Category';
+    brandCategoryInput.value = categories[index];
+    brandCategoryModal.show();
+   };
+
+   brandCategorySaveBtn.addEventListener('click', () => {
+    const val = brandCategoryInput.value.trim();
+    if (!val) return alert('Name cannot be empty.');
+    if (editingType === 'brand') {
+     brands[editingIndex] = val;
     } else {
-     document.getElementById('userDashboard').querySelector('#productGrid').appendChild(card);
+     categories[editingIndex] = val;
+    }
+    saveBrandsCategories();
+    populateBrandCategorySelects();
+    populateFilterSelects();
+    renderBrandList();
+    renderCategoryList();
+    renderProducts();
+    brandCategoryModal.hide();
+   });
+
+   window.deleteBrand = function(index) {
+    const brandToDelete = brands[index];
+    showDeleteModal(`Delete brand "${brandToDelete}"?`,
+     () => {
+      brands.splice(index, 1);
+      products.forEach(p => {
+       if (p.brand === brandToDelete) p.brand = '';
+      });
+      saveBrandsCategories();
+      saveProducts();
+      populateBrandCategorySelects();
+      populateFilterSelects();
+      renderBrandList();
+      renderProducts();
+     });
+   };
+
+   window.deleteCategory = function(index) {
+    const catToDelete = categories[index];
+    showDeleteModal(`Delete category "${catToDelete}"?`, () => {
+     categories.splice(index,
+      1);
+     products.forEach(p => {
+      if (p.category === catToDelete) p.category = '';
+     });
+     saveBrandsCategories();
+     saveProducts();
+     populateBrandCategorySelects();
+     populateFilterSelects();
+     renderCategoryList();
+     renderProducts();
+    });
+   };
+
+   addBrandConfirmBtn.addEventListener('click', () => {
+    const val = newBrandInput.value.trim();
+    if (val && !brands.includes(val)) {
+     brands.push(val);
+     saveBrandsCategories();
+     populateBrandCategorySelects();
+     populateFilterSelects();
+     renderBrandList();
+     newBrandInput.value = '';
     }
    });
-  });
- }
- // === Toggle Wishlist Icon ===
- function toggleWish(productId, btn) {
-  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-  const icon = btn.querySelector('ion-icon');
-  const index = wishlist.indexOf(productId);
-  if (index > -1) {
-   wishlist.splice(index, 1);
-   icon.setAttribute('name', 'heart');
-  } else {
-   wishlist.push(productId);
-   icon.setAttribute('name', 'heart-dislike');
-  }
-  localStorage.setItem('wishlist', JSON.stringify(wishlist));
- }
- // === Wishlist (localStorage) ===
- function toggleWish(id) {
-  let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-  if (wishlist.includes(id)) {
-   wishlist = wishlist.filter(i => i !== id);
-   alert('Removed from wishlist');
-  } else {
-   wishlist.push(id);
-   alert('Added to wishlist');
-  }
-  localStorage.setItem('wishlist', JSON.stringify(wishlist));
- }
- async function showWishlist() {
-  const container = document.getElementById('wishlistContainer');
-  const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-  if (!wishlist.length) {
-   container.innerHTML = '<p class = "text-center">No items in wishlist.</p>';
-   bootstrap.Modal.getOrCreateInstance(document.getElementById('wishlistModal')).show();
-   return;
-  }
-  const snap = await db.collection('products').where(firebase.firestore.FieldPath.documentId(), 'in', wishlist).get();
-  container.innerHTML = '';
-  snap.forEach(doc => {
-   const p = doc.data();
-   const card = document.createElement('div');
-   card.className = 'col-6 col-sm-6 col-md-4 col-lg-3 col-xxl-2';
-   card.innerHTML = `
-   <div class="card h-100">
-   <img src="${p.imageUrl}" class="card-img-top object-fit-cover" />
-   <div class="card-body p-2">
-   <h6 class="card-title small">${p.name}</h6>
-   <p class="small mb-1">AED ${p.retail?.toFixed(2)}</p>
-   <p class="small mb-1">Brand: ${p.brand}</p>
-   </div>
-   </div>`;
-   container.appendChild(card);
-  });
-  bootstrap.Modal.getOrCreateInstance(document.getElementById('wishlistModal')).show();
- }
- // === Cart Logic ===
- function chooseSizeAndAdd(id, name, price, sizes, image = '') {
-  let size = '';
-  if (sizes.length) {
-   const options = sizes.map(s => s.label).join(', ');
-   size = prompt('Select size (' + options + ')', sizes[0].label);
-   if (!sizes.some(s => s.label === size)) {
-    alert('Invalid size selected');
-    return;
-   }
-  }
-  const existing = cart.find(i => i.id === id && i.size === size);
-  if (existing) existing.qty++;
-  else cart.push({
-   id,
-   name,
-   price: +price,
-   size,
-   qty: 1,
-   image
-  }); // store image
-  updateCartCount();
-  alert('Added to cart');
- }
 
- function updateCartCount() {
-  const countElem = document.getElementById('cartCount');
-  const totalQty = cart.reduce((a, i) => a + i.qty, 0);
-  countElem.textContent = totalQty;
- }
- // Render cart modal body
- function renderCart() {
-  const body = document.querySelector('#cartModal .modal-body');
-  body.innerHTML = '';
-  if (!cart.length) {
-   body.innerHTML = ' < p > Your cart is empty. < /p>';
-   return;
-  }
-  cart.forEach((item, i) => {
-   const card = document.createElement('div');
-   card.className = 'card mb-2 shadow-sm';
-   card.innerHTML = `
-
-   <div class="row g-0">
-   <div class="col-3">
-   <img src="${item.image || 'https://via.placeholder.com/80'}" class="img-fluid rounded-start" alt="${item.name}" style="object-fit:cover;height:100%">
-   </div>
-   <div class="col-9">
-   <div class="card-body p-2">
-   <h6 class="card-title mb-1">${item.name}</h6>
-   <p class="card-text mb-1 small text-muted">${item.size ? 'Size: ' + item.size + ' | ': ''}AED ${item.price.toFixed(2)}</p>
-   <div class="btn-group btn-group-sm">
-   <button class="btn btn-outline-secondary" onclick="changeQty(${i}, -1)">–</button>
-   <button class="btn btn-outline-dark" disabled>${item.qty}</button>
-   <button class="btn btn-outline-secondary" onclick="changeQty(${i}, 1)">+</button>
-   </div>
-   </div>
-   </div>
-   </div>
-   `;
-   body.appendChild(card);
-  });
-  const subtotal = cart.reduce((a, i) => a + i.qty * i.price, 0);
-  const vat = subtotal * 0.05;
-  const total = subtotal + vat;
-  body.innerHTML += `
-
-  <hr />
-  <p>
-  <strong>Total quantity:</strong> ${cart.reduce((a, i) => a + i.qty, 0)}
-  </p>
-  <p>
-  <strong>Subtotal:</strong> AED ${subtotal.toFixed(2)}
-  </p>
-  <p>
-  <strong>VAT (5%):</strong> AED ${vat.toFixed(2)}
-  </p>
-  <p>
-  <strong>Grand total:</strong> AED ${total.toFixed(2)}
-  </p>
-  `;
- }
- // Change quantity in cart
- function changeQty(i, delta) {
-  cart[i].qty += delta;
-  if (cart[i].qty < 1) cart.splice(i, 1);
-  updateCartCount();
-  renderCart();
- }
- // Show cart modal update on open
- document.getElementById('cartModal').addEventListener('show.bs.modal', renderCart);
- // === Checkout logic ===
- const deliveryAddressInput = document.getElementById('deliveryAddress');
- const deliveryPhoneInput = document.getElementById('deliveryPhone');
- // Enable delivery address input only if delivery selected
- document.querySelectorAll('input[name="deliveryOption"]').forEach(radio => {
-  radio.addEventListener('change', e => {
-   deliveryAddressInput.disabled = e.target.value !== 'Delivery';
-   if (deliveryAddressInput.disabled) deliveryAddressInput.value = '';
-  });
- });
- // Autofill phone on checkout open
- document.getElementById('checkoutModal').addEventListener('show.bs.modal', () => {
-  if (!currentUser) return;
-  db.collection('users').doc(currentUser.uid).get().then(doc => {
-   const data = doc.data();
-   deliveryPhoneInput.value = data?.phone || '';
-   deliveryAddressInput.value = data?.address || '';
-   deliveryAddressInput.disabled = !document.querySelector('input[name="deliveryOption"]:checked').value === 'Delivery';
-  });
- });
- document.getElementById('checkoutForm').onsubmit = e => {
-  e.preventDefault();
-  if (!cart.length) {
-   alert('Cart is empty.');
-   return;
-  }
-  const deliveryType = document.querySelector('input[name="deliveryOption"]:checked').value;
-  if (deliveryType === 'Delivery' && !deliveryAddressInput.value.trim()) {
-   alert('Please enter delivery address.');
-   return;
-  }
-  runWithLoader(async () => {
-   const subtotal = cart.reduce((a, i) => a + i.qty * i.price, 0);
-   const vat = subtotal * 0.05;
-   let deliveryCharge = deliveryType === 'Delivery' ? 10: 0;
-   const grandTotal = subtotal + vat + deliveryCharge;
-   await db.collection('orders').add({
-    userId: currentUser.uid,
-    items: cart,
-    subtotal,
-    vat,
-    deliveryCharge,
-    grandTotal,
-    type: deliveryType,
-    deliveryAddress: deliveryAddressInput.value.trim(),
-    phone: deliveryPhoneInput.value.trim(),
-    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    status: 'Pending'
-   });
-   cart = [];
-   updateCartCount();
-   bootstrap.Modal.getInstance(document.getElementById('checkoutModal')).hide();
-   bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
-   bootstrap.Modal.getOrCreateInstance(document.getElementById('orderPlacedModal')).show();
-   await loadUserOrders();
-   if (currentRole === 'admin') await loadAdminOrders();
-  });
- };
- // === User Orders View ===
- async function loadUserOrders() {
-  runWithLoader(async () => {
-   const container = document.getElementById('userOrdersContainer');
-   const snap = await db.collection('orders').where('userId', '==', currentUser.uid).orderBy('timestamp', 'desc').get();
-   if (snap.empty) {
-    container.innerHTML = '<p> No orders found. </p>';
-    return;
-   }
-   container.innerHTML = '';
-   let pastDividerShown = false;
-   for (const doc of snap.docs) {
-    const order = doc.data();
-    const isPast = ['Accepted',
-     'Rejected'].includes(order.status);
-    if (isPast && !pastDividerShown) {
-     container.innerHTML += '<hr> <p class = "rounded p-1 bg-secondary text-center text-white"> Order History </p>';
-     pastDividerShown = true;
-    }
-    const date = order.timestamp?.toDate().toLocaleString() || 'Pending';
-    const cardWrapper = document.createElement('div');
-    cardWrapper.className = 'mb-4';
-    cardWrapper.innerHTML += `
-
-    <div class="mb-2">
-    <div class="d-flex justify-content-between align-items-center">
-    <div>
-    <strong>Order #${doc.id}</strong>
-    <span class="badge text-bg-${order.status === 'Accepted' ? 'success': order.status === 'Pending' ? 'warning': 'secondary'} ms-2">${order.status}</span>
-    <span class="badge text-bg-dark ms-1">${order.type}</span>
-    </div>
-    <small>${date}</small>
-    </div>
-    </div>
-    <div class="row row-cols-2 g-2" id="orderItems-${doc.id}"></div>
-    <p class="mt-2 mb-1">
-    <strong>Total:</strong> AED ${order.grandTotal.toFixed(2)}
-    </p>
-    ${order.status === 'Accepted' ? `
-    <button class="btn btn-sm btn-outline-primary" onclick="printReceipt('${doc.id}')">🧾 Print Receipt</button>`: ''}
-    `;
-    container.appendChild(cardWrapper);
-    const itemsRow = cardWrapper.querySelector(`#orderItems-${doc.id}`);
-    // 🖼️ Load product images for each item
-    for (const item of order.items) {
-     let imageUrl = '';
-     try {
-      const productDoc = await db.collection('products').doc(item.id).get();
-      imageUrl = productDoc.exists ? productDoc.data().imageUrl: '';
-     } catch (e) {
-      console.warn(`Product not found: ${item.id}`);
+   addCategoryConfirmBtn.addEventListener('click',
+    () => {
+     const val = newCategoryInput.value.trim();
+     if (val && !categories.includes(val)) {
+      categories.push(val);
+      saveBrandsCategories();
+      populateBrandCategorySelects();
+      populateFilterSelects();
+      renderCategoryList();
+      newCategoryInput.value = '';
      }
+    });
+
+   [addBrandBtn, editAddBrandBtn].forEach(btn => {
+    btn.addEventListener('click', () => {
+     const val = prompt('Enter new Brand name:');
+     if (val && !brands.includes(val.trim())) {
+      brands.push(val.trim());
+      saveBrandsCategories();
+      populateBrandCategorySelects();
+      populateFilterSelects();
+     }
+    });
+   });
+
+   [addCategoryBtn, editAddCategoryBtn].forEach(btn => {
+    btn.addEventListener('click',
+     () => {
+      const val = prompt('Enter new Category name:');
+      if (val && !categories.includes(val.trim())) {
+       categories.push(val.trim());
+       saveBrandsCategories();
+       populateBrandCategorySelects();
+       populateFilterSelects();
+      }
+     });
+   });
+
+   // Product Logic
+   productForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const newProduct = {
+     id: Date.now(),
+     name: document.getElementById('productName').value.trim(),
+     brand: productBrandSelect.value,
+     category: productCategorySelect.value,
+     qty: Number(document.getElementById('productQty').value),
+     reorder: Number(document.getElementById('reorderLevel').value),
+     cost: Number(document.getElementById('productCost').value),
+     supplier: document.getElementById('productSupplier').value.trim(),
+     image: document.getElementById('productImage').value.trim(),
+    };
+    products.push(newProduct);
+    saveProducts();
+    renderProducts();
+    productForm.reset();
+   });
+
+   function renderProducts() {
+    const filterText = searchInput.value.trim().toLowerCase();
+    const brandFilter = filterBrand.value;
+    const categoryFilter = filterCategory.value;
+    productList.innerHTML = '';
+
+    const filtered = products.filter(p => {
+     return (
+      (p.name.toLowerCase().includes(filterText) || p.supplier.toLowerCase().includes(filterText)) &&
+      (!brandFilter || p.brand === brandFilter) &&
+      (!categoryFilter || p.category === categoryFilter)
+     );
+    });
+
+    if (filtered.length === 0) {
+     productList.innerHTML = '<p class="text-center">No products found.</p>';
+     return;
+    }
+
+    filtered.forEach(product => {
+     const isLow = product.qty <= product.reorder;
      const card = document.createElement('div');
-     card.className = 'col';
+     card.className = 'col-md-6';
      card.innerHTML = `
-
-     <div class="card h-100">
-     ${imageUrl ? `
-     <img src="${imageUrl}" class="card-img-top object-fit-cover"/>`: ''}
-
-     <div class="card-body p-2">
-     <h6 class="card-title small">${item.name}</h6>
-     <p class="small mb-1">Size: ${item.size || '-'}</p>
-     <p class="small mb-1">Qty: ${item.qty}</p>
-     <p class="small mb-0">Price: AED ${item.price.toFixed(2)}</p>
+     <div class="card h-100 ${isLow ? 'low-stock': ''}">
+     <div class="card-body d-flex flex-column">
+     <div class="d-flex pb-2 mb-2 border-bottom border-secondary justify-content-between align-items-center mb-0">
+     <h6 class="mb-0"><strong>${product.name}</strong></h6>
+     ${isLow? `<span class="badge small bg-danger mb-0">Low Stock</span>`: `<span class="badge small bg-success mb-0">In Stock</span>`}
+     </div>
+     <div class="d-flex flex-grow-1">
+     <img src="${product.image}" class="product-img me-3" onerror="this.src='https://placehold.co/300x300?text=Loading...'">
+     <div class="d-flex flex-column justify-content-between flex-grow-1">
+     <div>
+     <p class="mb-1"><strong>Brand :</strong> ${product.brand || '-'}</p>
+     <p class="mb-1"><strong>Cost :</strong> AED ${product.cost || '-'}</p>
+     <p class="mb-1"><strong>Category :</strong> ${product.category || '-'}</p>
+     <p class="mb-1"><strong>Stock :</strong> ${product.qty}</p>
+     </div>
+     <button class="btn btn-sm btn-outline-primary w-100 mt-2" onclick="viewProduct(${product.id})">View</button>
+     </div>
+     </div>
      </div>
      </div>`;
-     itemsRow.appendChild(card);
-    }
-   }
-   bootstrap.Modal.getOrCreateInstance(document.getElementById('userOrdersModal')).show();
-  });
- }
- // === Print Orders Receipt ===
- async function printReceipt(orderId) {
-  const doc = await db.collection('orders').doc(orderId).get();
-  const order = doc.data();
-  const itemsHtml = order.items.map(i => `
-   <tr>
-   <td>${i.name}${i.size ? ' (' + i.size + ')': ''}</td>
-   <td>${i.qty}</td>
-   <td>${i.price.toFixed(2)}</td>
-   </tr>`).join('');
-  const html = `
-  <html>
-  <head>
-  <title>Receipt</title>
-  <style>
-  body{font-family:sans-serif;padding:20px;} table{width:100%;border-collapse:collapse;} td,th{padding:10px;border-bottom:1px solid #ccc;}
-  </style>
-  </head>
-  <body>
-  <center>
-  <h2>Order Receipt</h2>
-  <h3>POS Store</h3>
-  </center>
-  <p class="mb-0"><strong>Order ID:</strong> ${orderId}</p>
-  <p class="mb-0"><strong>Date:</strong> ${order.timestamp.toDate().toLocaleString()}</p>
-  <hr>
-  <table>
-  <thead>
-  <tr>
-  <th>Item</th>
-  <th>Qty</th>
-  <th>Price (AED)</th>
-  </tr>
-  </thead>
-  <tbody>${itemsHtml}</tbody>
-  </table>
-  <hr>
-  <p><strong>Subtotal :</strong> AED ${order.subtotal.toFixed(2)}</p>
-  <p><strong>VAT :</strong> AED ${(order.vat || 0).toFixed(2)}</p>
-  ${order.deliveryCharge ? `
-  <p><strong>Delivery Charge :</strong> AED ${order.deliveryCharge.toFixed(2)}</p>`: ''}
-  <p>
-  <strong>Total :</strong> AED ${order.grandTotal.toFixed(2)}
-  </p>
-  <p>
-  <strong>Thank you!</strong>
-  </p>
-  </body>
-  </html>`;
-  const win = window.open('',
-   '_blank');
-  win.document.write(html);
-  win.print();
-  win.close();
- }
-
- // === Admin Orders View ===
- async function loadAdminOrders() {
-  runWithLoader(async () => {
-   const container = document.getElementById('adminOrdersContainer');
-   const snap = await db.collection('orders').orderBy('timestamp', 'desc').get();
-
-   if (snap.empty) {
-    container.innerHTML = '<p>No orders found.</p>';
-    return;
+     productList.appendChild(card);
+    });
    }
 
-   container.innerHTML = '';
+   window.viewProduct = function (id) {
+    currentProductId = id;
+    const p = products.find(prod => prod.id === id);
+    if (!p) return;
 
-   for (const doc of snap.docs) {
-    const order = doc.data();
-    const date = order.timestamp ? order.timestamp.toDate().toLocaleString(): 'N/A';
+    const isLow = p.qty <= p.reorder;
 
-    // 🧠 Fetch product images
-    const enrichedItems = await Promise.all(order.items.map(async i => {
-     let imageUrl = '';
-     try {
-      const productDoc = await db.collection('products').doc(i.id).get();
-      imageUrl = productDoc.exists ? productDoc.data().imageUrl: '';
-     } catch (e) {
-      console.warn(`Missing product for item: ${i.id}`);
-     }
-     return {
-      ...i, image: imageUrl
-     };
-    }));
-
-    const itemCards = enrichedItems.map(i => `
-     <div class="card mb-2 shadow-sm">
-     <div class="row g-0 align-items-center">
-     <div class="col-4 col-sm-3">
-     <img src="${i.image || 'https://via.placeholder.com/80'}"
-     class="img-fluid rounded-start w-100 object-fit-cover"
-     alt="${i.name}"
-     style="aspect-ratio: 1 / 1;" />
-     </div>
-     <div class="col-8 col-sm-9">
-     <div class="card-body p-2">
-     <h6 class="card-title mb-1">${i.name}</h6>
-     <p class="card-text mb-1 small text-muted">
-     ${i.size ? `Size: ${i.size} | `: ''}Qty: ${i.qty}
-     </p>
-     <p class="card-text mb-0 small">Price: AED ${i.price.toFixed(2)}</p>
-     </div>
-     </div>
-     </div>
-     </div>
-     `).join('');
-
-    const orderCard = `
-    <div class="card mb-3">
-    <div class="card-body">
-    <div class="d-flex small justify-content-between align-items-center mb-2">
-    <strong>Order #${doc.id}</strong>
-    <small>${date}</small>
+    productDetails.innerHTML = `
+    <div class="container-fluid">
+    <div class="row g-4">
+    <!-- Image Section -->
+    <div class="col-md-5 text-center">
+    <img src="${p.image}" class="img-fluid rounded shadow-sm w-100" style="max-height: 200px; object-fit: contain;"
+    onerror="this.src='https://placehold.co/300x300?text=Loading...'">
     </div>
-    <p class="mb-1"><strong>Status:</strong>
-    <span class="badge ms-2 text-bg-${
-    order.status === 'Pending' ? 'warning': order.status === 'Accepted' ? 'success': 'secondary'
-    }">${order.status}</span>
-    </p>
-    <p class="mb-1"><strong>Type:</strong> ${order.type}</p>
-
-    ${itemCards}
-
-    <hr>
-    <p class="mb-1"><strong>Total:</strong> AED ${order.grandTotal.toFixed(2)}</p>
-    <p class="mb-1"><strong>Phone:</strong> ${order.phone || 'N/A'}</p>
-    <p class="mb-2"><strong>Address:</strong> ${order.deliveryAddress || 'N/A'}</p>
-
-    ${order.status === 'Pending' ? `
-    <div class="d-flex gap-2">
-    <button class="btn btn-sm btn-success flex-fill" onclick="acceptOrder('${doc.id}')">Accept</button>
-    <button class="btn btn-sm btn-danger flex-fill" onclick="rejectOrder('${doc.id}')">Reject</button>
+    <!-- Details Section -->
+    <div class="col-md-7">
+    <h5 class="border-bottom pb-2 mb-3"><strong>${p.name}</strong></h5>
+    <div class="mb-2">
+    <span class="fw-semibold">Brand :</span> ${p.brand || '-'}
     </div>
-    `: ''}
+    <div class="mb-2">
+    <span class="fw-semibold">Category :</span> ${p.category || '-'}
+    </div>
+    <div class="mb-2">
+    <span class="fw-semibold">Stock :</span> ${p.qty}
+    ${isLow
+    ? `<span class="badge bg-danger ms-2"><i class="bi bi-exclamation-circle-fill"></i> Low Stock</span>`: `<span class="badge bg-success ms-2"><i class="bi bi-check-circle-fill"></i> In Stock</span>`}
+    </div>
+    <div class="mb-2">
+    <span class="fw-semibold">Reorder Level :</span> ${p.reorder}
+    </div>
+    <div class="mb-2">
+    <span class="fw-semibold">Cost :</span> <span class="text-primary fw-bold"> AED ${p.cost.toFixed(2)}</span>
+    </div>
+    <div class="mb-2">
+    <span class="fw-semibold">Supplier :</span> ${p.supplier}
+    </div>
+    </div>
     </div>
     </div>
     `;
 
-    container.innerHTML += orderCard;
-   }
+    new bootstrap.Modal(document.getElementById('productModal')).show();
+   };
 
-   bootstrap.Modal.getOrCreateInstance(document.getElementById('adminOrdersModal')).show();
-  });
- }
+   window.openEditModal = function () {
+    const p = products.find(prod => prod.id === currentProductId);
+    if (!p) return;
+    editName.value = p.name;
+    editBrand.value = p.brand;
+    editCategory.value = p.category;
+    editQty.value = p.qty;
+    editReorder.value = p.reorder;
+    editCost.value = p.cost;
+    editSupplier.value = p.supplier;
+    editImage.value = p.image;
+    bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+    editModal.show();
+   };
 
-
-
-
-
- // Admin accept/reject
- async function acceptOrder(id) {
-  runWithLoader(async () => {
-   await db.collection('orders').doc(id).update({
-    status: 'Accepted'
+   saveEditBtn.addEventListener('click', () => {
+    const p = products.find(prod => prod.id === currentProductId);
+    if (!p) return;
+    p.name = editName.value.trim();
+    p.brand = editBrand.value;
+    p.category = editCategory.value;
+    p.qty = Number(editQty.value);
+    p.reorder = Number(editReorder.value);
+    p.cost = Number(editCost.value);
+    p.supplier = editSupplier.value.trim();
+    p.image = editImage.value.trim();
+    saveProducts();
+    renderProducts();
+    editModal.hide();
    });
-   await addSalesRecord(id);
-   loadAdminOrders();
-  });
- }
- async function rejectOrder(id) {
-  runWithLoader(async () => {
-   await db.collection('orders').doc(id).update({
-    status: 'Rejected'
-   });
-   loadAdminOrders();
-  });
- }
- // Add sales record for Accepted order
- async function addSalesRecord(orderId) {
-  const orderDoc = await db.collection('orders').doc(orderId).get();
-  const order = orderDoc.data();
-  await db.collection('sales').add({
-   orderId,
-   userId: order.userId,
-   totalAmount: order.grandTotal,
-   timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  });
- }
- // === Admin product management ===
- const addProductForm = document.getElementById('addProductForm');
- addProductForm.onsubmit = e => {
-  e.preventDefault();
-  const [imageUrl, name, costPrice, retailPrice, brand, category, sizesStr, sku] = Array.from(e.target.elements).filter(el => el.tagName === 'INPUT').map(i => i.value.trim());
-  const sizes = parseSizes(sizesStr);
-  runWithLoader(async () => {
-   await db.collection('products').add({
-    imageUrl,
-    name,
-    cost: parseFloat(costPrice),
-    retail: parseFloat(retailPrice),
-    brand,
-    category,
-    sizes,
-    sku,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-   });
-   e.target.reset();
-   bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
-   loadProducts();
-  });
- };
- // Edit/Delete product (admin)
- async function deleteProduct(id) {
-  if (!confirm('Delete product?')) return;
-  runWithLoader(async () => {
-   await db.collection('products').doc(id).delete();
-   loadProducts();
-  });
- }
- let editingProductId = null;
- async function startEditProduct(id) {
-  editingProductId = id;
-  const doc = await db.collection('products').doc(id).get();
-  const p = doc.data();
-  const form = document.getElementById('editProductForm');
-  form.imageUrl.value = p.imageUrl;
-  form.name.value = p.name;
-  form.cost.value = p.cost;
-  form.retail.value = p.retail;
-  form.brand.value = p.brand;
-  form.category.value = p.category;
-  form.sizesStr.value = (p.sizes || []).map(s => s.label + ':' + s.qty).join(', ');
-  form.sku.value = p.sku;
-  bootstrap.Modal.getOrCreateInstance(document.getElementById('editProductModal')).show();
 
-  // Override form submit for edit
-  addProductForm.onsubmit = e => {
-   e.preventDefault();
-   const [imageUrl,
-    name,
-    costPrice,
-    retailPrice,
-    brand,
-    category,
-    sizesStr,
-    sku
-   ] = Array.from(e.target.elements).filter(el => el.tagName === 'INPUT').map(i => i.value.trim());
-   const sizes = parseSizes(sizesStr);
-   runWithLoader(async () => {
-    await db.collection('products').doc(editingProductId).update({
-     imageUrl,
-     name,
-     cost: parseFloat(costPrice),
-     retail: parseFloat(retailPrice),
-     brand,
-     category,
-     sizes,
-     sku
+   window.openQtyModal = function () {
+    qtyChangeInput.value = '';
+    bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+    qtyModal.show();
+   };
+
+   updateQtyBtn.addEventListener('click',
+    () => {
+     const p = products.find(prod => prod.id === currentProductId);
+     const newQty = Number(qtyChangeInput.value);
+     if (!p || isNaN(newQty) || newQty < 0) return alert('Invalid quantity');
+     p.qty = newQty;
+     saveProducts();
+     renderProducts();
+     qtyModal.hide();
     });
-    editingProductId = null;
-    e.target.reset();
-    bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
-    loadProducts();
-    // Reset submit handler to add mode
-    addProductForm.onsubmit = addProductFormSubmit;
-   });
-  };
- }
- // --- Edit Product Submit Handler ---
- document.getElementById('editProductForm').onsubmit = e => {
-  e.preventDefault();
-  const form = e.target;
-  const [imageUrl,
-   name,
-   cost,
-   retail,
-   brand,
-   category,
-   sizesStr,
-   sku] =
-  ['imageUrl',
-   'name',
-   'cost',
-   'retail',
-   'brand',
-   'category',
-   'sizesStr',
-   'sku']
-  .map(n => form[n].value.trim());
 
-  const sizes = parseSizes(sizesStr);
+   window.openDeleteModal = function () {
+    const p = products.find(prod => prod.id === currentProductId);
+    if (!p) return;
+    showDeleteModal(`Delete product "${p.name}"?`, () => {
+     products = products.filter(prod => prod.id !== currentProductId);
+     saveProducts();
+     renderProducts();
+    });
+   };
 
-  runWithLoader(async () => {
-   await db.collection('products').doc(editingProductId).update({
-    imageUrl,
-    name,
-    cost: parseFloat(cost),
-    retail: parseFloat(retail),
-    brand,
-    category,
-    sizes,
-    sku
-   });
-   bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
-   loadProducts();
+   function showDeleteModal(message, callback) {
+    // Close any other open modal
+    document.querySelectorAll('.modal.show').forEach(modalEl => {
+     const instance = bootstrap.Modal.getInstance(modalEl);
+     if (instance) instance.hide();
+    });
+
+    // Set message and callback
+    document.querySelector('#deleteModal .modal-body').textContent = message;
+    deleteCallback = callback;
+
+    // Show delete modal
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal')).show();
+   }
+   
+   confirmDeleteBtn.addEventListener('click',
+    () => {
+     if (typeof deleteCallback === 'function') deleteCallback();
+     deleteModal.hide();
+    });
+
+   // Search and filters
+   searchInput.addEventListener('input',
+    renderProducts);
+   filterBrand.addEventListener('change',
+    renderProducts);
+   filterCategory.addEventListener('change',
+    renderProducts);
   });
- };
-
- // --- Delete Product Submit Handler ---
- let PendingDeleteId = null;
-
- function deleteProduct(id) {
-  PendingDeleteId = id;
-  bootstrap.Modal.getOrCreateInstance(document.getElementById('confirmDeleteModal')).show();
- }
-
- document.getElementById('confirmDeleteBtn').onclick = async () => {
-  runWithLoader(async () => {
-   await db.collection('products').doc(PendingDeleteId).delete();
-   PendingDeleteId = null;
-   bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
-   loadProducts();
-  });
- };
-
-
- // Store original add product submit handler to restore later
- const addProductFormSubmit = addProductForm.onsubmit;
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ </script>
 </body>
 </html>
