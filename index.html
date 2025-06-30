@@ -38,92 +38,117 @@
   </div>
 
   <!-- Filters and Search -->
-  <div class="d-flex justify-content-around mb-3 gap-1">
-   <div class="col">
+  <div class="d-flex flex-column mb-3 gap-2">
+   <!-- Search Input -->
+   <div class="form-floating px-1">
     <input type="text" id="searchInput" class="form-control" placeholder="Search by product name or supplier" />
+    <label for="searchInput">Search by article/Product/supplier</label>
    </div>
-   <div class="col-2">
-    <select id="filterBrand" class="form-select">
-     <option value="">Filter by Brand</option>
-    </select>
-   </div>
-   <div class="col-2">
-    <select id="filterCategory" class="form-select">
-     <option value="">Filter by Category</option>
-    </select>
+
+   <!-- Filters -->
+   <div class="d-flex gap-2 px-1">
+    <div class="form-floating w-50">
+     <select id="filterBrand" class="form-select">
+      <option value="" selected disabled>Choose Brand</option>
+     </select>
+     <label for="filterBrand">Filter by Brand</label>
+    </div>
+    <div class="form-floating w-50">
+     <select id="filterCategory" class="form-select">
+      <option value="" selected disabled>Choose Category</option>
+     </select>
+     <label for="filterCategory">Filter by Category</label>
+    </div>
    </div>
   </div>
+
 
   <!-- Product List -->
   <div id="productList" class="row g-3"></div>
  </div>
 
-<!-- Add Product Modal -->
-<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+ <!-- Add Product Modal -->
+ <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Add New Product</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Add Product Form -->
-        <form id="productForm">
-          <div class="row g-2">
-            <div class="col-md-12">
-              <label for="productName" class="form-label">Product Name</label>
-              <input type="text" class="form-control" id="productName" placeholder="Product Name" required />
-            </div>
-
-            <div class="col-md-6 d-flex align-items-center">
-              <div class="flex-grow-1">
-                <label for="productBrand" class="form-label">Brand</label>
-                <select id="productBrand" class="form-select" required></select>
-              </div>
-              <button type="button" class="btn btn-outline-secondary ms-1 mt-4" id="addBrandBtn" title="Add Brand">➕</button>
-            </div>
-
-            <div class="col-md-6 d-flex align-items-center">
-              <div class="flex-grow-1">
-                <label for="productCategory" class="form-label">Category</label>
-                <select id="productCategory" class="form-select" required></select>
-              </div>
-              <button type="button" class="btn btn-outline-secondary ms-1 mt-4" id="addCategoryBtn" title="Add Category">➕</button>
-            </div>
-
-            <div class="col-md-4">
-              <label for="productQty" class="form-label">Stock Qty</label>
-              <input type="number" class="form-control" id="productQty" placeholder="Stock Qty" min="0" required />
-            </div>
-
-            <div class="col-md-4">
-              <label for="reorderLevel" class="form-label">Reorder Level</label>
-              <input type="number" class="form-control" id="reorderLevel" placeholder="Reorder Level" min="0" required />
-            </div>
-
-            <div class="col-md-4">
-              <label for="productCost" class="form-label">Cost</label>
-              <input type="number" step="0.01" class="form-control" id="productCost" placeholder="Cost" min="0" required />
-            </div>
-
-            <div class="col-md-6">
-              <label for="productSupplier" class="form-label">Supplier Name</label>
-              <input type="text" class="form-control" id="productSupplier" placeholder="Supplier Name" required />
-            </div>
-
-            <div class="col-md-6">
-              <label for="productImage" class="form-label">Image URL</label>
-              <input type="url" class="form-control" id="productImage" placeholder="Image URL" required />
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" form="productForm" class="btn btn-primary">Add Product</button>
-      </div>
+   <div class="modal-content">
+    <div class="modal-header">
+     <h5 class="modal-title">Add New Product</h5>
+     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
+    <div class="modal-body">
+     <form id="productForm">
+      <div class="row g-2">
+       <div class="col-md-12">
+        <div class="form-floating">
+         <input type="text" class="form-control" id="productName" placeholder="Product Name" required />
+         <label for="productName">Product Name</label>
+        </div>
+       </div>
+
+       <div class="col-md-6 d-flex align-items-end">
+        <div class="form-floating flex-grow-1">
+         <select id="productBrand" class="form-select" required>
+          <option value="" disabled selected>Select Brand</option>
+         </select>
+         <label for="productBrand">Brand</label>
+        </div>
+        <button type="button" class="btn btn-outline-secondary py-3 ms-1" id="addBrandBtn" title="Add Brand">➕</button>
+       </div>
+
+       <div class="col-md-6 d-flex align-items-end">
+        <div class="form-floating flex-grow-1">
+         <select id="productCategory" class="form-select" required>
+          <option value="" disabled selected>Select Category</option>
+         </select>
+         <label for="productCategory">Category</label>
+        </div>
+        <button type="button" class="btn btn-outline-secondary py-3 ms-1" id="addCategoryBtn" title="Add Category">➕</button>
+       </div>
+
+       <div class="col-md-4">
+        <div class="form-floating">
+         <input type="number" class="form-control" id="productQty" placeholder="Stock Qty" min="0" required />
+         <label for="productQty">Stock Qty</label>
+        </div>
+       </div>
+
+       <div class="col-md-4">
+        <div class="form-floating">
+         <input type="number" class="form-control" id="reorderLevel" placeholder="Reorder Level" min="0" required />
+         <label for="reorderLevel">Reorder Level</label>
+        </div>
+       </div>
+
+       <div class="col-md-4">
+        <div class="form-floating">
+         <input type="number" step="0.01" class="form-control" id="productCost" placeholder="Cost" min="0" required />
+         <label for="productCost">Cost</label>
+        </div>
+       </div>
+
+       <div class="col-md-6">
+        <div class="form-floating">
+         <input type="text" class="form-control" id="productSupplier" placeholder="Supplier Name" required />
+         <label for="productSupplier">Supplier Name</label>
+        </div>
+       </div>
+
+       <div class="col-md-6">
+        <div class="form-floating">
+         <input type="url" class="form-control" id="productImage" placeholder="Image URL" required />
+         <label for="productImage">Image URL</label>
+        </div>
+       </div>
+      </div>
+
+     </form>
+    </div>
+    <div class="modal-footer">
+     <button type="submit" form="productForm" class="btn btn-primary">Add Product</button>
+    </div>
+   </div>
   </div>
-</div>
+ </div>
 
 
  <!-- Product Detail Modal -->
@@ -153,32 +178,67 @@
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
     <div class="modal-body">
-     <form id="editForm">
-      <div class="mb-2">
-       <input type="text" id="editName" class="form-control" placeholder="Name" required />
+     <form id="editForm" class="row g-2">
+      <div class="col-12">
+       <div class="form-floating">
+        <input type="text" id="editName" class="form-control" placeholder="Name" required />
+        <label for="editName">Product Name</label>
+       </div>
       </div>
-      <div class="mb-2 d-flex align-items-center">
-       <select id="editBrand" class="form-select" required></select>
-       <button type="button" class="btn btn-outline-secondary ms-1" id="editAddBrandBtn" title="Add Brand">➕</button>
+
+      <div class="col-12 d-flex align-items-end">
+       <div class="form-floating flex-grow-1">
+        <select id="editBrand" class="form-select" required>
+         <option value="" disabled selected>Select Brand</option>
+        </select>
+        <label for="editBrand">Brand</label>
+       </div>
+       <button type="button" class="btn btn-outline-secondary ms-1 py-3" id="editAddBrandBtn" title="Add Brand">➕</button>
       </div>
-      <div class="mb-2 d-flex align-items-center">
-       <select id="editCategory" class="form-select" required></select>
-       <button type="button" class="btn btn-outline-secondary ms-1" id="editAddCategoryBtn" title="Add Category">➕</button>
+
+      <div class="col-12 d-flex align-items-end">
+       <div class="form-floating flex-grow-1">
+        <select id="editCategory" class="form-select" required>
+         <option value="" disabled selected>Select Category</option>
+        </select>
+        <label for="editCategory">Category</label>
+       </div>
+       <button type="button" class="btn btn-outline-secondary ms-1 py-3" id="editAddCategoryBtn" title="Add Category">➕</button>
       </div>
-      <div class="mb-2">
-       <input type="number" id="editQty" class="form-control" placeholder="Quantity" min="0" required />
+
+      <div class="col-6">
+       <div class="form-floating">
+        <input type="number" id="editQty" class="form-control" placeholder="Quantity" min="0" required />
+        <label for="editQty">Stock Quantity</label>
+       </div>
       </div>
-      <div class="mb-2">
-       <input type="number" id="editReorder" class="form-control" placeholder="Reorder Level" min="0" required />
+
+      <div class="col-6">
+       <div class="form-floating">
+        <input type="number" id="editReorder" class="form-control" placeholder="Reorder Level" min="0" required />
+        <label for="editReorder">Reorder Level</label>
+       </div>
       </div>
-      <div class="mb-2">
-       <input type="number" step="0.01" id="editCost" class="form-control" placeholder="Cost" min="0" required />
+
+      <div class="col-6">
+       <div class="form-floating">
+        <input type="number" step="0.01" id="editCost" class="form-control" placeholder="Cost" min="0" required />
+        <label for="editCost">Cost</label>
+       </div>
       </div>
-      <div class="mb-2">
-       <input type="text" id="editSupplier" class="form-control" placeholder="Supplier" required />
+
+      <div class="col-6">
+       <div class="form-floating">
+        <input type="text" id="editSupplier" class="form-control" placeholder="Supplier" required />
+        <label for="editSupplier">Supplier Name</label>
+       </div>
       </div>
-      <div class="mb-2">
-       <input type="url" id="editImage" class="form-control" placeholder="Image URL" required />
+
+      <div class="col-12">
+       <div class="form-floating">
+        <input type="url" id="editImage" class="form-control" placeholder="Image URL" required />
+        <label for="editImage">Image URL</label>
+       </div>
       </div>
      </form>
     </div>
@@ -189,6 +249,7 @@
   </div>
  </div>
 
+
  <!-- Update Quantity Modal -->
  <div class="modal fade" id="qtyModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
@@ -198,7 +259,10 @@
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
     <div class="modal-body">
-     <input type="number" id="qtyChange" class="form-control" placeholder="Enter new quantity" min="0" required />
+     <div class="form-floating">
+      <input type="number" id="qtyChange" class="form-control" placeholder="Enter new quantity" min="0" required />
+      <label for="qtyChange">Enter new quantity</label>
+     </div>
     </div>
     <div class="modal-footer">
      <button class="btn btn-success" id="updateQtyBtn">Update</button>
@@ -234,26 +298,36 @@
      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
     <div class="modal-body d-flex gap-5 flex-wrap">
+     <!-- Brands Section -->
      <div style="flex: 1 1 45%;">
       <h6>Brands</h6>
       <ul class="list-group mb-3" id="brandList"></ul>
-      <div class="input-group">
-       <input type="text" id="newBrandInput" class="form-control" placeholder="New Brand Name" />
-       <button class="btn btn-primary" id="addBrandConfirmBtn">Add Brand</button>
+      <div class="d-flex align-items-end gap-2">
+       <div class="form-floating flex-grow-1">
+        <input type="text" id="newBrandInput" class="form-control" placeholder="New Brand Name" />
+        <label for="newBrandInput">New Brand Name</label>
+       </div>
+       <button class="btn btn-primary py-3" id="addBrandConfirmBtn">Add</button>
       </div>
      </div>
+
+     <!-- Categories Section -->
      <div style="flex: 1 1 45%;">
       <h6>Categories</h6>
       <ul class="list-group mb-3" id="categoryList"></ul>
-      <div class="input-group">
-       <input type="text" id="newCategoryInput" class="form-control" placeholder="New Category Name" />
-       <button class="btn btn-primary" id="addCategoryConfirmBtn">Add Category</button>
+      <div class="d-flex align-items-end gap-2">
+       <div class="form-floating flex-grow-1">
+        <input type="text" id="newCategoryInput" class="form-control" placeholder="New Category Name" />
+        <label for="newCategoryInput">New Category Name</label>
+       </div>
+       <button class="btn btn-primary py-3" id="addCategoryConfirmBtn">Add</button>
       </div>
      </div>
     </div>
    </div>
   </div>
  </div>
+
 
  <!-- Add/Edit Brand or Category Modal -->
  <div class="modal fade" id="brandCategoryModal" tabindex="-1" aria-hidden="true">
@@ -723,7 +797,7 @@
     // Show delete modal
     bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal')).show();
    }
-   
+
    confirmDeleteBtn.addEventListener('click',
     () => {
      if (typeof deleteCallback === 'function') deleteCallback();
